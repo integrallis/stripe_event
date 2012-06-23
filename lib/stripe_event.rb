@@ -10,9 +10,13 @@ module StripeEvent
     self
   end
   
+  def self.publish(event_obj)
+    ActiveSupport::Notifications.instrument(event_obj.type, :event => event_obj)
+  end
+  
   def self.subscribe(name, &block)
     raise InvalidEventType.new(name) if !TYPES.include?(name)
-    ActiveSupport::Notifications.subscribe(name, &block)
+    ActiveSupport::Notifications.subscribe(name, proxy(&block))
   end
   
   def self.subscribers(name)
@@ -27,5 +31,11 @@ module StripeEvent
   
   def self.unsubscribe(subscriber)
     ActiveSupport::Notifications.notifier.unsubscribe(subscriber)
+  end
+  
+  def self.proxy(&block)
+    lambda do |name, started, finished, id, payload|
+      block.call(payload[:event])
+    end
   end
 end

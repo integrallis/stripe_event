@@ -37,4 +37,16 @@ describe StripeEvent do
       StripeEvent.subscribers(event_type).should be_empty
     end
   end
+  
+  context "publishing" do
+    let(:event_type) { 'transfer.created' }
+    let(:event) { double("event", :type => event_type) }
+    
+    it "should only pass the event to the subscribed block" do
+      expect { |block|
+        StripeEvent.subscribe(event_type, &block)
+        StripeEvent.publish(event)
+      }.to yield_with_args(event)
+    end
+  end
 end
