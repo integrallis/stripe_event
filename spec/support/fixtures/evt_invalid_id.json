@@ -1,0 +1,7 @@
+{
+  "error": {
+    "message": "No such notification: invalid-id",
+    "param": "id",
+    "type": "invalid_request_error"
+  }
+}
