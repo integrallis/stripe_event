@@ -14,5 +14,12 @@ describe StripeEvent do
         StripeEvent.subscribe('fake.event_type') { }
       }.to raise_error(StripeEvent::InvalidEventType)
     end
+    
+    it "should clear all subscribers" do
+      StripeEvent.subscribe(event_type) { }
+      StripeEvent.subscribe(event_type) { }
+      StripeEvent.clear_subscribers!
+      StripeEvent.subscribers(event_type).should be_empty
+    end
   end
 end

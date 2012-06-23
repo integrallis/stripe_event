@@ -13,4 +13,14 @@ module StripeEvent
   def self.subscribers(name)
     ActiveSupport::Notifications.notifier.listeners_for(name)
   end
+  
+  def self.clear_subscribers!
+    TYPES.each do |type|
+      subscribers(type).each { |s| unsubscribe(s) }
+    end
+  end
+  
+  def self.unsubscribe(subscriber)
+    ActiveSupport::Notifications.notifier.unsubscribe(subscriber)
+  end
 end
