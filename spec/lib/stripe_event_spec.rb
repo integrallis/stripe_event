@@ -8,5 +8,11 @@ describe StripeEvent do
       subscriber = StripeEvent.subscribe(event_type) { }
       StripeEvent.subscribers(event_type).should == [subscriber]
     end
+    
+    it "should require a valid event type" do
+      expect {
+        StripeEvent.subscribe('fake.event_type') { }
+      }.to raise_error(StripeEvent::InvalidEventType)
+    end
   end
 end
