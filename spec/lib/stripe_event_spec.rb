@@ -5,9 +5,9 @@ describe StripeEvent do
   
   context "configuration" do
     it "yields itself to the block" do
-      StripeEvent.configure do |config|
-        config.should == StripeEvent
-      end
+      expect { |block|
+        StripeEvent.configure(&block)
+      }.to yield_with_args(StripeEvent)
     end
     
     it "should return itself" do
