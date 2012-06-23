@@ -1,0 +1,46 @@
+{
+  "created": 1335427082,
+  "id": "evt_charge_succeeded",
+  "livemode": false,
+  "object": "event",
+  "pending_webhooks": 0,
+  "type": "charge.succeeded",
+  "data": {
+    "object": {
+      "amount": 3279,
+      "amount_refunded": 0,
+      "created": 1335427082,
+      "currency": "usd",
+      "customer": null,
+      "description": "order_id=21 email=jimmorrison@example.com",
+      "disputed": false,
+      "failure_message": null,
+      "fee": 0,
+      "id": "ch_00000000000000",
+      "invoice": null,
+      "livemode": false,
+      "object": "charge",
+      "paid": true,
+      "refunded": false,
+      "card": {
+        "address_country": null,
+        "address_line1": "4130 N. Paradise Way",
+        "address_line1_check": "pass",
+        "address_line2": "",
+        "address_state": "AZ",
+        "address_zip": "85251",
+        "address_zip_check": "pass",
+        "country": "US",
+        "cvc_check": "pass",
+        "exp_month": 1,
+        "exp_year": 2013,
+        "fingerprint": "5twio8INGMQkPl6M",
+        "id": "cc_00000000000000",
+        "last4": "4242",
+        "name": "Jim Morrison",
+        "object": "card",
+        "type": "Visa"
+      }
+    }
+  }
+}
