@@ -5,6 +5,11 @@ require "stripe_event/types"
 module StripeEvent
   InvalidEventType = Class.new(StandardError)
   
+  def self.configure
+    yield self
+    self
+  end
+  
   def self.subscribe(name, &block)
     raise InvalidEventType if !TYPES.include?(name)
     ActiveSupport::Notifications.subscribe(name, &block)
