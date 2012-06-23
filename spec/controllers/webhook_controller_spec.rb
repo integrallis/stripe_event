@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe StripeEvent::WebhookController do
   before do
+    StripeEvent.clear_subscribers!
     @base_params = { :use_route => :stripe_event }
   end
 
