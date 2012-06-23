@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe StripeEvent do
+  before { StripeEvent.clear_subscribers! }
+  
   context "subscribing" do
     let(:event_type) { 'charge.failed' }
     
