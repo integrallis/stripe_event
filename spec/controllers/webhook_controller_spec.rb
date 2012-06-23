@@ -16,6 +16,13 @@ describe StripeEvent::WebhookController do
       post :event, @base_params.merge(:id => event_id)
       response.should be_success
     end
+    
+    it "should publish the retrieved event" do
+      expect { |blk|
+        StripeEvent.subscribe('charge.succeeded', &blk)
+        post :event, @base_params.merge(:id => event_id)
+      }.to yield_with_args(assigns[:event])
+    end
   end
   
   context "with invalid event data" do
