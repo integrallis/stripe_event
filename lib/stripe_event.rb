@@ -11,7 +11,7 @@ module StripeEvent
   end
   
   def self.subscribe(name, &block)
-    raise InvalidEventType if !TYPES.include?(name)
+    raise InvalidEventType.new(name) if !TYPES.include?(name)
     ActiveSupport::Notifications.subscribe(name, &block)
   end
   
