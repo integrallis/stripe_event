@@ -17,10 +17,8 @@ mount StripeEvent::Engine => "/stripe_event"
 # config/initializers/stripe.rb
 Stripe.api_key = ENV['STRIPE_API_KEY'] # Set your api key
 
-StripeEvent.configure do |config|
-  # Define subscriber behavior
-  config.subscribe 'charge.failed' do |event|
-    MyClass.handle_failed_charge(event)
-  end
+# Define subscriber behavior
+StripeEvent.subscribe 'charge.failed' do |event|
+  MyClass.handle_failed_charge(event)
 end
 ```
