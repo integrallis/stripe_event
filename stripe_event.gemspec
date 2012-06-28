@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Danny Whalen"]
   s.email       = ["dwhalen@integrallis.com"]
   s.homepage    = "https://github.com/integrallis/stripe_event"
-  s.summary     = "Stripe webhook integration for Rails applications"
-  s.description = "Easily handle webhook events from Stripe."
+  s.summary     = "Stripe webhook integration for Rails applications."
+  s.description = "Stripe webhook integration for Rails applications."
 
   s.files = Dir["{app,config,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
 
