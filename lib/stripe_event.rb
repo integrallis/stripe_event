@@ -3,7 +3,6 @@ require "stripe_event/engine"
 require "stripe_event/types"
 
 module StripeEvent
-  InvalidEventType = Class.new(StandardError)
   
   def self.configure
     yield self
