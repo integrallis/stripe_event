@@ -1,7 +1,7 @@
 stripe_event
 ============
 
-stripe_event is built on the ActiveSupport::Notifications API. Incoming webhook requests are authenticated by retrieving the event from Stripe. The retrieved event is yielded to subscribers when published.
+stripe_event is built on the ActiveSupport::Notifications API. Incoming webhook requests are authenticated by retrieving the event from Stripe. Authenticated events are published to subscribers.
 
 ```ruby
 # Gemfile
