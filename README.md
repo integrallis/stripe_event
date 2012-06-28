@@ -1,10 +1,9 @@
-stripe_event
-============
+## stripe_event
 
 stripe_event is built on the ActiveSupport::Notifications API. Incoming webhook requests are authenticated by retrieving the event from Stripe. Authenticated events are published to subscribers.
 
-Install
-=======
+## Install
+
 
 ```ruby
 # Gemfile
@@ -16,8 +15,7 @@ gem 'stripe_event'
 mount StripeEvent::Engine => "/stripe_event" # or provide a custom path
 ```
 
-Usage
-=====
+## Usage
 
 ```ruby
 # config/initializers/stripe.rb
@@ -29,6 +27,6 @@ StripeEvent.subscribe 'charge.failed' do |event|
 end
 ```
 
-Register webhook url with Stripe
+## Register webhook url with Stripe
 
 ![Setup webhook url](https://raw.github.com/integrallis/stripe_event/master/screenshots/dashboard-webhook.png "webhook setup")
