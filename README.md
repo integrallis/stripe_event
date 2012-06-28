@@ -10,7 +10,7 @@ gem 'stripe_event'
 
 ```ruby
 # config/routes.rb
-mount StripeEvent::Engine => "/stripe_event"
+mount StripeEvent::Engine => "/stripe_event" # or provide a custom path
 ```
 
 ```ruby
