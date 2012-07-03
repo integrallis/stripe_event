@@ -18,6 +18,11 @@ describe StripeEvent::WebhookController do
       response.should be_success
     end
     
+    it "should assign the retrieved event" do
+      post :event, @base_params.merge(:id => event_id)
+      assigns(:event).type.should == 'charge.succeeded'
+    end
+    
     it "should publish the retrieved event" do
       block_args = nil
       StripeEvent.subscribe('charge.succeeded') { |*args| block_args = args }
