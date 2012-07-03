@@ -117,4 +117,4 @@ DEPENDENCIES
   rspec-rails (~> 2.10)
   sqlite3
   stripe_event!
-  webmock
+  webmock (~> 1.8)
