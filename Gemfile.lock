@@ -115,6 +115,6 @@ PLATFORMS
 
 DEPENDENCIES
   rspec-rails (~> 2.10)
-  sqlite3
+  sqlite3 (~> 1.3)
   stripe_event!
   webmock (~> 1.8)
