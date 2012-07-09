@@ -1,4 +1,4 @@
-## stripe_event
+## stripe_event [![Build Status](https://secure.travis-ci.org/integrallis/stripe_event.png?branch=master)][travis]
 
 stripe_event is built on the ActiveSupport::Notifications API. Incoming webhook requests are authenticated by retrieving the event from Stripe. Authenticated events are published to subscribers.
 
