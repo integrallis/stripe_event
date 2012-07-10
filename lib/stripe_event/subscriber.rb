@@ -23,9 +23,8 @@ module StripeEvent
     end
     
     def ensure_valid_types!
-      @names.each do |name|
-        raise InvalidEventType.new(name) if !TYPES.include?(name)
-      end
+      invalid_names = @names.select { |name| !TYPES.include?(name) }
+      raise InvalidEventType.new(invalid_names) if invalid_names.any?
     end
   end
 end
