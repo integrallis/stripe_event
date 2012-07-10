@@ -1,5 +1,6 @@
 require "stripe"
 require "stripe_event/engine"
+require "stripe_event/subscriber"
 require "stripe_event/types"
 
 module StripeEvent
@@ -14,11 +15,7 @@ module StripeEvent
   end
   
   def self.subscriber(*names, &block)
-    names = TYPES if names.empty?
-    names.each do |name|
-      raise InvalidEventType.new(name) if !TYPES.include?(name)
-    end
-    ActiveSupport::Notifications.subscribe(Regexp.union(names), proxy(&block))
+    Subscriber.new(names, &block).register
   end
   
   def self.subscribers(name)
@@ -33,11 +30,5 @@ module StripeEvent
   
   def self.unsubscribe(subscriber)
     ActiveSupport::Notifications.notifier.unsubscribe(subscriber)
-  end
-  
-  def self.proxy(&block)
-    lambda do |name, started, finished, id, payload|
-      block.call(payload[:event])
-    end
   end
 end
