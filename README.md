@@ -24,8 +24,16 @@ mount StripeEvent::Engine => "/stripe_event" # or provide a custom path
 Stripe.api_key = ENV['STRIPE_API_KEY'] # Set your api key
 
 # Define subscriber behavior
-StripeEvent.subscribe 'charge.failed' do |event|
+StripeEvent.subscriber 'charge.failed' do |event|
   MyClass.handle_failed_charge(event)
+end
+
+StripeEvent.subscriber 'customer.created', 'customer.updated' do |event|
+  # Handle multiple event types
+end
+
+StripeEvent.subscriber do |event|
+  # Log events, etc.
 end
 ```
 
