@@ -20,19 +20,18 @@ describe StripeEvent do
     let(:event_type) { 'charge.failed' }
     
     it "should register a subscriber" do
-      subscriber = StripeEvent.subscribe(event_type) { }
+      subscriber = StripeEvent.subscriber(event_type) { }
       StripeEvent.subscribers(event_type).should == [subscriber]
     end
     
     it "should require a valid event type" do
       expect {
-        StripeEvent.subscribe('fake.event_type') { }
+        StripeEvent.subscriber('fake.event_type') { }
       }.to raise_error(StripeEvent::InvalidEventType)
     end
     
     it "should clear all subscribers" do
-      StripeEvent.subscribe(event_type) { }
-      StripeEvent.subscribe(event_type) { }
+      StripeEvent.subscriber(event_type) { }
       StripeEvent.clear_subscribers!
       StripeEvent.subscribers(event_type).should be_empty
     end
@@ -44,7 +43,7 @@ describe StripeEvent do
     
     it "should only pass the event to the subscribed block" do
       expect { |block|
-        StripeEvent.subscribe(event_type, &block)
+        StripeEvent.subscriber(event_type, &block)
         StripeEvent.publish(event)
       }.to yield_with_args(event)
     end
