@@ -14,6 +14,7 @@ module StripeEvent
   end
   
   def self.subscriber(*names, &block)
+    names = TYPES if names.empty?
     names.each do |name|
       raise InvalidEventType.new(name) if !TYPES.include?(name)
     end

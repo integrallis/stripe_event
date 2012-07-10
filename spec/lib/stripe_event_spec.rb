@@ -32,6 +32,13 @@ describe StripeEvent do
       end
     end
     
+    it "should register a subscriber to all events" do
+      subscriber = StripeEvent.subscriber { }
+      StripeEvent::TYPES.each do |type|
+        StripeEvent.subscribers(type).should == [subscriber]
+      end
+    end
+    
     it "should require a valid event type" do
       expect {
         StripeEvent.subscriber('fake.event_type') { }
