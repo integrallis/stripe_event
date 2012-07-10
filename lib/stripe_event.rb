@@ -13,9 +13,11 @@ module StripeEvent
     ActiveSupport::Notifications.instrument(event_obj.type, :event => event_obj)
   end
   
-  def self.subscriber(name, &block)
-    raise InvalidEventType.new(name) if !TYPES.include?(name)
-    ActiveSupport::Notifications.subscribe(name, proxy(&block))
+  def self.subscriber(*names, &block)
+    names.each do |name|
+      raise InvalidEventType.new(name) if !TYPES.include?(name)
+    end
+    ActiveSupport::Notifications.subscribe(Regexp.union(names), proxy(&block))
   end
   
   def self.subscribers(name)
