@@ -1,4 +1,4 @@
-### 0.2.0 (unreleased)
+### 0.2.0 (July 12, 2012)
   * Register a subscriber to one/many/all events
   * Remove sqlite3 development dependency
   * Setup travis-ci for repo
@@ -9,5 +9,5 @@
   * Specify development dependency versions
   * Fix controller test which was passing incorrectly
 
-### 0.1.0 (June 26, 2012)
+### 0.1.0 (June 24, 2012)
   * Initial release
