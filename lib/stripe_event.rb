@@ -1,7 +1,6 @@
 require "stripe"
 require "stripe_event/engine"
 require "stripe_event/subscriber"
-require "stripe_event/publisher"
 require "stripe_event/types"
 
 module StripeEvent
@@ -12,7 +11,7 @@ module StripeEvent
   end
   
   def self.publish(event_obj)
-    Publisher.new(event_obj).publish
+    ActiveSupport::Notifications.instrument(event_obj.type, :event => event_obj)
   end
   
   def self.subscriber(*names, &block)
