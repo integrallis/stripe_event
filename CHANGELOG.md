@@ -1,5 +1,4 @@
 ### 0.2.0 (unreleased)
-  * [breaking change] `subscribe` method is now `subscriber`
   * Register a subscriber to one/many/all events
   * Remove sqlite3 development dependency
   * Setup travis-ci for repo

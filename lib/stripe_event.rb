@@ -14,7 +14,7 @@ module StripeEvent
     ActiveSupport::Notifications.instrument(event_obj.type, :event => event_obj)
   end
   
-  def self.subscriber(*names, &block)
+  def self.subscribe(*names, &block)
     Subscriber.new(names, &block).register
   end
   

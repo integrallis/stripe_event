@@ -20,14 +20,14 @@ describe StripeEvent do
     let(:event_type) { 'charge.failed' }
     
     it "should register a subscriber" do
-      subscriber = StripeEvent.subscriber(event_type) { }
+      subscriber = StripeEvent.subscribe(event_type) { }
       StripeEvent.subscribers(event_type).should == [subscriber]
     end
     
     it "should register a subscriber for many event types" do
       picked = StripeEvent::TYPES[0..3]
       unpicked = StripeEvent::TYPES[4..-1]
-      subscriber = StripeEvent.subscriber(*picked) { }
+      subscriber = StripeEvent.subscribe(*picked) { }
       picked.each do |type|
         StripeEvent.subscribers(type).should == [subscriber]
       end
@@ -37,7 +37,7 @@ describe StripeEvent do
     end
     
     it "should register a subscriber to all events" do
-      subscriber = StripeEvent.subscriber { }
+      subscriber = StripeEvent.subscribe { }
       StripeEvent::TYPES.each do |type|
         StripeEvent.subscribers(type).should == [subscriber]
       end
@@ -45,12 +45,12 @@ describe StripeEvent do
     
     it "should require a valid event type" do
       expect {
-        StripeEvent.subscriber('fake.event_type') { }
+        StripeEvent.subscribe('fake.event_type') { }
       }.to raise_error(StripeEvent::InvalidEventType)
     end
     
     it "should clear all subscribers" do
-      StripeEvent.subscriber(event_type) { }
+      StripeEvent.subscribe(event_type) { }
       StripeEvent.clear_subscribers!
       StripeEvent.subscribers(event_type).should be_empty
     end
@@ -62,7 +62,7 @@ describe StripeEvent do
     
     it "should only pass the event to the subscribed block" do
       expect { |block|
-        StripeEvent.subscriber(event_type, &block)
+        StripeEvent.subscribe(event_type, &block)
         StripeEvent.publish(event)
       }.to yield_with_args(event)
     end
