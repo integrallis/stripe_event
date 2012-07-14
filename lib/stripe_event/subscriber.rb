@@ -1,7 +1,7 @@
 module StripeEvent
   class Subscriber
-    def initialize(names, &block)
-      @names = Array(names)
+    def initialize(*names, &block)
+      @names = names
       @block = block
       ensure_valid_types!
     end

@@ -15,7 +15,7 @@ module StripeEvent
   end
   
   def self.subscribe(*names, &block)
-    Subscriber.new(names, &block).register
+    Subscriber.new(*names, &block).register
   end
   
   def self.subscribers(name)
