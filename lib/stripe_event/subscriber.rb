@@ -13,7 +13,7 @@ module StripeEvent
     private
     
     def pattern
-      Regexp.union(@names.empty? ? TYPES : @names)
+      Regexp.union(@names.empty? ? TYPE_LIST : @names)
     end
     
     def proxied_block
@@ -23,7 +23,7 @@ module StripeEvent
     end
     
     def ensure_valid_types!
-      invalid_names = @names.select { |name| !TYPES.include?(name) }
+      invalid_names = @names.select { |name| !TYPE_LIST.include?(name) }
       raise InvalidEventType.new(invalid_names) if invalid_names.any?
     end
   end

@@ -25,8 +25,8 @@ describe StripeEvent do
     end
     
     it "should register a subscriber for many event types" do
-      picked = StripeEvent::TYPES[0..3]
-      unpicked = StripeEvent::TYPES[4..-1]
+      picked = StripeEvent::TYPE_LIST[0..3]
+      unpicked = StripeEvent::TYPE_LIST[4..-1]
       subscriber = StripeEvent.subscribe(*picked) { }
       picked.each do |type|
         StripeEvent.subscribers(type).should == [subscriber]
@@ -38,7 +38,7 @@ describe StripeEvent do
     
     it "should register a subscriber to all events" do
       subscriber = StripeEvent.subscribe { }
-      StripeEvent::TYPES.each do |type|
+      StripeEvent::TYPE_LIST.each do |type|
         StripeEvent.subscribers(type).should == [subscriber]
       end
     end

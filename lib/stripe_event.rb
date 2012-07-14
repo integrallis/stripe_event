@@ -23,7 +23,7 @@ module StripeEvent
   end
   
   def self.clear_subscribers!
-    TYPES.each do |type|
+    TYPE_LIST.each do |type|
       subscribers(type).each { |s| unsubscribe(s) }
     end
   end
