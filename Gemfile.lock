@@ -113,7 +113,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rake
   rspec-rails (~> 2.10)
   stripe_event!
   webmock (~> 1.8)
