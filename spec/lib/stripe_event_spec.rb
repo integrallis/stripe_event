@@ -1,11 +1,13 @@
 require 'spec_helper'
 
 describe StripeEvent do
-  before { StripeEvent.clear_subscribers! }
+  let(:event_type) { StripeEvent::TYPE_LIST.sample }
+  
+  before do
+    StripeEvent.clear_subscribers!
+  end
   
   context "subscribing" do
-    let(:event_type) { 'charge.failed' }
-    
     it "should register a subscriber" do
       subscriber = StripeEvent.subscribe(event_type) { }
       StripeEvent.subscribers(event_type).should == [subscriber]
@@ -44,7 +46,6 @@ describe StripeEvent do
   end
   
   context "publishing" do
-    let(:event_type) { 'transfer.created' }
     let(:event) { double("event", :type => event_type) }
     
     it "should only pass the event to the subscribed block" do
