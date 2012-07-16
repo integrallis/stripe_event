@@ -113,6 +113,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  jruby-openssl (~> 0.7)
   rspec-rails (~> 2.10)
   stripe_event!
   webmock (~> 1.8)
