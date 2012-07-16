@@ -4,12 +4,6 @@ require "stripe_event/subscriber"
 require "stripe_event/types"
 
 module StripeEvent
-  
-  def self.configure
-    yield self
-    self
-  end
-  
   def self.publish(event_obj)
     ActiveSupport::Notifications.instrument(event_obj.type, :event => event_obj)
   end

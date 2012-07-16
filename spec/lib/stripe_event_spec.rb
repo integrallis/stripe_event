@@ -3,19 +3,6 @@ require 'spec_helper'
 describe StripeEvent do
   before { StripeEvent.clear_subscribers! }
   
-  context "configuration" do
-    it "yields itself to the block" do
-      expect { |block|
-        StripeEvent.configure(&block)
-      }.to yield_with_args(StripeEvent)
-    end
-    
-    it "should return itself" do
-      value = StripeEvent.configure { |c| }
-      value.should == StripeEvent
-    end
-  end
-  
   context "subscribing" do
     let(:event_type) { 'charge.failed' }
     
