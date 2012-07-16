@@ -1,3 +1,9 @@
+### 0.3.0 (July 16, 2012)
+  * Add registration method for conveniently adding many subscribers
+  * Depend on jruby-openssl when running on jruby
+  * Remove unneeded rake dependency
+  * Remove configure method
+
 ### 0.2.0 (July 12, 2012)
   * Register a subscriber to one/many/all events
   * Remove sqlite3 development dependency
