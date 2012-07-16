@@ -13,6 +13,13 @@ describe StripeEvent do
       StripeEvent.subscribers(event_type).should == [subscriber]
     end
     
+    it "registers subscribers within a parent block" do
+      StripeEvent.registration do
+        subscribe('invoice.payment_succeeded') { |e| }
+      end
+      StripeEvent.subscribers('invoice.payment_succeeded').should_not be_empty
+    end
+    
     it "should register a subscriber for many event types" do
       picked = StripeEvent::TYPE_LIST[0..3]
       unpicked = StripeEvent::TYPE_LIST[4..-1]
