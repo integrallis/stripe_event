@@ -7,19 +7,15 @@ module StripeEvent
     end
     
     def register
-      ActiveSupport::Notifications.subscribe(pattern, proxied_block)
+      ActiveSupport::Notifications.subscribe(pattern) do |*_, payload|
+        @block.call(payload[:event])
+      end
     end
     
     private
     
     def pattern
       Regexp.union(@names.empty? ? TYPE_LIST : @names)
-    end
-    
-    def proxied_block
-      lambda do |name, started, finished, id, payload|
-        @block.call(payload[:event])
-      end
     end
     
     def ensure_valid_types!
