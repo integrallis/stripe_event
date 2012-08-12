@@ -14,7 +14,7 @@ describe StripeEvent do
     end
     
     it "registers subscribers within a parent block" do
-      StripeEvent.registration do
+      StripeEvent.configure do
         subscribe('invoice.payment_succeeded') { |e| }
       end
       StripeEvent.subscribers('invoice.payment_succeeded').should_not be_empty

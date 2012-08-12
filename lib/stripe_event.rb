@@ -5,7 +5,7 @@ require "stripe_event/types"
 
 module StripeEvent
   class << self
-    alias_method :registration, :instance_eval
+    alias_method :configure, :instance_eval
   end
   
   def self.publish(event_obj)
