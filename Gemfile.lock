@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    stripe_event (0.3.0)
+    stripe_event (0.3.1)
       rails (~> 3.1)
       stripe (~> 1.6)
 

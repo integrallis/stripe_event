@@ -22,7 +22,7 @@ mount StripeEvent::Engine => "/my-chosen-path" # provide a custom path
 # config/initializers/stripe.rb
 Stripe.api_key = ENV['STRIPE_API_KEY'] # Set your api key
 
-StripeEvent.registration do
+StripeEvent.configure do
   subscribe 'charge.failed' do |event|
     MyClass.handle_failed_charge(event) # Define subscriber behavior
   end
@@ -40,3 +40,9 @@ end
 ## Register webhook url with Stripe
 
 ![Setup webhook url](https://raw.github.com/integrallis/stripe_event/master/screenshots/dashboard-webhook.png "webhook setup")
+
+## Note: The "Test Webhooks" Button Doesn't Work
+
+![Test Webhooks Fails](https://raw.github.com/barancw/stripe_event/master/screenshots/dashboard-webhook-test-fail.png "test webhooks fails")
+
+This implementation increases security by fetching the sent event again from stripe and eliminating any man in the middle or spoof attacks.  Unfortunately this breaks the test button from this panel.  If you need to test your setup make sure to trigger real events from your test site.  These events will all load correctly.
