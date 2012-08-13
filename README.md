@@ -41,8 +41,8 @@ end
 
 ![Setup webhook url](https://raw.github.com/integrallis/stripe_event/master/screenshots/dashboard-webhook.png "webhook setup")
 
-## Note: The "Test Webhooks" Button Doesn't Work
+## The "Test Webhooks" Button Doesn't Work
 
 ![Test Webhooks Fails](https://raw.github.com/barancw/stripe_event/master/screenshots/dashboard-webhook-test-fail.png "test webhooks fails")
 
-This implementation increases security by fetching the sent event again from stripe and eliminating any man in the middle or spoof attacks.  Unfortunately this breaks the test button from this panel.  If you need to test your setup make sure to trigger real events from your test site.  These events will all load correctly.
+This implementation increases security by fetching the sent event again from stripe and eliminating any man in the middle or spoof attacks ( [forum post](https://answers.stripe.com/questions/what-is-the-recommended-way-to-authenticate-a-webhook-callback) ).  Unfortunately this breaks the test button from this panel.  If you need to test your setup make sure to trigger real events from your test site.  These events will all load correctly.
