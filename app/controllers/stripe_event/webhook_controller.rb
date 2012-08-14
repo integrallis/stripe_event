@@ -1,8 +1,11 @@
 module StripeEvent
-  class WebhookController < ApplicationController
+  class WebhookController < ActionController::Base
     def event
-      StripeEvent.publish(@event)
+      event = Stripe::Event.retrieve(params[:id])
+      StripeEvent.publish(event)
       head :ok
+    rescue Stripe::StripeError
+      head :unauthorized
     end
   end
 end
