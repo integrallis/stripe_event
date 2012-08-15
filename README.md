@@ -22,7 +22,7 @@ mount StripeEvent::Engine => "/my-chosen-path" # provide a custom path
 # config/initializers/stripe.rb
 Stripe.api_key = ENV['STRIPE_API_KEY'] # Set your api key
 
-StripeEvent.registration do
+StripeEvent.setup do
   subscribe 'charge.failed' do |event|
     MyClass.handle_failed_charge(event) # Define subscriber behavior
   end

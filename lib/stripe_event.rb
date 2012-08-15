@@ -5,7 +5,12 @@ require "stripe_event/types"
 
 module StripeEvent
   class << self
-    alias_method :configure, :instance_eval
+    alias_method :setup, :instance_eval
+  end
+  
+  def self.registration(&block)
+    warn "[Deprecation Warning] StripeEvent.registration is deprecated. Use StripeEvent.setup."
+    instance_eval(&block)
   end
   
   def self.publish(event_obj)
