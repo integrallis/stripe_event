@@ -1,3 +1,7 @@
+### 0.3.1 (August 14, 2012)
+  * Fix controller inheritance issue. Thanks to Christopher Baran for [reporting the bug](https://github.com/integrallis/stripe_event/issues/1), and to Robert Bousquet for [fixing it](https://github.com/integrallis/stripe_event/pull/3).
+  * Deprecate registration method. Use 'setup' instead.
+
 ### 0.3.0 (July 16, 2012)
   * Add registration method for conveniently adding many subscribers
   * Depend on jruby-openssl when running on jruby
