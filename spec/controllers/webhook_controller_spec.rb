@@ -10,7 +10,7 @@ describe StripeEvent::WebhookController do
     let(:event_id) { 'evt_charge_succeeded' }
 
     before do
-      @event = stub_event(event_id)
+      stub_event(event_id)
     end
 
     it "should be successful" do
