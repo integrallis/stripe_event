@@ -2,7 +2,7 @@
 
 [![Build Status](https://secure.travis-ci.org/integrallis/stripe_event.png?branch=master)](http://travis-ci.org/integrallis/stripe_event)
 
-stripe_event is built on the ActiveSupport::Notifications API. Incoming webhook requests are authenticated by retrieving the [event object](https://stripe.com/docs/api?lang=ruby#event_object) from Stripe. Define subscriber blocks to handle one, many, or all event types.
+stripe_event is built on the ActiveSupport::Notifications API[[0]](http://api.rubyonrails.org/classes/ActiveSupport/Notifications.html). Incoming webhook requests are authenticated by retrieving the [event object](https://stripe.com/docs/api?lang=ruby#event_object) from Stripe[[1]](https://answers.stripe.com/questions/what-is-the-recommended-way-to-authenticate-a-webhook-callback). Define subscriber blocks to handle one, many, or all event types.
 
 ## Install
 
@@ -13,7 +13,7 @@ gem 'stripe_event'
 
 ```ruby
 # config/routes.rb
-mount StripeEvent::Engine => "/my-chosen-path" # provide a custom path
+mount StripeEvent::Engine => '/my-chosen-path' # provide a custom path
 ```
 
 ## Usage
