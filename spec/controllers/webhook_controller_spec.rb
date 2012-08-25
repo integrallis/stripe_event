@@ -13,7 +13,7 @@ describe StripeEvent::WebhookController do
       stub_event(event_id)
     end
 
-    it "should be successful" do
+    it "is successful" do
       post :event, @base_params.merge(:id => event_id)
       response.should be_success
     end
@@ -26,7 +26,7 @@ describe StripeEvent::WebhookController do
       stub_event(event_id, 404)
     end
 
-    it "should deny access" do
+    it "denies access" do
       post :event, @base_params.merge(:id => event_id)
       response.code.should == '401'
     end
