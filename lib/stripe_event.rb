@@ -8,11 +8,6 @@ module StripeEvent
     alias_method :setup, :instance_eval
   end
   
-  def self.registration(&block)
-    warn "[Deprecation Warning] StripeEvent.registration is deprecated. Use StripeEvent.setup."
-    instance_eval(&block)
-  end
-  
   def self.publish(event_obj)
     ActiveSupport::Notifications.instrument(event_obj.type, :event => event_obj)
   end
