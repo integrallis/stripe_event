@@ -62,4 +62,17 @@ describe StripeEvent do
       }.to yield_with_args(event)
     end
   end
+
+  context "retrieving" do
+    it "uses Stripe::Event as the default event retriever" do
+      Stripe::Event.should_receive(:retrieve).with('1')
+      StripeEvent.event_retriever.call({:id => '1'})
+    end
+
+    it "allows setting an event_retriever" do
+      event = stub(:event)
+      StripeEvent.event_retriever = Proc.new {|params| event }
+      StripeEvent.event_retriever.call({:id => '1'}).should == event
+    end
+  end
 end
