@@ -8,8 +8,8 @@ module StripeEvent
     alias_method :setup, :instance_eval
   end
   
-  def self.publish(event_obj)
-    ActiveSupport::Notifications.instrument(event_obj.type, :event => event_obj)
+  def self.publish(event)
+    ActiveSupport::Notifications.instrument(event[:type], :event => event)
   end
   
   def self.subscribe(*names, &block)

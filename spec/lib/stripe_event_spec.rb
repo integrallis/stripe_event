@@ -53,7 +53,7 @@ describe StripeEvent do
   end
   
   context "publishing" do
-    let(:event) { double("event", :type => event_type) }
+    let(:event) { Hash[:type => event_type] }
     
     it "passes only the event object to the subscribed block" do
       expect { |block|
