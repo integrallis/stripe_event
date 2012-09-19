@@ -1,7 +1,7 @@
 module StripeEvent
   class WebhookController < ActionController::Base
     def event
-      event = Stripe::Event.retrieve(params[:id])
+      event = StripeEvent.event_retriever.call(params)
       StripeEvent.publish(event)
       head :ok
     rescue Stripe::StripeError
