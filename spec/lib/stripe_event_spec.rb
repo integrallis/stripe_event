@@ -3,10 +3,6 @@ require 'spec_helper'
 describe StripeEvent do
   let(:event_type) { StripeEvent::TYPE_LIST.sample }
   
-  before do
-    StripeEvent.clear_subscribers!
-  end
-  
   context "subscribing" do
     it "registers a subscriber" do
       subscriber = StripeEvent.subscribe(event_type) { }
@@ -71,7 +67,7 @@ describe StripeEvent do
 
     it "allows setting an event_retriever" do
       event = stub(:event)
-      StripeEvent.event_retriever = Proc.new {|params| event }
+      StripeEvent.event_retriever = Proc.new { |params| event }
       StripeEvent.event_retriever.call({:id => '1'}).should == event
     end
   end
