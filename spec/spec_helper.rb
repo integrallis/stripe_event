@@ -13,10 +13,11 @@ Dir[File.join(ENGINE_RAILS_ROOT, "spec/support/**/*.rb")].each {|f| require f }
 
 RSpec.configure do |config|
   config.include(FixtureHelper)
+  config.include(ActiveSupportHelper)
 
   config.before do
     StripeEvent.event_retriever = Proc.new { |params| Stripe::Event.retrieve(params[:id]) }
-    StripeEvent.clear_subscribers!
+    clear_subscribers_for_list(StripeEvent::TYPE_LIST)
   end
 
   config.infer_base_class_for_anonymous_controllers = false
