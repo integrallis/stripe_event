@@ -1,5 +1,7 @@
 module StripeEvent
   TYPE_LIST = [
+    'account.updated',
+    'account.application.deauthorized',
     'charge.succeeded',
     'charge.failed',
     'charge.refunded',
@@ -28,6 +30,7 @@ module StripeEvent
     'coupon.updated',
     'coupon.deleted',
     'transfer.created',
+    'transfer.updated',
     'transfer.failed',
     'ping'
   ]
