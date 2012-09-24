@@ -29,15 +29,16 @@ describe StripeEvent do
   end
 
   context "retrieving" do
+    let(:params) { Hash[:id => '1'] }
+    
     it "uses Stripe::Event as the default event retriever" do
       Stripe::Event.should_receive(:retrieve).with('1')
-      StripeEvent.event_retriever.call({:id => '1'})
+      StripeEvent.event_retriever.call(params)
     end
 
     it "allows setting an event_retriever" do
-      event = stub(:event)
-      StripeEvent.event_retriever = Proc.new { |params| event }
-      StripeEvent.event_retriever.call({:id => '1'}).should == event
+      StripeEvent.event_retriever = Proc.new { |*args| args }
+      StripeEvent.event_retriever.call(params).should == [params]
     end
   end
 end
