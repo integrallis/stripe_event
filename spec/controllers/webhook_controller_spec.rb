@@ -2,7 +2,10 @@ require 'spec_helper'
 
 describe StripeEvent::WebhookController do
   before do
-    @base_params = { :use_route => :stripe_event }
+    @base_params = {
+      :type => StripeEvent::TYPE_LIST.sample,
+      :use_route => :stripe_event
+    }
   end
 
   context "with valid event data" do
@@ -28,6 +31,23 @@ describe StripeEvent::WebhookController do
     it "denies access" do
       post :event, @base_params.merge(:id => event_id)
       response.code.should == '401'
+    end
+  end
+  
+  context "with a custom event retriever" do
+    before do
+      StripeEvent.event_retriever = Proc.new { |params| params }
+    end
+    
+    it "is successful" do
+      post :event, @base_params.merge(:id => '1')
+      response.should be_success
+    end
+    
+    it "fails without an event type" do
+      expect {
+        post :event, @base_params.merge(:id => '1', :type => nil)
+      }.to raise_error(StripeEvent::InvalidEventTypeError)
     end
   end
 end
