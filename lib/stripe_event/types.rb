@@ -1,6 +1,4 @@
 module StripeEvent
-  InvalidEventTypeError = Class.new(StandardError)
-  
   TYPE_LIST = [
     'charge.succeeded',
     'charge.failed',

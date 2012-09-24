@@ -3,6 +3,7 @@ require "stripe_event/engine"
 require "stripe_event/subscriber"
 require "stripe_event/publisher"
 require "stripe_event/types"
+require "stripe_event/errors"
 
 module StripeEvent
   mattr_accessor :event_retriever
