@@ -12,7 +12,7 @@ describe StripeEvent::Publisher do
   end
   
   describe "#type" do
-    it "detemines the type of event given" do
+    it "determines the type of event given" do
       publisher.type.should == event_type
     end
     
