@@ -26,11 +26,11 @@ describe StripeEvent::Subscriber do
       let(:event_types) { StripeEvent::TYPE_LIST.sample(1) }
       
       it "matches the given type" do
-        event_types.each { |type| subscriber.pattern.should match(type) }
+        event_types.each { |type| subscriber.pattern.should === type }
       end
       
       it "does not match other types" do
-        other_types.each { |type| subscriber.pattern.should_not match(type) }
+        other_types.each { |type| subscriber.pattern.should_not === type }
       end
     end
     
@@ -38,11 +38,11 @@ describe StripeEvent::Subscriber do
       let(:event_types) { StripeEvent::TYPE_LIST.sample(5) }
       
       it "matches the given types" do
-        event_types.each { |type| subscriber.pattern.should match(type) }
+        event_types.each { |type| subscriber.pattern.should === type }
       end
 
       it "does not match other types" do
-        other_types.each { |type| subscriber.pattern.should_not match(type) }
+        other_types.each { |type| subscriber.pattern.should_not === type }
       end
     end
     
@@ -50,7 +50,7 @@ describe StripeEvent::Subscriber do
       let(:event_types) { nil }
       
       it "matches all types" do
-        StripeEvent::TYPE_LIST.each { |type| subscriber.pattern.should match(type) }
+        StripeEvent::TYPE_LIST.each { |type| subscriber.pattern.should === type }
       end
     end
   end
