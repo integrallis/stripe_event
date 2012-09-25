@@ -1,3 +1,9 @@
+### 0.4.0 (September 24, 2012)
+  * Add configuration for custom event retrieval. Thanks to Dan Hodos for the [pull request](https://github.com/integrallis/stripe_event/pull/6).
+  * Move module methods only used in tests into a test helper.
+  * Various internal refactorings and additional tests.
+  * Error classes will inherit from a base error class now.
+
 ### 0.3.1 (August 14, 2012)
   * Fix controller inheritance issue. Thanks to Christopher Baran for [reporting the bug](https://github.com/integrallis/stripe_event/issues/1), and to Robert Bousquet for [fixing it](https://github.com/integrallis/stripe_event/pull/3).
   * Deprecate registration method. Use 'setup' instead.
