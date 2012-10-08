@@ -1,7 +1,7 @@
 module StripeEvent
   class Publisher < Struct.new(:event)
     def instrument
-      ActiveSupport::Notifications.instrument(type, :event => event)
+      ActiveSupport::Notifications.instrument(type, event)
     end
     
     def type

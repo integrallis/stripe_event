@@ -7,7 +7,7 @@ describe StripeEvent::Publisher do
   let(:event_type) { StripeEvent::TYPE_LIST.sample }
   
   it "instruments the event" do
-    ActiveSupport::Notifications.should_receive(:instrument).with(event_type, :event => event)
+    ActiveSupport::Notifications.should_receive(:instrument).with(event_type, event)
     publisher.instrument
   end
   
