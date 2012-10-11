@@ -33,17 +33,17 @@ describe StripeEvent::WebhookController do
       response.code.should == '401'
     end
   end
-  
+
   context "with a custom event retriever" do
     before do
       StripeEvent.event_retriever = Proc.new { |params| params }
     end
-    
+
     it "is successful" do
       post :event, @base_params.merge(:id => '1')
       response.should be_success
     end
-    
+
     it "fails without an event type" do
       expect {
         post :event, @base_params.merge(:id => '1', :type => nil)

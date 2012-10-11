@@ -3,7 +3,7 @@ module StripeEvent
     def instrument
       ActiveSupport::Notifications.instrument(type, event)
     end
-    
+
     def type
       event[:type].tap { |type|
         raise InvalidEventTypeError.new("Event type was not present for: #{event}") if !type.present?
