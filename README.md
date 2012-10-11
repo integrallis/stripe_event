@@ -57,3 +57,7 @@ StripeEvent.event_retriever = Proc.new { |params| params }
 ## Register webhook url with Stripe
 
 ![Setup webhook url](https://raw.github.com/integrallis/stripe_event/master/screenshots/dashboard-webhook.png "webhook setup")
+
+### Note: 'Test Webhooks' Button on Stripe Dashboard
+
+This button sends an example event to your webhook urls, including an `id` of `evt_00000000000000`. To confirm that Stripe sent the webhook, stripe_event attempts to retrieve the event details from Stripe using the given `id`. In this case the event does not exist and stripe_event responds with `401 Unauthorized`. Instead of using the 'Test Webhooks' button, trigger webhooks by using the Stripe Dashboard to create test payments, customers, etc.
