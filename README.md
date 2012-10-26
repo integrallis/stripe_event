@@ -54,9 +54,13 @@ During development it may be useful to skip retrieving the event from Stripe, an
 StripeEvent.event_retriever = Proc.new { |params| params }
 ```
 
-## Register webhook url with Stripe
+### Register webhook url with Stripe
 
 ![Setup webhook url](https://raw.github.com/integrallis/stripe_event/master/screenshots/dashboard-webhook.png "webhook setup")
+
+### Examples
+
+The [RailsApps](https://github.com/RailsApps) project by Daniel Kehoe has released an [example Rails 3.2 app](https://github.com/RailsApps/rails-stripe-membership-saas) with recurring billing using Stripe. The application uses stripe_event to handle `'customer.subscription.deleted'` events.
 
 ### Note: 'Test Webhooks' Button on Stripe Dashboard
 
