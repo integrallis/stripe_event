@@ -2,7 +2,7 @@ module StripeEvent
   class Subscriber
     def initialize(*names)
       @names = names
-      ensure_valid_types!
+      assert_valid_types!
     end
 
     def register(&block)
@@ -18,7 +18,7 @@ module StripeEvent
 
     private
 
-    def ensure_valid_types!
+    def assert_valid_types!
       invalid_names = @names.select { |name| !TYPE_LIST.include?(name) }
       raise InvalidEventTypeError.new(invalid_names) if invalid_names.any?
     end
