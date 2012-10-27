@@ -9,27 +9,23 @@ describe StripeEvent::WebhookController do
   end
 
   context "with valid event data" do
-    let(:event_id) { 'evt_charge_succeeded' }
-
     before do
-      stub_event(event_id)
+      stub_event('evt_charge_succeeded')
     end
 
     it "is successful" do
-      post :event, @base_params.merge(:id => event_id)
+      post :event, @base_params.merge(:id => 'evt_charge_succeeded')
       response.should be_success
     end
   end
 
   context "with invalid event data" do
-    let(:event_id) { 'evt_invalid_id' }
-
     before do
-      stub_event(event_id, 404)
+      stub_event('evt_invalid_id', 404)
     end
 
     it "denies access" do
-      post :event, @base_params.merge(:id => event_id)
+      post :event, @base_params.merge(:id => 'evt_invalid_id')
       response.code.should == '401'
     end
   end
