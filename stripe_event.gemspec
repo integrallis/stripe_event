@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
   s.add_dependency "stripe", "~> 1.6"
 
   s.add_development_dependency "rspec-rails", "~> 2.12"
-  s.add_development_dependency "webmock", "~> 1.8"
+  s.add_development_dependency "webmock", "~> 1.9"
 end

@@ -35,7 +35,7 @@ GEM
     activesupport (3.2.6)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    addressable (2.2.8)
+    addressable (2.3.2)
     arel (3.0.2)
     builder (3.0.0)
     crack (0.3.1)
@@ -103,7 +103,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.33)
-    webmock (1.8.7)
+    webmock (1.9.0)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
 
@@ -114,4 +114,4 @@ DEPENDENCIES
   jruby-openssl (~> 0.7)
   rspec-rails (~> 2.12)
   stripe_event!
-  webmock (~> 1.8)
+  webmock (~> 1.9)
