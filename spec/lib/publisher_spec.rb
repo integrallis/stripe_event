@@ -13,7 +13,7 @@ describe StripeEvent::Publisher do
 
   describe "#type" do
     it "determines the type of event given" do
-      publisher.type.should == event_type
+      expect(publisher.type).to eq event_type
     end
 
     context "given event does not have a type" do

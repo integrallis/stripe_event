@@ -14,8 +14,13 @@ Dir[File.join(ENGINE_RAILS_ROOT, "spec/support/**/*.rb")].each {|f| require f }
 RSpec.configure do |config|
   config.include(FixtureHelper)
   config.include(ActiveSupportHelper)
+
   config.order = 'random'
-  
+
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
+
   config.before do
     @_event_retriever = StripeEvent.event_retriever
     clear_subscribers_for_list(StripeEvent::TYPE_LIST)

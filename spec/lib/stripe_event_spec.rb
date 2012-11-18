@@ -6,14 +6,16 @@ describe StripeEvent do
   context "subscribing" do
     it "registers a subscriber" do
       subscriber = StripeEvent.subscribe(event_type) { |e| }
-      subscribers_for_type(event_type).should == [subscriber]
+      subscribers = subscribers_for_type(event_type)
+      expect(subscribers).to eq [subscriber]
     end
 
     it "registers subscribers within a parent block" do
       StripeEvent.setup do
         subscribe('invoice.payment_succeeded') { |e| }
       end
-      subscribers_for_type('invoice.payment_succeeded').should_not be_empty
+      subscribers = subscribers_for_type('invoice.payment_succeeded')
+      expect(subscribers).to_not be_empty
     end
   end
 
@@ -38,7 +40,8 @@ describe StripeEvent do
 
     it "allows setting an event_retriever" do
       StripeEvent.event_retriever = Proc.new { |*args| args }
-      StripeEvent.event_retriever.call(params).should == [params]
+      event = StripeEvent.event_retriever.call(params)
+      expect(event).to eq [params]
     end
   end
 end
