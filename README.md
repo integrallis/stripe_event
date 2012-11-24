@@ -24,7 +24,10 @@ Stripe.api_key = ENV['STRIPE_API_KEY'] # Set your api key
 
 StripeEvent.setup do
   subscribe 'charge.failed' do |event|
-    MyClass.handle_failed_charge(event) # Define subscriber behavior
+    # Define subscriber behavior based on the event object
+    event.class #=> Stripe::Event
+    event.type  #=> "charge.failed"
+    event.data  #=> { ... }
   end
 
   subscribe 'customer.created', 'customer.updated' do |event|
@@ -60,7 +63,7 @@ StripeEvent.event_retriever = Proc.new { |params| params }
 
 ### Examples
 
-The [RailsApps](https://github.com/RailsApps) project by Daniel Kehoe has released an [example Rails 3.2 app](https://github.com/RailsApps/rails-stripe-membership-saas) with recurring billing using Stripe. The application uses stripe_event to handle `'customer.subscription.deleted'` events.
+The [RailsApps](https://github.com/RailsApps) project by Daniel Kehoe has released an [example Rails 3.2 app](https://github.com/RailsApps/rails-stripe-membership-saas) with recurring billing using Stripe. The application uses stripe_event to handle `customer.subscription.deleted` events.
 
 ### Note: 'Test Webhooks' Button on Stripe Dashboard
 
