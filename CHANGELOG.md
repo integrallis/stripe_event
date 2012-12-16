@@ -1,4 +1,4 @@
-### 0.5.0 (unreleased)
+### 0.5.0 (December 16, 2012)
   * Remove `Gemfile.lock` from version control
   * Internal event type list is now a set
   * Update event type list
