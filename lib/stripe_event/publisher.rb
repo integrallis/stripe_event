@@ -5,9 +5,8 @@ module StripeEvent
     end
 
     def type
-      event[:type].tap { |type|
-        raise InvalidEventTypeError.new("Event type was not present for: #{event}") if !type.present?
-      }
+      return event[:type] if event[:type].present?
+      raise InvalidEventTypeError.new("Event type was not present for: #{event}")
     end
   end
 end
