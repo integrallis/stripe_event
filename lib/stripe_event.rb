@@ -52,7 +52,6 @@ module StripeEvent
     'plan.updated',
     'plan.deleted',
     'coupon.created',
-    'coupon.updated',
     'coupon.deleted',
     'transfer.created',
     'transfer.updated',
