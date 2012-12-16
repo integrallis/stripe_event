@@ -7,6 +7,7 @@ require "stripe_event/version"
 Gem::Specification.new do |s|
   s.name        = "stripe_event"
   s.version     = StripeEvent::VERSION
+  s.license     = "MIT"
   s.authors     = ["Danny Whalen"]
   s.email       = ["dwhalen@integrallis.com"]
   s.homepage    = "https://github.com/integrallis/stripe_event"
