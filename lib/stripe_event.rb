@@ -7,8 +7,8 @@ module StripeEvent
   mattr_accessor :event_retriever
   self.event_retriever = Proc.new { |params| Stripe::Event.retrieve(params[:id]) }
 
-  class << self
-    alias_method :setup, :instance_eval
+  def self.setup(&block)
+    instance_eval(&block)
   end
 
   def self.publish(event)
