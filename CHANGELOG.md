@@ -1,3 +1,10 @@
+### 0.5.0 (unreleased)
+  * Remove `Gemfile.lock` from version control
+  * Internal event type list is now a set
+  * Update event type list
+  * Various internal refactorings
+  * More readable tests
+
 ### 0.4.0 (September 24, 2012)
   * Add configuration for custom event retrieval. Thanks to Dan Hodos for the [pull request](https://github.com/integrallis/stripe_event/pull/6).
   * Move module methods only used in tests into a test helper.
