@@ -1,3 +1,4 @@
+require "set"
 require "stripe"
 require "stripe_event/engine"
 require "stripe_event/subscriber"
@@ -22,7 +23,7 @@ module StripeEvent
   class StripeEventError < StandardError; end
   class InvalidEventTypeError < StripeEventError; end
 
-  TYPE_LIST = [
+  TYPE_LIST = Set[
     'account.updated',
     'account.application.deauthorized',
     'charge.succeeded',
@@ -57,5 +58,5 @@ module StripeEvent
     'transfer.updated',
     'transfer.failed',
     'ping'
-  ]
+  ].freeze
 end

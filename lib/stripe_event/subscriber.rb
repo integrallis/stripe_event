@@ -13,7 +13,7 @@ module StripeEvent
     end
 
     def pattern
-      Regexp.union(@names.empty? ? TYPE_LIST : @names)
+      Regexp.union(@names.empty? ? TYPE_LIST.to_a : @names)
     end
 
     private
