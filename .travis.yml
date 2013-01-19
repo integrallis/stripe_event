@@ -4,6 +4,10 @@ rvm:
   - 1.9.3
   - rbx-19mode
   - jruby-19mode
+gemfile:
+  - gemfiles/rails3.1.gemfile
+  - gemfiles/rails3.2.gemfile
+  - gemfiles/rails_master.gemfile
 notifications:
   email:
     - daniel.r.whalen@gmail.com
