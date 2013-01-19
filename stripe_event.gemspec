@@ -16,9 +16,10 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,lib}/**/*"] + ["LICENSE.md", "Rakefile", "README.md"]
 
-  s.add_dependency "rails", "~> 3.1"
+  s.add_dependency "rails", ">= 3.1"
   s.add_dependency "stripe", "~> 1.6"
 
   s.add_development_dependency "rspec-rails", "~> 2.12"
   s.add_development_dependency "webmock", "~> 1.9"
+  s.add_development_dependency "appraisal"
 end
