@@ -14,7 +14,8 @@ Gem::Specification.new do |s|
   s.summary     = "Stripe webhook integration for Rails applications."
   s.description = "Stripe webhook integration for Rails applications."
 
-  s.files = Dir["{app,config,lib}/**/*"] + ["LICENSE.md", "Rakefile", "README.md"]
+  s.files       = `git ls-files`.split("\n")
+  s.test_files  = `git ls-files -- Appraisals {spec,gemfiles}/*`.split("\n")
 
   s.add_dependency "rails", ">= 3.1"
   s.add_dependency "stripe", "~> 1.6"
