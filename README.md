@@ -68,3 +68,7 @@ The [RailsApps](https://github.com/RailsApps) project by Daniel Kehoe has releas
 ### Note: 'Test Webhooks' Button on Stripe Dashboard
 
 This button sends an example event to your webhook urls, including an `id` of `evt_00000000000000`. To confirm that Stripe sent the webhook, stripe_event attempts to retrieve the event details from Stripe using the given `id`. In this case the event does not exist and stripe_event responds with `401 Unauthorized`. Instead of using the 'Test Webhooks' button, trigger webhooks by using the Stripe Dashboard to create test payments, customers, etc.
+
+### License
+
+[MIT License](https://github.com/integrallis/stripe_event/blob/master/LICENSE.md). Copyright 2012-2013 Integrallis Software.
