@@ -11,6 +11,10 @@ module StripeEvent
       instance_eval(&block)
     end
 
+    def instrument(params)
+      publish event_retriever.call(params)
+    end
+
     def publish(event)
       backend.publish event[:type], event
     end
@@ -25,8 +29,8 @@ module StripeEvent
     end
   end
 
-  self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
   self.backend = ActiveSupport::Notifications
+  self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
 
   TYPE_LIST = Set[
     'account.updated',
