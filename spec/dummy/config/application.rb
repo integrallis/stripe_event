@@ -7,8 +7,8 @@ require "action_controller/railtie"
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
-Bundler.require
-# require "stripe_event"
+# Bundler.require
+require "stripe_event"
 
 module Dummy
   class Application < Rails::Application

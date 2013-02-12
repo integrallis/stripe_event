@@ -1,27 +1,32 @@
 require "set"
 require "stripe"
 require "stripe_event/engine"
-require "stripe_event/subscriber"
-require "stripe_event/publisher"
 
 module StripeEvent
-  mattr_accessor :event_retriever
-  self.event_retriever = Proc.new { |params| Stripe::Event.retrieve(params[:id]) }
+  class << self
+    attr_accessor :backend
+    attr_accessor :event_retriever
 
-  def self.setup(&block)
-    instance_eval(&block)
+    def setup(&block)
+      instance_eval(&block)
+    end
+
+    def publish(event)
+      backend.publish event[:type], event
+    end
+
+    def subscribe(*names, &block)
+      pattern = Regexp.union(names.empty? ? TYPE_LIST.to_a : names)
+
+      backend.subscribe(pattern) do |*args|
+        payload = args.last
+        block.call payload
+      end
+    end
   end
 
-  def self.publish(event)
-    Publisher.new(event).instrument
-  end
-
-  def self.subscribe(*names, &block)
-    Subscriber.new(*names).register(&block)
-  end
-
-  class StripeEventError < StandardError; end
-  class InvalidEventTypeError < StripeEventError; end
+  self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
+  self.backend = ActiveSupport::Notifications
 
   TYPE_LIST = Set[
     'account.updated',
