@@ -117,7 +117,7 @@ PLATFORMS
 DEPENDENCIES
   appraisal
   jruby-openssl (~> 0.7)
-  rails (~> 3.2.11)
+  rails (~> 3.2)
   rspec-rails (~> 2.12)
   stripe_event!
   webmock (~> 1.9)
