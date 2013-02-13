@@ -57,7 +57,7 @@ StripeEvent.event_retriever = Proc.new { |params| params }
 
 ### Register webhook url with Stripe
 
-![Setup webhook url](https://raw.github.com/integrallis/stripe_event/master/screenshots/dashboard-webhook.png "webhook setup")
+![Setup webhook url](https://raw.github.com/integrallis/stripe_event/master/dashboard-webhook.png "webhook setup")
 
 ### Examples
 
