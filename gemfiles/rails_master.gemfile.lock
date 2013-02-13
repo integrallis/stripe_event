@@ -120,7 +120,6 @@ PLATFORMS
 
 DEPENDENCIES
   appraisal
-  jruby-openssl (~> 0.7)
   rails!
   rspec-rails (~> 2.12)
   stripe_event!

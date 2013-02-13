@@ -2,7 +2,6 @@
 
 source "http://rubygems.org"
 
-gem "jruby-openssl", "~> 0.7", :platforms=>:jruby
 gem "rails", "~> 3.2"
 
 gemspec :path=>"../"
