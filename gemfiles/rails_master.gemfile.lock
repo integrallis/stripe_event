@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/rails/rails.git
-  revision: 9c5cc89ede353c1b756d294ee28e4d011655b164
+  revision: f8c8ad56c8a1cb48c6535fd8e248dcb9049e0aa3
   specs:
     actionmailer (4.0.0.beta)
       actionpack (= 4.0.0.beta)
@@ -63,14 +63,14 @@ GEM
     erubis (2.7.0)
     hike (1.2.1)
     i18n (0.6.1)
-    json (1.7.6)
+    json (1.7.7)
     mail (2.5.3)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.21)
     minitest (4.6.0)
-    multi_json (1.5.0)
+    multi_json (1.6.0)
     polyglot (0.3.3)
     rack (1.5.2)
     rack-test (0.6.2)
