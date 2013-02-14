@@ -1,3 +1,5 @@
+The MIT License
+
 Copyright 2012-2013 Integrallis Software
 
 Permission is hereby granted, free of charge, to any person obtaining

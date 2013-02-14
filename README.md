@@ -1,4 +1,4 @@
-# stripe_event [![Build Status](https://secure.travis-ci.org/integrallis/stripe_event.png?branch=master)](http://travis-ci.org/integrallis/stripe_event) [![Dependency Status](https://gemnasium.com/integrallis/stripe_event.png)](https://gemnasium.com/integrallis/stripe_event) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/integrallis/stripe_event)
+# stripe_event [![Build Status](https://secure.travis-ci.org/integrallis/stripe_event.png?branch=master)](http://travis-ci.org/integrallis/stripe_event) [![Dependency Status](https://gemnasium.com/integrallis/stripe_event.png)](https://gemnasium.com/integrallis/stripe_event)
 
 stripe_event is built on the [ActiveSupport::Notifications API](http://api.rubyonrails.org/classes/ActiveSupport/Notifications.html). Incoming webhook requests are authenticated by retrieving the [event object](https://stripe.com/docs/api?lang=ruby#event_object) from Stripe[[1]](https://answers.stripe.com/questions/what-is-the-recommended-way-to-authenticate-a-webhook-callback). Define subscriber blocks to handle one, many, or all event types.
 
@@ -43,7 +43,7 @@ end
 If you have built an application that has multiple Stripe accounts--say, each of your customers has their own--you may want to define your own way of retrieving events from Stripe (e.g. perhaps you want to use the [user_id parameter](https://stripe.com/docs/apps/getting-started#webhooks) from the top level to detect the customer for the event, then grab their specific API key). You can do this:
 
 ```ruby
-StripeEvent.event_retriever = Proc.new do |params| 
+StripeEvent.event_retriever = lambda do |params|
   secret_key = Account.find_by_stripe_user_id(params[:user_id]).secret_key
   Stripe::Event.retrieve(params[:id], secret_key)
 end
@@ -52,7 +52,7 @@ end
 During development it may be useful to skip retrieving the event from Stripe, and deal with the params hash directly. Just remember that the data has not been authenticated.
 
 ```ruby
-StripeEvent.event_retriever = Proc.new { |params| params }
+StripeEvent.event_retriever = lambda { |params| params }
 ```
 
 ### Register webhook url with Stripe
