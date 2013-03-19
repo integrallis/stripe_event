@@ -4,19 +4,19 @@ require "stripe_event/engine"
 
 module StripeEvent
   class << self
-    attr_accessor :backend
-    attr_accessor :event_retriever
+    attr_accessor :backend, :event_retriever
 
     def setup(&block)
       instance_eval(&block)
     end
 
     def instrument(params)
-      publish event_retriever.call(params)
+      event = event_retriever.call(params)
+      publish(event)
     end
 
     def publish(event)
-      backend.publish event[:type], event
+      backend.publish(event[:type], event)
     end
 
     def subscribe(*names, &block)
@@ -24,7 +24,7 @@ module StripeEvent
 
       backend.subscribe(pattern) do |*args|
         payload = args.last
-        block.call payload
+        block.call(payload)
       end
     end
   end
