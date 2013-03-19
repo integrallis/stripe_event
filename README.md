@@ -1,6 +1,6 @@
-# stripe_event [![Build Status](https://secure.travis-ci.org/integrallis/stripe_event.png?branch=master)](http://travis-ci.org/integrallis/stripe_event) [![Dependency Status](https://gemnasium.com/integrallis/stripe_event.png)](https://gemnasium.com/integrallis/stripe_event)
+# StripeEvent [![Build Status](https://secure.travis-ci.org/integrallis/stripe_event.png?branch=master)](http://travis-ci.org/integrallis/stripe_event) [![Dependency Status](https://gemnasium.com/integrallis/stripe_event.png)](https://gemnasium.com/integrallis/stripe_event) [![Gem Version](https://badge.fury.io/rb/stripe_event.png)](http://badge.fury.io/rb/stripe_event)
 
-stripe_event is built on the [ActiveSupport::Notifications API](http://api.rubyonrails.org/classes/ActiveSupport/Notifications.html). Incoming webhook requests are authenticated by retrieving the [event object](https://stripe.com/docs/api?lang=ruby#event_object) from Stripe[[1]](https://answers.stripe.com/questions/what-is-the-recommended-way-to-authenticate-a-webhook-callback). Define subscriber blocks to handle one, many, or all event types.
+StripeEvent is built on the [ActiveSupport::Notifications API](http://api.rubyonrails.org/classes/ActiveSupport/Notifications.html). Incoming webhook requests are authenticated by retrieving the [event object](https://stripe.com/docs/api?lang=ruby#event_object) from Stripe[[1]](https://answers.stripe.com/questions/what-is-the-recommended-way-to-authenticate-a-webhook-callback). Define subscriber blocks to handle one, many, or all event types.
 
 ## Install
 
@@ -61,11 +61,11 @@ StripeEvent.event_retriever = lambda { |params| params }
 
 ### Examples
 
-The [RailsApps](https://github.com/RailsApps) project by Daniel Kehoe has released an [example Rails 3.2 app](https://github.com/RailsApps/rails-stripe-membership-saas) with recurring billing using Stripe. The application uses stripe_event to handle `customer.subscription.deleted` events.
+The [RailsApps](https://github.com/RailsApps) project by Daniel Kehoe has released an [example Rails 3.2 app](https://github.com/RailsApps/rails-stripe-membership-saas) with recurring billing using Stripe. The application uses StripeEvent to handle `customer.subscription.deleted` events.
 
 ### Note: 'Test Webhooks' Button on Stripe Dashboard
 
-This button sends an example event to your webhook urls, including an `id` of `evt_00000000000000`. To confirm that Stripe sent the webhook, stripe_event attempts to retrieve the event details from Stripe using the given `id`. In this case the event does not exist and stripe_event responds with `401 Unauthorized`. Instead of using the 'Test Webhooks' button, trigger webhooks by using the Stripe Dashboard to create test payments, customers, etc.
+This button sends an example event to your webhook urls, including an `id` of `evt_00000000000000`. To confirm that Stripe sent the webhook, StripeEvent attempts to retrieve the event details from Stripe using the given `id`. In this case the event does not exist and StripeEvent responds with `401 Unauthorized`. Instead of using the 'Test Webhooks' button, trigger webhooks by using the Stripe Dashboard to create test payments, customers, etc.
 
 ### License
 
