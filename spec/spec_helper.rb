@@ -23,10 +23,12 @@ RSpec.configure do |config|
 
   config.before do
     @_event_retriever = StripeEvent.event_retriever
-    clear_subscribers_for_list(StripeEvent::TYPE_LIST)
+    @_notifier = StripeEvent.backend.notifier
+    StripeEvent.backend.notifier = @_notifier.class.new
   end
 
   config.after do
     StripeEvent.event_retriever = @_event_retriever
+    StripeEvent.backend.notifier = @_notifier
   end
 end
