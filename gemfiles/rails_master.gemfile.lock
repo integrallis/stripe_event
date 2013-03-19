@@ -43,7 +43,7 @@ GIT
 PATH
   remote: /Users/dwhalen/Dropbox/stripe_event
   specs:
-    stripe_event (0.5.0)
+    stripe_event (0.6.0)
       rails (>= 3.1)
       stripe (~> 1.6)
 

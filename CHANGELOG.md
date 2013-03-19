@@ -1,3 +1,9 @@
+### 0.6.0 (March 18, 2013)
+  * Rails 4 compatibility. Thank you to Ben Ubois for reporting the [issue](https://github.com/integrallis/stripe_event/issues/13) and to Matt Goldman for the [pull request](https://github.com/integrallis/stripe_event/pull/14).
+  * Run specs against different Rails versions
+  * Refactor internal usage of AS::Notifications
+  * Remove jruby-openssl as platform conditional dependency
+
 ### 0.5.0 (December 16, 2012)
   * Remove `Gemfile.lock` from version control
   * Internal event type list is now a set
