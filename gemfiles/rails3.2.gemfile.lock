@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/dwhalen/code/stripe_event
+  remote: ..
   specs:
     stripe_event (0.6.0)
       rails (>= 3.1)
