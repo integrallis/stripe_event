@@ -6,11 +6,11 @@ rvm:
 gemfile:
   - gemfiles/rails3.1.gemfile
   - gemfiles/rails3.2.gemfile
-  - gemfiles/rails_master.gemfile
+  - gemfiles/rails4.0.gemfile
 matrix:
   exclude:
     - rvm: 1.9.2
-      gemfile: gemfiles/rails_master.gemfile
+      gemfile: gemfiles/rails4.0.gemfile
 notifications:
   email:
-    - daniel.r.whalen@gmail.com
+    - daniel.r.whalen+travis-ci@gmail.com

@@ -1,11 +1,11 @@
 appraise "rails3.1" do
-  gem "rails", "~> 3.1"
+  gem "rails", "~> 3.1.0"
 end
 
 appraise "rails3.2" do
-  gem "rails", "~> 3.2"
+  gem "rails", "~> 3.2.0"
 end
 
-appraise "rails-master" do
-  gem "rails", :github => "rails/rails"
+appraise "rails4.0" do
+  gem "rails", "~> 4.0.0"
 end
