@@ -6,7 +6,7 @@ PATH
       stripe (~> 1.6)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     actionmailer (4.0.0)
       actionpack (= 4.0.0)
@@ -38,7 +38,6 @@ GEM
       rake
     arel (4.0.0)
     atomic (1.1.10)
-    atomic (1.1.10-java)
     builder (3.1.4)
     crack (0.4.1)
       safe_yaml (~> 0.9.0)
@@ -109,7 +108,6 @@ GEM
       crack (>= 0.3.2)
 
 PLATFORMS
-  java
   ruby
 
 DEPENDENCIES

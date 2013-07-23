@@ -6,7 +6,7 @@ PATH
       stripe (~> 1.6)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     actionmailer (3.2.13)
       actionpack (= 3.2.13)
@@ -49,7 +49,6 @@ GEM
     i18n (0.6.1)
     journey (1.0.4)
     json (1.8.0)
-    json (1.8.0-java)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -114,7 +113,6 @@ GEM
       crack (>= 0.3.2)
 
 PLATFORMS
-  java
   ruby
 
 DEPENDENCIES
