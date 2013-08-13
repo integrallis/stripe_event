@@ -35,15 +35,20 @@ module StripeEvent
   TYPE_LIST = Set[
     'account.updated',
     'account.application.deauthorized',
+    'balance.available',
     'charge.succeeded',
     'charge.failed',
     'charge.refunded',
+    'charge.captured',
     'charge.dispute.created',
     'charge.dispute.updated',
     'charge.dispute.closed',
     'customer.created',
     'customer.updated',
     'customer.deleted',
+    'customer.card.created',
+    'customer.card.updated',
+    'customer.card.deleted',
     'customer.subscription.created',
     'customer.subscription.updated',
     'customer.subscription.deleted',
@@ -65,6 +70,7 @@ module StripeEvent
     'coupon.deleted',
     'transfer.created',
     'transfer.updated',
+    'transfer.paid',
     'transfer.failed',
     'ping'
   ].freeze
