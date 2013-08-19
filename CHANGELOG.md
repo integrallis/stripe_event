@@ -1,3 +1,7 @@
+### 0.6.1 (August 19, 2013)
+  * Update event type list
+  * Update test gemfiles
+
 ### 0.6.0 (March 18, 2013)
   * Rails 4 compatibility. Thank you to Ben Ubois for reporting the [issue](https://github.com/integrallis/stripe_event/issues/13) and to Matt Goldman for the [pull request](https://github.com/integrallis/stripe_event/pull/14).
   * Run specs against different Rails versions
