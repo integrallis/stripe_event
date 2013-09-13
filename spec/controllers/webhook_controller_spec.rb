@@ -19,6 +19,15 @@ describe StripeEvent::WebhookController do
     expect(response.code).to eq '401'
   end
 
+  it "ensures user-generated Stripe exceptions pass through" do
+    StripeEvent.setup do
+      subscribe('charge.succeeded') { |e| raise Stripe::StripeError }
+    end
+    stub_event('evt_charge_succeeded')
+
+    expect {event_post :id => 'evt_charge_succeeded'}.to raise_error(Stripe::StripeError)
+  end
+
   it "succeeds with a custom event retriever" do
     StripeEvent.event_retriever = Proc.new { |params| params }
 

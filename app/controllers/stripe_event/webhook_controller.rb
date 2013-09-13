@@ -3,7 +3,7 @@ module StripeEvent
     def event
       StripeEvent.instrument(params)
       head :ok
-    rescue Stripe::StripeError
+    rescue StripeEvent::UnauthorizedError
       head :unauthorized
     end
   end
