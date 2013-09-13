@@ -16,7 +16,9 @@ module StripeEvent
     end
 
     def publish(event)
-      backend.publish(event[:type], event)
+      type = event[:type]
+      type ||= event.type if event.respond_to?(:type)
+      backend.publish(type, event)
     end
 
     def subscribe(*names, &block)
