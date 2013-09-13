@@ -42,4 +42,17 @@ describe StripeEvent do
     event = described_class.event_retriever.call(params)
     expect(event).to eq params
   end
+
+  it "allows using an event_retriever that utilizes Stripe::Event.construct_from" do
+    params = { 'id' => '1', 'type' => 'charge.succeeded' }
+
+    described_class.event_retriever = Proc.new { |params| Stripe::Event.construct_from(params) }
+    described_class.setup do
+      subscribe 'charge.succeeded' do |event|
+        raise "this code should be run"
+      end
+    end
+    event = described_class.event_retriever.call(params)
+    expect {described_class.publish(event)}.to raise_error(StandardError)
+  end
 end
