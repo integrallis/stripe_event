@@ -22,7 +22,7 @@ describe StripeEvent do
   end
 
   it "passes only the event object to the subscribed block" do
-    event = { :type => event_type }
+    event = { type: event_type }
 
     expect { |block|
       described_class.subscribe(event_type, &block)
@@ -32,11 +32,11 @@ describe StripeEvent do
 
   it "uses Stripe::Event as the default event retriever" do
     Stripe::Event.should_receive(:retrieve).with('1')
-    described_class.event_retriever.call(:id => '1')
+    described_class.event_retriever.call(id: '1')
   end
 
   it "allows setting an event_retriever" do
-    params = { :id => '1' }
+    params = { id: '1' }
 
     described_class.event_retriever = Proc.new { |arg| arg }
     event = described_class.event_retriever.call(params)
