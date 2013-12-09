@@ -11,7 +11,11 @@ module StripeEvent
     end
 
     def instrument(params)
-      event = event_retriever.call(params)
+      begin
+        event = event_retriever.call(params)
+      rescue Stripe::StripeError
+        raise UnauthorizedError
+      end
       publish(event)
     end
 
@@ -28,6 +32,8 @@ module StripeEvent
       end
     end
   end
+
+  class UnauthorizedError < StandardError; end
 
   self.backend = ActiveSupport::Notifications
   self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
