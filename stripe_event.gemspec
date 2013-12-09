@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = StripeEvent::VERSION
   s.license     = "MIT"
   s.authors     = ["Danny Whalen"]
-  s.email       = ["dwhalen@integrallis.com"]
+  s.email       = "daniel.r.whalen@gmail.com"
   s.homepage    = "https://github.com/integrallis/stripe_event"
   s.summary     = "Stripe webhook integration for Rails applications."
   s.description = "Stripe webhook integration for Rails applications."
