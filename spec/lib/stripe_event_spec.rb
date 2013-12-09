@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe StripeEvent do
-  let(:event_type) { StripeEvent::TYPE_LIST.sample }
+  let(:event_type) { 'charge.succeeded' }
 
   it "backend defaults to AS::Notifications" do
     expect(described_class.backend).to eq ActiveSupport::Notifications
