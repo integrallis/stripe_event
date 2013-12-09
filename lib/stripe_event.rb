@@ -13,9 +13,10 @@ module StripeEvent
     def instrument(params)
       begin
         event = event_retriever.call(params)
-      rescue Stripe::StripeError
-        raise UnauthorizedError
+      rescue Stripe::StripeError => e
+        raise UnauthorizedError.new(e)
       end
+
       publish(event)
     end
 
