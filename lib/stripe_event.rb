@@ -26,11 +26,7 @@ module StripeEvent
 
     def subscribe(*names, &block)
       pattern = Regexp.union(names.empty? ? TYPE_LIST.to_a : names)
-
-      backend.subscribe(pattern) do |*args|
-        payload = args.last
-        block.call(payload)
-      end
+      backend.subscribe pattern, NotificationAdapter.new(block)
     end
   end
 
@@ -38,6 +34,13 @@ module StripeEvent
 
   self.backend = ActiveSupport::Notifications
   self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
+
+  class NotificationAdapter < Struct.new(:subscriber)
+    def call(*args)
+      payload = args.last
+      subscriber.call(payload)
+    end
+  end
 
   TYPE_LIST = Set[
     'account.updated',

@@ -42,4 +42,14 @@ describe StripeEvent do
     event = described_class.event_retriever.call(params)
     expect(event).to eq params
   end
+
+  describe StripeEvent::NotificationAdapter do
+    it "calls the subscriber with the last argument" do
+      callable = double('subscriber object')
+      expect(callable).to receive(:call).with(:last)
+
+      adapter = StripeEvent::NotificationAdapter.new(callable)
+      adapter.call(:first, :last)
+    end
+  end
 end
