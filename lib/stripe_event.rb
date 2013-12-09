@@ -1,6 +1,7 @@
+require "active_support/notifications"
 require "set"
 require "stripe"
-require "stripe_event/engine"
+require "stripe_event/engine" if defined?(Rails)
 
 module StripeEvent
   class << self
