@@ -26,8 +26,11 @@ module StripeEvent
     end
 
     def subscribe(*names, &block)
-      pattern = Regexp.union(names.empty? ? TYPE_LIST.to_a : names)
-      backend.subscribe pattern, NotificationAdapter.new(block)
+      backend.subscribe Regexp.union(names), NotificationAdapter.new(block)
+    end
+
+    def all(&block)
+      subscribe(*TYPE_LIST.to_a, &block)
     end
   end
 

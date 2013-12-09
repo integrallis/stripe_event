@@ -18,7 +18,7 @@ describe StripeEvent do
   end
 
   it "calls the subscriber with any retrieved events" do
-    StripeEvent.subscribe(&subscriber)
+    StripeEvent.all(&subscriber)
 
     expect(charge_succeeded).to receive(:[]).with(:type).and_return('charge.succeeded')
     expect(Stripe::Event).to receive(:retrieve).with('evt_charge_succeeded').and_return(charge_succeeded)

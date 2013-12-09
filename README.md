@@ -1,6 +1,6 @@
 # StripeEvent [![Build Status](https://secure.travis-ci.org/integrallis/stripe_event.png?branch=master)](http://travis-ci.org/integrallis/stripe_event) [![Dependency Status](https://gemnasium.com/integrallis/stripe_event.png)](https://gemnasium.com/integrallis/stripe_event) [![Gem Version](https://badge.fury.io/rb/stripe_event.png)](http://badge.fury.io/rb/stripe_event)
 
-StripeEvent is built on the [ActiveSupport::Notifications API](http://api.rubyonrails.org/classes/ActiveSupport/Notifications.html). Incoming webhook requests are authenticated by retrieving the [event object](https://stripe.com/docs/api?lang=ruby#event_object) from Stripe[[1]](https://answers.stripe.com/questions/what-is-the-recommended-way-to-authenticate-a-webhook-callback). Define subscriber blocks to handle one, many, or all event types.
+StripeEvent is built on the [ActiveSupport::Notifications API](http://api.rubyonrails.org/classes/ActiveSupport/Notifications.html). Incoming webhook requests are authenticated by [retrieving the event object](https://stripe.com/docs/api?lang=ruby#retrieve_event) from Stripe. Define subscribers to handle one, many or all event types.
 
 ## Install
 
@@ -23,16 +23,12 @@ Stripe.api_key = ENV['STRIPE_API_KEY'] # Set your api key
 StripeEvent.setup do
   subscribe 'charge.failed' do |event|
     # Define subscriber behavior based on the event object
-    event.class #=> Stripe::Event
-    event.type  #=> "charge.failed"
-    event.data  #=> { ... }
+    event.class       #=> Stripe::Event
+    event.type        #=> "charge.failed"
+    event.data.object #=> #<Stripe::Charge:0x3fcb34c115f8> JSON: { ... }
   end
 
-  subscribe 'customer.created', 'customer.updated' do |event|
-    # Handle multiple event types
-  end
-
-  subscribe do |event|
+  all do |event|
     # Handle all event types - logging, etc.
   end
 end
@@ -49,12 +45,6 @@ StripeEvent.event_retriever = lambda do |params|
 end
 ```
 
-During development it may be useful to skip retrieving the event from Stripe, and deal with the params hash directly. Just remember that the data has not been authenticated.
-
-```ruby
-StripeEvent.event_retriever = lambda { |params| params }
-```
-
 ### Register webhook url with Stripe
 
 ![Setup webhook url](https://raw.github.com/integrallis/stripe_event/master/dashboard-webhook.png "webhook setup")
@@ -65,7 +55,7 @@ The [RailsApps](https://github.com/RailsApps) project by Daniel Kehoe has releas
 
 ### Note: 'Test Webhooks' Button on Stripe Dashboard
 
-This button sends an example event to your webhook urls, including an `id` of `evt_00000000000000`. To confirm that Stripe sent the webhook, StripeEvent attempts to retrieve the event details from Stripe using the given `id`. In this case the event does not exist and StripeEvent responds with `401 Unauthorized`. Instead of using the 'Test Webhooks' button, trigger webhooks by using the Stripe Dashboard to create test payments, customers, etc.
+This button sends an example event to your webhook urls, including an `id` of `evt_00000000000000`. To confirm that Stripe sent the webhook, StripeEvent attempts to retrieve the event details from Stripe using the given `id`. In this case the event does not exist and StripeEvent responds with `401 Unauthorized`. Instead of using the 'Test Webhooks' button, trigger webhooks by using the Stripe API or Dashboard to create test payments, customers, etc.
 
 ### License
 
