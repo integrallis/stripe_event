@@ -63,9 +63,26 @@ If you have built an application that has multiple Stripe accounts--say, each of
 
 ```ruby
 StripeEvent.event_retriever = lambda do |params|
-  secret_key = Account.find_by_stripe_user_id(params[:user_id]).secret_key
-  Stripe::Event.retrieve(params[:id], secret_key)
+  api_key = Account.find_by!(stripe_user_id: params[:user_id]).api_key
+  Stripe::Event.retrieve(params[:id], api_key)
 end
+
+# Or use any object that responds to #call
+
+class EventRetriever
+  def call(params)
+    api_key = retrieve_api_key(params[:user_id])
+    Stripe::Event.retrieve(params[:id], api_key)
+  end
+
+  def retrieve_api_key(stripe_user_id)
+    Account.find_by!(stripe_user_id: stripe_user_id).api_key
+  rescue ActiveRecord::RecordNotFound
+    # whoops something went wrong - error handling
+  end
+end
+
+StripeEvent.event_retriever = EventRetriever.new
 ```
 
 ## Testing
