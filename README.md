@@ -68,13 +68,33 @@ StripeEvent.event_retriever = lambda do |params|
 end
 ```
 
-### Register webhook url with Stripe
+## Testing
 
-![Setup webhook url](https://raw.github.com/integrallis/stripe_event/master/dashboard-webhook.png "webhook setup")
+Handling webhooks is a critical piece of modern billing systems. Verifying the behavior of StripeEvent subscribers can be done fairly easily by stubbing out the HTTP request used to authenticate the webhook request. Tools like [Webmock](https://github.com/bblimke/webmock) and [VCR](https://github.com/vcr/vcr) work well. [RequestBin](http://requestb.in/) is great for collecting the payloads. For exploratory phases of development, [UltraHook](http://www.ultrahook.com/) and other tools can forward webhook requests directly to localhost. You can check out [test-hooks](https://github.com/invisiblefunnel/test-hooks), and example Rails application to see how to test StripeEvent subscribers with RSpec request specs and Webmock. A quick look:
 
-### Examples
+```ruby
+# spec/requests/billing_events_spec.rb
+require 'spec_helper'
 
-The [RailsApps](https://github.com/RailsApps) project by Daniel Kehoe has released an [example Rails 3.2 app](https://github.com/RailsApps/rails-stripe-membership-saas) with recurring billing using Stripe. The application uses StripeEvent to handle `customer.subscription.deleted` events.
+describe "Billing Events" do
+  def stub_event(fixture_id, status = 200)
+    stub_request(:get, "https://api.stripe.com/v1/events/#{fixture_id}").
+      to_return(status: status, body: File.read("spec/support/fixtures/#{fixture_id}.json"))
+  end
+
+  describe "customer.created" do
+    before do
+      stub_event 'evt_customer_created'
+    end
+
+    it "is successful" do
+      post '/_billing_events', id: 'evt_customer_created'
+      expect(response.code).to eq "200"
+      # Additional expectations...
+    end
+  end
+end
+```
 
 ### Note: 'Test Webhooks' Button on Stripe Dashboard
 
