@@ -51,7 +51,7 @@ describe StripeEvent do
       end
     end
 
-    context "with a subscriber the responds to #call" do
+    context "with a subscriber that responds to #call" do
       it "calls the subscriber with all retrieved events" do
         StripeEvent.all(subscriber)
 
