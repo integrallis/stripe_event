@@ -41,4 +41,28 @@ describe StripeEvent do
       adapter.call(:first, :last)
     end
   end
+
+  describe StripeEvent::Namespace do
+    let(:namespace) { StripeEvent.namespace }
+
+    describe "#call" do
+      it "prepends the namespace to a given string" do
+        expect(namespace.call('foo.bar')).to eq '__stripe_event__.foo.bar'
+      end
+
+      it "returns the namespace given no arguments" do
+        expect(namespace.call).to eq namespace.value
+      end
+    end
+
+    describe "#to_regexp" do
+      it "matches namespaced strings" do
+        expect(namespace.to_regexp('foo.bar')).to match namespace.call('foo.bar')
+      end
+
+      it "matches all namespaced strings given no arguments" do
+        expect(namespace.to_regexp).to match namespace.call('foo.bar')
+      end
+    end
+  end
 end

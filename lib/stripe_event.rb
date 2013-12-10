@@ -1,11 +1,10 @@
 require "active_support/notifications"
-require "set"
 require "stripe"
 require "stripe_event/engine" if defined?(Rails)
 
 module StripeEvent
   class << self
-    attr_accessor :backend, :event_retriever
+    attr_accessor :backend, :event_retriever, :namespace
 
     def setup(&block)
       instance_eval(&block)
@@ -18,26 +17,31 @@ module StripeEvent
         raise UnauthorizedError.new(e)
       end
 
-      publish(event)
+      publish event
     end
 
     def publish(event)
-      backend.publish(event[:type], event)
+      backend.publish namespace.call(event[:type]), event
     end
 
-    def subscribe(*names, &block)
-      backend.subscribe Regexp.union(names), NotificationAdapter.new(block)
+    def subscribe(name, &block)
+      backend.subscribe namespace.to_regexp(name), NotificationAdapter.new(block)
     end
 
     def all(&block)
-      subscribe(*TYPE_LIST.to_a, &block)
+      subscribe nil, &block
     end
   end
 
-  class UnauthorizedError < StandardError; end
+  class Namespace < Struct.new(:value, :delimiter)
+    def call(name = nil)
+      name ? "#{value}#{delimiter}#{name}" : value
+    end
 
-  self.backend = ActiveSupport::Notifications
-  self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
+    def to_regexp(name = nil)
+      %r{^#{call(name)}}
+    end
+  end
 
   class NotificationAdapter < Struct.new(:subscriber)
     def call(*args)
@@ -46,46 +50,9 @@ module StripeEvent
     end
   end
 
-  TYPE_LIST = Set[
-    'account.updated',
-    'account.application.deauthorized',
-    'balance.available',
-    'charge.succeeded',
-    'charge.failed',
-    'charge.refunded',
-    'charge.captured',
-    'charge.dispute.created',
-    'charge.dispute.updated',
-    'charge.dispute.closed',
-    'customer.created',
-    'customer.updated',
-    'customer.deleted',
-    'customer.card.created',
-    'customer.card.updated',
-    'customer.card.deleted',
-    'customer.subscription.created',
-    'customer.subscription.updated',
-    'customer.subscription.deleted',
-    'customer.subscription.trial_will_end',
-    'customer.discount.created',
-    'customer.discount.updated',
-    'customer.discount.deleted',
-    'invoice.created',
-    'invoice.updated',
-    'invoice.payment_succeeded',
-    'invoice.payment_failed',
-    'invoiceitem.created',
-    'invoiceitem.updated',
-    'invoiceitem.deleted',
-    'plan.created',
-    'plan.updated',
-    'plan.deleted',
-    'coupon.created',
-    'coupon.deleted',
-    'transfer.created',
-    'transfer.updated',
-    'transfer.paid',
-    'transfer.failed',
-    'ping'
-  ].freeze
+  class UnauthorizedError < StandardError; end
+
+  self.backend = ActiveSupport::Notifications
+  self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
+  self.namespace = Namespace.new("__stripe_event__", ".")
 end
