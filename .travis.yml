@@ -2,9 +2,10 @@ language: ruby
 rvm:
   - 1.9.2
   - 1.9.3
-  - rbx-19mode
-  - jruby-19mode
   - 2.0.0
+  - jruby-19mode
+  - jruby-head
+  - rbx-2.1.1
 gemfile:
   - gemfiles/rails3.1.gemfile
   - gemfiles/rails3.2.gemfile
