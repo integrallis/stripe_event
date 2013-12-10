@@ -24,12 +24,12 @@ module StripeEvent
       backend.publish namespace.call(event[:type]), event
     end
 
-    def subscribe(name, &block)
-      backend.subscribe namespace.to_regexp(name), NotificationAdapter.new(block)
+    def subscribe(name, callable = Proc.new)
+      backend.subscribe namespace.to_regexp(name), NotificationAdapter.new(callable)
     end
 
-    def all(&block)
-      subscribe nil, &block
+    def all(callable = Proc.new)
+      subscribe nil, callable
     end
   end
 

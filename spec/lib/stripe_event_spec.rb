@@ -6,31 +6,61 @@ describe StripeEvent do
   let(:charge_succeeded) { double('charge succeeded') }
   let(:charge_failed) { double('charge failed') }
 
-  it "calls the subscriber with the retrieved event" do
-    StripeEvent.subscribe('charge.succeeded', &subscriber)
+  describe "subscribing to a specific event type" do
+    before do
+      expect(charge_succeeded).to receive(:[]).with(:type).and_return('charge.succeeded')
+      expect(Stripe::Event).to receive(:retrieve).with('evt_charge_succeeded').and_return(charge_succeeded)
+    end
 
-    expect(charge_succeeded).to receive(:[]).with(:type).and_return('charge.succeeded')
-    expect(Stripe::Event).to receive(:retrieve).with('evt_charge_succeeded').and_return(charge_succeeded)
+    context "with a block subscriber" do
+      it "calls the subscriber with the retrieved event" do
+        StripeEvent.subscribe('charge.succeeded', &subscriber)
+        StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
 
-    StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
+        expect(events).to eq [charge_succeeded]
+      end
+    end
 
-    expect(events).to eq [charge_succeeded]
+    context "with a subscriber that responds to #call" do
+      it "calls the subscriber with the retrieved event" do
+        StripeEvent.subscribe('charge.succeeded', subscriber)
+        StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
+
+        expect(events).to eq [charge_succeeded]
+      end
+    end
   end
 
-  it "calls the subscriber with any retrieved events" do
-    StripeEvent.all(&subscriber)
+  describe "subscribing to all event types" do
+    before do
+      expect(charge_succeeded).to receive(:[]).with(:type).and_return('charge.succeeded')
+      expect(Stripe::Event).to receive(:retrieve).with('evt_charge_succeeded').and_return(charge_succeeded)
 
-    expect(charge_succeeded).to receive(:[]).with(:type).and_return('charge.succeeded')
-    expect(Stripe::Event).to receive(:retrieve).with('evt_charge_succeeded').and_return(charge_succeeded)
+      expect(charge_failed).to receive(:[]).with(:type).and_return('charge.failed')
+      expect(Stripe::Event).to receive(:retrieve).with('evt_charge_failed').and_return(charge_failed)
+    end
 
-    StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
+    context "with a block subscriber" do
+      it "calls the subscriber with all retrieved events" do
+        StripeEvent.all(&subscriber)
 
-    expect(charge_failed).to receive(:[]).with(:type).and_return('charge.failed')
-    expect(Stripe::Event).to receive(:retrieve).with('evt_charge_failed').and_return(charge_failed)
+        StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
+        StripeEvent.instrument(id: 'evt_charge_failed', type: 'charge.failed')
 
-    StripeEvent.instrument(id: 'evt_charge_failed', type: 'charge.failed')
+        expect(events).to eq [charge_succeeded, charge_failed]
+      end
+    end
 
-    expect(events).to eq [charge_succeeded, charge_failed]
+    context "with a subscriber the responds to #call" do
+      it "calls the subscriber with all retrieved events" do
+        StripeEvent.all(subscriber)
+
+        StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
+        StripeEvent.instrument(id: 'evt_charge_failed', type: 'charge.failed')
+
+        expect(events).to eq [charge_succeeded, charge_failed]
+      end
+    end
   end
 
   describe StripeEvent::NotificationAdapter do
