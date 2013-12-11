@@ -3,10 +3,10 @@
   * Subscribe to all event types with `StripeEvent.all` instead of `StripeEvent.subscribe`.
   * Remove ability to subscribe to many event types with once call to `StripeEvent.subscribe`.
   * Subscribers can be an object that responds to #call.
-  * Allow subscriber-generated `Stripe::StripeError`'s to bubble up.
+  * Allow subscriber-generated `Stripe::StripeError`'s to bubble up. Thank you to [adamonduty](https://github.com/adamonduty) for the [patch](https://github.com/integrallis/stripe_event/pull/26).
   * Only depend on `stripe` and `activesupport` gems.
   * Add `rails` as a development dependency.
-  * Only `require stripe_event/engine` if `Rails` constant exists to allow StripeEvent to be used outside of a Rails application.
+  * Only `require 'stripe_event/engine'` if `Rails` constant exists to allow StripeEvent to be used outside of a Rails application.
 
 ### 0.6.1 (August 19, 2013)
   * Update event type list
