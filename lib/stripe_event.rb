@@ -50,7 +50,8 @@ module StripeEvent
     end
   end
 
-  class UnauthorizedError < StandardError; end
+  class StripeEvent::Error < StandardError; end
+  class StripeEvent::UnauthorizedError < StripeEvent::Error; end
 
   self.backend = ActiveSupport::Notifications
   self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
