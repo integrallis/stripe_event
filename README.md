@@ -85,6 +85,28 @@ end
 StripeEvent.event_retriever = EventRetriever.new
 ```
 
+## Without Rails
+
+StripeEvent can be used outside of Rails applications as well. Here is a basic Sinatra implementation:
+
+```ruby
+require 'json'
+require 'sinatra'
+require 'stripe_event'
+
+Stripe.api_key = ENV['STRIPE_API_KEY']
+
+StripeEvent.subscribe 'charge.failed' do |event|
+  # Look ma, no Rails!
+end
+
+post '/_billing_events' do
+  data = JSON.parse(request.body.read, symbolize_names: true)
+  StripeEvent.instrument(data)
+  200
+end
+```
+
 ## Testing
 
 Handling webhooks is a critical piece of modern billing systems. Verifying the behavior of StripeEvent subscribers can be done fairly easily by stubbing out the HTTP request used to authenticate the webhook request. Tools like [Webmock](https://github.com/bblimke/webmock) and [VCR](https://github.com/vcr/vcr) work well. [RequestBin](http://requestb.in/) is great for collecting the payloads. For exploratory phases of development, [UltraHook](http://www.ultrahook.com/) and other tools can forward webhook requests directly to localhost. You can check out [test-hooks](https://github.com/invisiblefunnel/test-hooks), and example Rails application to see how to test StripeEvent subscribers with RSpec request specs and Webmock. A quick look:
