@@ -15,6 +15,7 @@ describe StripeEvent do
     context "with a block subscriber" do
       it "calls the subscriber with the retrieved event" do
         StripeEvent.subscribe('charge.succeeded', &subscriber)
+
         StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
 
         expect(events).to eq [charge_succeeded]
@@ -24,6 +25,7 @@ describe StripeEvent do
     context "with a subscriber that responds to #call" do
       it "calls the subscriber with the retrieved event" do
         StripeEvent.subscribe('charge.succeeded', subscriber)
+
         StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
 
         expect(events).to eq [charge_succeeded]
@@ -64,10 +66,12 @@ describe StripeEvent do
   end
 
   describe StripeEvent::NotificationAdapter do
+    let(:adapter) { StripeEvent.adapter }
+
     it "calls the subscriber with the last argument" do
       expect(subscriber).to receive(:call).with(:last)
 
-      StripeEvent::NotificationAdapter.call(subscriber).call(:first, :last)
+      adapter.call(subscriber).call(:first, :last)
     end
   end
 
@@ -80,7 +84,7 @@ describe StripeEvent do
       end
 
       it "returns the namespace given no arguments" do
-        expect(namespace.call).to eq namespace.value
+        expect(namespace.call).to eq '__stripe_event__'
       end
     end
 
