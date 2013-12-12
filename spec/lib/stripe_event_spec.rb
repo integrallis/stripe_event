@@ -67,8 +67,7 @@ describe StripeEvent do
     it "calls the subscriber with the last argument" do
       expect(subscriber).to receive(:call).with(:last)
 
-      adapter = StripeEvent::NotificationAdapter.new(subscriber)
-      adapter.call(:first, :last)
+      StripeEvent::NotificationAdapter.call(subscriber).call(:first, :last)
     end
   end
 

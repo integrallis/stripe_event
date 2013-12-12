@@ -4,7 +4,7 @@ require "stripe_event/engine" if defined?(Rails)
 
 module StripeEvent
   class << self
-    attr_accessor :backend, :event_retriever, :namespace
+    attr_accessor :adapter, :backend, :event_retriever, :namespace
 
     def setup(&block)
       instance_eval(&block)
@@ -25,7 +25,7 @@ module StripeEvent
     end
 
     def subscribe(name, callable = Proc.new)
-      backend.subscribe namespace.to_regexp(name), NotificationAdapter.new(callable)
+      backend.subscribe namespace.to_regexp(name), adapter.call(callable)
     end
 
     def all(callable = Proc.new)
@@ -44,6 +44,10 @@ module StripeEvent
   end
 
   class NotificationAdapter < Struct.new(:subscriber)
+    def self.call(callable)
+      new(callable)
+    end
+
     def call(*args)
       payload = args.last
       subscriber.call(payload)
@@ -53,6 +57,7 @@ module StripeEvent
   class StripeEvent::Error < StandardError; end
   class StripeEvent::UnauthorizedError < StripeEvent::Error; end
 
+  self.adapter = NotificationAdapter
   self.backend = ActiveSupport::Notifications
   self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
   self.namespace = Namespace.new("__stripe_event__", ".")
