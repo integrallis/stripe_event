@@ -17,11 +17,7 @@ module StripeEvent
         raise UnauthorizedError.new(e)
       end
 
-      publish event
-    end
-
-    def publish(event)
-      backend.publish namespace.call(event[:type]), event
+      backend.instrument namespace.call(event[:type]), event
     end
 
     def subscribe(name, callable = Proc.new)
