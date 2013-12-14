@@ -11,33 +11,32 @@ describe StripeEvent::WebhookController do
     post :event, params.merge(use_route: :stripe_event)
   end
 
-  before do
-    @called = false
-    StripeEvent.subscribe('charge.succeeded') { |evt| @called = true }
-  end
-
   it "succeeds with valid event data" do
+    count = 0
+    StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
     stub_event('evt_charge_succeeded')
 
     webhook id: 'evt_charge_succeeded'
 
     expect(response.code).to eq '200'
-    expect(@called).to be_true
+    expect(count).to eq 1
   end
 
   it "denies access with invalid event data" do
+    count = 0
+    StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
     stub_event('evt_invalid_id', 404)
 
     webhook id: 'evt_invalid_id'
 
     expect(response.code).to eq '401'
-    expect(@called).to be_false
+    expect(count).to eq 0
   end
 
   it "ensures user-generated Stripe exceptions pass through" do
-    StripeEvent.subscribe('charge.succeeded') { |evt| raise Stripe::StripeError }
+    StripeEvent.subscribe('charge.succeeded') { |evt| raise Stripe::StripeError, "testing" }
     stub_event('evt_charge_succeeded')
 
-    expect { webhook id: 'evt_charge_succeeded' }.to raise_error(Stripe::StripeError)
+    expect { webhook id: 'evt_charge_succeeded' }.to raise_error(Stripe::StripeError, /testing/)
   end
 end
