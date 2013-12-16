@@ -35,7 +35,7 @@ module StripeEvent
     end
 
     def to_regexp(name = nil)
-      %r{^#{call(name)}}
+      %r{^#{Regexp.escape call(name)}}
     end
   end
 
