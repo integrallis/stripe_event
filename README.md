@@ -25,7 +25,7 @@ StripeEvent.setup do
     # Define subscriber behavior based on the event object
     event.class       #=> Stripe::Event
     event.type        #=> "charge.failed"
-    event.data.object #=> #<Stripe::Charge:0x3fcb34c115f8> JSON: { ... }
+    event.data.object #=> #<Stripe::Charge:0x3fcb34c115f8>
   end
 
   all do |event|
@@ -43,7 +43,10 @@ end
 
 class BillingEventLogger
   def initialize(logger = nil)
-    @logger = logger || Logger.new($stdout)
+    @logger = logger || begin
+      require 'logger'
+      Logger.new($stdout)
+    end
   end
 
   def call(event)
