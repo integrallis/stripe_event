@@ -50,8 +50,8 @@ module StripeEvent
     end
   end
 
-  class StripeEvent::Error < StandardError; end
-  class StripeEvent::UnauthorizedError < StripeEvent::Error; end
+  class Error < StandardError; end
+  class UnauthorizedError < Error; end
 
   self.adapter = NotificationAdapter
   self.backend = ActiveSupport::Notifications
