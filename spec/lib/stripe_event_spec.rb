@@ -80,11 +80,11 @@ describe StripeEvent do
 
     describe "#call" do
       it "prepends the namespace to a given string" do
-        expect(namespace.call('foo.bar')).to eq '__stripe_event__.foo.bar'
+        expect(namespace.call('foo.bar')).to eq 'stripe_event.foo.bar'
       end
 
       it "returns the namespace given no arguments" do
-        expect(namespace.call).to eq '__stripe_event__'
+        expect(namespace.call).to eq 'stripe_event'
       end
     end
 

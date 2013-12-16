@@ -56,5 +56,5 @@ module StripeEvent
   self.adapter = NotificationAdapter
   self.backend = ActiveSupport::Notifications
   self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
-  self.namespace = Namespace.new("__stripe_event__", ".")
+  self.namespace = Namespace.new("stripe_event", ".")
 end
