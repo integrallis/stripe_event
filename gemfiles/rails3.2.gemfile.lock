@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    stripe_event (1.0.0.rc)
+    stripe_event (1.0.0)
       activesupport (>= 3.1)
       stripe (~> 1.6)
 

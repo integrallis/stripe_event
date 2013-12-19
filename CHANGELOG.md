@@ -1,4 +1,4 @@
-### 1.0.0 (unreleased)
+### 1.0.0 (December 19, 2013)
   * Internally namespace dispatched events to avoid maintaining a list of all possible event types.
   * Subscribe to all event types with `StripeEvent.all` instead of `StripeEvent.subscribe`.
   * Remove ability to subscribe to many event types with once call to `StripeEvent.subscribe`.
