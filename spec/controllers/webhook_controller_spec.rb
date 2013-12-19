@@ -1,37 +1,42 @@
+require 'rails_helper'
 require 'spec_helper'
 
 describe StripeEvent::WebhookController do
-  def event_post(params)
-    post :event, params.merge(:use_route => :stripe_event)
+  def stub_event(identifier, status = 200)
+    stub_request(:get, "https://api.stripe.com/v1/events/#{identifier}").
+      to_return(status: status, body: File.read("spec/support/fixtures/#{identifier}.json"))
+  end
+
+  def webhook(params)
+    post :event, params.merge(use_route: :stripe_event)
   end
 
   it "succeeds with valid event data" do
+    count = 0
+    StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
     stub_event('evt_charge_succeeded')
 
-    event_post :id => 'evt_charge_succeeded'
-    expect(response).to be_success
+    webhook id: 'evt_charge_succeeded'
+
+    expect(response.code).to eq '200'
+    expect(count).to eq 1
   end
 
   it "denies access with invalid event data" do
+    count = 0
+    StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
     stub_event('evt_invalid_id', 404)
 
-    event_post :id => 'evt_invalid_id'
+    webhook id: 'evt_invalid_id'
+
     expect(response.code).to eq '401'
+    expect(count).to eq 0
   end
 
   it "ensures user-generated Stripe exceptions pass through" do
-    StripeEvent.setup do
-      subscribe('charge.succeeded') { |e| raise Stripe::StripeError }
-    end
+    StripeEvent.subscribe('charge.succeeded') { |evt| raise Stripe::StripeError, "testing" }
     stub_event('evt_charge_succeeded')
 
-    expect {event_post :id => 'evt_charge_succeeded'}.to raise_error(Stripe::StripeError)
-  end
-
-  it "succeeds with a custom event retriever" do
-    StripeEvent.event_retriever = Proc.new { |params| params }
-
-    event_post :id => '1'
-    expect(response).to be_success
+    expect { webhook id: 'evt_charge_succeeded' }.to raise_error(Stripe::StripeError, /testing/)
   end
 end

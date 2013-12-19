@@ -1,45 +1,101 @@
 require 'spec_helper'
 
 describe StripeEvent do
-  let(:event_type) { StripeEvent::TYPE_LIST.sample }
+  let(:events) { [] }
+  let(:subscriber) { ->(evt){ events << evt } }
+  let(:charge_succeeded) { double('charge succeeded') }
+  let(:charge_failed) { double('charge failed') }
 
-  it "backend defaults to AS::Notifications" do
-    expect(described_class.backend).to eq ActiveSupport::Notifications
-  end
-
-  it "registers a subscriber" do
-    subscriber = described_class.subscribe(event_type) { |e| }
-    subscribers = subscribers_for_type(event_type)
-    expect(subscribers).to eq [subscriber]
-  end
-
-  it "registers subscribers within a parent block" do
-    described_class.setup do
-      subscribe('invoice.payment_succeeded') { |e| }
+  describe "subscribing to a specific event type" do
+    before do
+      expect(charge_succeeded).to receive(:[]).with(:type).and_return('charge.succeeded')
+      expect(Stripe::Event).to receive(:retrieve).with('evt_charge_succeeded').and_return(charge_succeeded)
     end
-    subscribers = subscribers_for_type('invoice.payment_succeeded')
-    expect(subscribers).to_not be_empty
+
+    context "with a block subscriber" do
+      it "calls the subscriber with the retrieved event" do
+        StripeEvent.subscribe('charge.succeeded', &subscriber)
+
+        StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
+
+        expect(events).to eq [charge_succeeded]
+      end
+    end
+
+    context "with a subscriber that responds to #call" do
+      it "calls the subscriber with the retrieved event" do
+        StripeEvent.subscribe('charge.succeeded', subscriber)
+
+        StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
+
+        expect(events).to eq [charge_succeeded]
+      end
+    end
   end
 
-  it "passes only the event object to the subscribed block" do
-    event = { :type => event_type }
+  describe "subscribing to all event types" do
+    before do
+      expect(charge_succeeded).to receive(:[]).with(:type).and_return('charge.succeeded')
+      expect(Stripe::Event).to receive(:retrieve).with('evt_charge_succeeded').and_return(charge_succeeded)
 
-    expect { |block|
-      described_class.subscribe(event_type, &block)
-      described_class.publish(event)
-    }.to yield_with_args(event)
+      expect(charge_failed).to receive(:[]).with(:type).and_return('charge.failed')
+      expect(Stripe::Event).to receive(:retrieve).with('evt_charge_failed').and_return(charge_failed)
+    end
+
+    context "with a block subscriber" do
+      it "calls the subscriber with all retrieved events" do
+        StripeEvent.all(&subscriber)
+
+        StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
+        StripeEvent.instrument(id: 'evt_charge_failed', type: 'charge.failed')
+
+        expect(events).to eq [charge_succeeded, charge_failed]
+      end
+    end
+
+    context "with a subscriber that responds to #call" do
+      it "calls the subscriber with all retrieved events" do
+        StripeEvent.all(subscriber)
+
+        StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded')
+        StripeEvent.instrument(id: 'evt_charge_failed', type: 'charge.failed')
+
+        expect(events).to eq [charge_succeeded, charge_failed]
+      end
+    end
   end
 
-  it "uses Stripe::Event as the default event retriever" do
-    Stripe::Event.should_receive(:retrieve).with('1')
-    described_class.event_retriever.call(:id => '1')
+  describe StripeEvent::NotificationAdapter do
+    let(:adapter) { StripeEvent.adapter }
+
+    it "calls the subscriber with the last argument" do
+      expect(subscriber).to receive(:call).with(:last)
+
+      adapter.call(subscriber).call(:first, :last)
+    end
   end
 
-  it "allows setting an event_retriever" do
-    params = { :id => '1' }
+  describe StripeEvent::Namespace do
+    let(:namespace) { StripeEvent.namespace }
 
-    described_class.event_retriever = Proc.new { |arg| arg }
-    event = described_class.event_retriever.call(params)
-    expect(event).to eq params
+    describe "#call" do
+      it "prepends the namespace to a given string" do
+        expect(namespace.call('foo.bar')).to eq 'stripe_event.foo.bar'
+      end
+
+      it "returns the namespace given no arguments" do
+        expect(namespace.call).to eq 'stripe_event'
+      end
+    end
+
+    describe "#to_regexp" do
+      it "matches namespaced strings" do
+        expect(namespace.to_regexp('foo.bar')).to match namespace.call('foo.bar')
+      end
+
+      it "matches all namespaced strings given no arguments" do
+        expect(namespace.to_regexp).to match namespace.call('foo.bar')
+      end
+    end
   end
 end
