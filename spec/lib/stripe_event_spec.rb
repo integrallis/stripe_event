@@ -33,6 +33,41 @@ describe StripeEvent do
     end
   end
 
+  describe "subscribing to a namespace of event types" do
+    let(:card_created) { double('card created') }
+    let(:card_updated) { double('card updated') }
+
+    before do
+      expect(card_created).to receive(:[]).with(:type).and_return('customer.card.created')
+      expect(Stripe::Event).to receive(:retrieve).with('evt_card_created').and_return(card_created)
+
+      expect(card_updated).to receive(:[]).with(:type).and_return('customer.card.updated')
+      expect(Stripe::Event).to receive(:retrieve).with('evt_card_updated').and_return(card_updated)
+    end
+
+    context "with a block subscriber" do
+      it "calls the subscriber with any events in the namespace" do
+        StripeEvent.subscribe('customer.card', &subscriber)
+
+        StripeEvent.instrument(id: 'evt_card_created', type: 'customer.card.created')
+        StripeEvent.instrument(id: 'evt_card_updated', type: 'customer.card.updated')
+
+        expect(events).to eq [card_created, card_updated]
+      end
+    end
+
+    context "with a subscriber that responds to #call" do
+      it "calls the subscriber with any events in the namespace" do
+        StripeEvent.subscribe('customer.card.', subscriber)
+
+        StripeEvent.instrument(id: 'evt_card_updated', type: 'customer.card.updated')
+        StripeEvent.instrument(id: 'evt_card_created', type: 'customer.card.created')
+
+        expect(events).to eq [card_updated, card_created]
+      end
+    end
+  end
+
   describe "subscribing to all event types" do
     before do
       expect(charge_succeeded).to receive(:[]).with(:type).and_return('charge.succeeded')

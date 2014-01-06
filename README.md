@@ -59,6 +59,12 @@ StripeEvent.setup do
   all BillingEventLogger.new(Rails.logger)
   subscribe 'customer.created', CustomerCreated.new
 end
+
+# Subscribing to a namespace of event types
+
+StripeEvent.subscribe 'customer.card.' do |event|
+  # Will be triggered for any customer.card.* events
+end
 ```
 
 ## Configuration
