@@ -6,9 +6,11 @@ module StripeEvent
   class << self
     attr_accessor :adapter, :backend, :event_retriever, :namespace
 
-    def setup(&block)
-      instance_eval(&block)
+    def configure(&block)
+      raise ArgumentError, "must provide a block" unless block_given?
+      block.arity.zero? ? instance_eval(&block) : yield(self)
     end
+    alias :setup :configure
 
     def instrument(params)
       begin

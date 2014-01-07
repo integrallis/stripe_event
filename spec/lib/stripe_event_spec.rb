@@ -6,6 +6,26 @@ describe StripeEvent do
   let(:charge_succeeded) { double('charge succeeded') }
   let(:charge_failed) { double('charge failed') }
 
+  describe ".configure" do
+    it "yields itself to the block" do
+      yielded = nil
+      StripeEvent.configure { |events| yielded = events }
+      expect(yielded).to eq StripeEvent
+    end
+
+    it "requires a block argument" do
+      expect { StripeEvent.configure }.to raise_error ArgumentError
+    end
+
+    describe ".setup - deprecated" do
+      it "evaluates the block in its own context" do
+        ctx = nil
+        StripeEvent.setup { ctx = self }
+        expect(ctx).to eq StripeEvent
+      end
+    end
+  end
+
   describe "subscribing to a specific event type" do
     before do
       expect(charge_succeeded).to receive(:[]).with(:type).and_return('charge.succeeded')
