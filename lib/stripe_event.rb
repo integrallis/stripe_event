@@ -33,7 +33,7 @@ module StripeEvent
 
   class Namespace < Struct.new(:value, :delimiter)
     def call(name = nil)
-      name ? "#{value}#{delimiter}#{name}" : value
+      "#{value}#{delimiter}#{name}"
     end
 
     def to_regexp(name = nil)

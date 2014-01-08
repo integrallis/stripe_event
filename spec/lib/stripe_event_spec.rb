@@ -139,7 +139,7 @@ describe StripeEvent do
       end
 
       it "returns the namespace given no arguments" do
-        expect(namespace.call).to eq 'stripe_event'
+        expect(namespace.call).to eq 'stripe_event.'
       end
     end
 
