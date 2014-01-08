@@ -1,7 +1,8 @@
-### 1.1.0 (unreleased)
+### 1.1.0 (January 8, 2014)
   * Deprecate `StripeEvent.setup` in favor of `StripeEvent.configure`. Remove `setup` at next major release.
   * `StripeEvent.configure` yields the module to the block for configuration.
   * `StripeEvent.configure` will raise `ArgumentError` unless a block is given.
+  * Track test coverage
 
 ### 1.0.0 (December 19, 2013)
   * Internally namespace dispatched events to avoid maintaining a list of all possible event types.
