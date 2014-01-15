@@ -151,4 +151,4 @@ This button sends an example event to your webhook urls, including an `id` of `e
 
 ### License
 
-[MIT License](https://github.com/integrallis/stripe_event/blob/master/LICENSE.md). Copyright 2012-2013 Integrallis Software.
+[MIT License](https://github.com/integrallis/stripe_event/blob/master/LICENSE.md). Copyright 2012-2014 Integrallis Software.
