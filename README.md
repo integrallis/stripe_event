@@ -43,15 +43,12 @@ class CustomerCreated
 end
 
 class BillingEventLogger
-  def initialize(logger = nil)
-    @logger = logger || begin
-      require 'logger'
-      Logger.new($stdout)
-    end
+  def initialize(logger)
+    @logger = logger
   end
 
   def call(event)
-    @logger.info "BILLING-EVENT: #{event.type} #{event.id}"
+    @logger.info "BILLING:#{event.type}:#{event.id}"
   end
 end
 
