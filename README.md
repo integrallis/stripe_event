@@ -1,7 +1,7 @@
 # StripeEvent
 [![Build Status](https://secure.travis-ci.org/integrallis/stripe_event.png?branch=master)](http://travis-ci.org/integrallis/stripe_event) [![Dependency Status](https://gemnasium.com/integrallis/stripe_event.png)](https://gemnasium.com/integrallis/stripe_event) [![Gem Version](https://badge.fury.io/rb/stripe_event.png)](http://badge.fury.io/rb/stripe_event) [![Code Climate](https://codeclimate.com/github/integrallis/stripe_event.png)](https://codeclimate.com/github/integrallis/stripe_event) [![Coverage Status](https://coveralls.io/repos/integrallis/stripe_event/badge.png)](https://coveralls.io/r/integrallis/stripe_event)
 
-StripeEvent is built on the [ActiveSupport::Notifications API](http://api.rubyonrails.org/classes/ActiveSupport/Notifications.html). Incoming webhook requests are authenticated by [retrieving the event object](https://stripe.com/docs/api?lang=ruby#retrieve_event) from Stripe. Define subscribers to handle a single event type or all event types. Subscribers can be a block or any object that responds to `#call`.
+StripeEvent is built on the [ActiveSupport::Notifications API](http://api.rubyonrails.org/classes/ActiveSupport/Notifications.html). Incoming webhook requests are authenticated by [retrieving the event object](https://stripe.com/docs/api?lang=ruby#retrieve_event) from Stripe. Define subscribers to handle specific event types. Subscribers can be a block or an object that responds to `#call`.
 
 ## Install
 
@@ -33,9 +33,11 @@ StripeEvent.configure do |events|
     # Handle all event types - logging, etc.
   end
 end
+```
 
-# Subscriber objects that respond to #call
+### Subscriber objects that respond to #call
 
+```ruby
 class CustomerCreated
   def call(event)
     # Event handling
@@ -51,14 +53,18 @@ class BillingEventLogger
     @logger.info "BILLING:#{event.type}:#{event.id}"
   end
 end
+```
 
+```ruby
 StripeEvent.configure do |events|
   events.all BillingEventLogger.new(Rails.logger)
   events.subscribe 'customer.created', CustomerCreated.new
 end
+```
 
-# Subscribing to a namespace of event types
+### Subscribing to a namespace of event types
 
+```ruby
 StripeEvent.subscribe 'customer.card.' do |event|
   # Will be triggered for any customer.card.* events
 end
@@ -73,9 +79,9 @@ StripeEvent.event_retriever = lambda do |params|
   api_key = Account.find_by!(stripe_user_id: params[:user_id]).api_key
   Stripe::Event.retrieve(params[:id], api_key)
 end
+```
 
-# Or use any object that responds to #call
-
+```ruby
 class EventRetriever
   def call(params)
     api_key = retrieve_api_key(params[:user_id])
