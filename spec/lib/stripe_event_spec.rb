@@ -53,6 +53,38 @@ describe StripeEvent do
     end
   end
 
+  describe "subscribing to the 'account.application.deauthorized' event type" do
+    before do
+      expect(Stripe::Event).to receive(:retrieve).with('evt_account_application_deauthorized').and_raise(Stripe::AuthenticationError)
+    end
+
+    context "with a subscriber params with symbolized keys" do
+      it "calls the subscriber with the retrieved event" do
+        StripeEvent.subscribe('account.application.deauthorized', subscriber)
+
+        StripeEvent.instrument(id: 'evt_account_application_deauthorized', type: 'account.application.deauthorized')
+
+        expect(events.first.type).to    eq 'account.application.deauthorized'
+        expect(events.first[:type]).to  eq 'account.application.deauthorized'
+      end
+    end
+
+    # The Stripe api expects params to be passed into their StripeObject's
+    # with symbolized keys, but the params that we pass through from a
+    # accont.application.deauthorized webhook are a HashWithIndifferentAccess
+    # (keys stored as strings always.
+    context "with a subscriber params with indifferent access (stringified keys)" do
+      it "calls the subscriber with the retrieved event" do
+        StripeEvent.subscribe('account.application.deauthorized', subscriber)
+
+        StripeEvent.instrument({ id: 'evt_account_application_deauthorized', type: 'account.application.deauthorized' }.with_indifferent_access)
+
+        expect(events.first.type).to    eq 'account.application.deauthorized'
+        expect(events.first[:type]).to  eq 'account.application.deauthorized'
+      end
+    end
+  end
+
   describe "subscribing to a namespace of event types" do
     let(:card_created) { double('card created') }
     let(:card_updated) { double('card updated') }
