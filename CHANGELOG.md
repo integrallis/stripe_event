@@ -1,3 +1,6 @@
+### 1.2.0 (June 17, 2014)
+  * Gracefully authenticate `account.application.deauthorized` events. Thank you to [Ryan McGeary](https://github.com/rmm5t) for the pull request and for taking the time to test the change in a live environment.
+
 ### 1.1.0 (January 8, 2014)
   * Deprecate `StripeEvent.setup` in favor of `StripeEvent.configure`. Remove `setup` at next major release.
   * `StripeEvent.configure` yields the module to the block for configuration.
