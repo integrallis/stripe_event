@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    stripe_event (1.1.0)
+    stripe_event (1.2.0)
       activesupport (>= 3.1)
       stripe (~> 1.6)
 
@@ -52,6 +52,7 @@ GEM
     erubis (2.7.0)
     hike (1.2.3)
     i18n (0.6.9)
+    json (1.8.1)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -104,9 +105,9 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
-    stripe (1.9.9)
+    stripe (1.11.0)
+      json (~> 1.8.1)
       mime-types (~> 1.25)
-      multi_json (>= 1.0.4, < 2)
       rest-client (~> 1.4)
     term-ansicolor (1.2.2)
       tins (~> 0.8)
