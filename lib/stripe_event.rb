@@ -17,7 +17,7 @@ module StripeEvent
         event = event_retriever.call(params)
       rescue Stripe::AuthenticationError => e
         if params[:type] == "account.application.deauthorized"
-          event = Stripe::Event.construct_from(params)
+          event = Stripe::Event.construct_from(params.deep_symbolize_keys)
         else
           raise UnauthorizedError.new(e)
         end

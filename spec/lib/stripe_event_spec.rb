@@ -5,7 +5,6 @@ describe StripeEvent do
   let(:subscriber) { ->(evt){ events << evt } }
   let(:charge_succeeded) { double('charge succeeded') }
   let(:charge_failed) { double('charge failed') }
-  let(:account_application_deauthorized) { double('account application deauthorized') }
 
   describe ".configure" do
     it "yields itself to the block" do
@@ -56,18 +55,32 @@ describe StripeEvent do
 
   describe "subscribing to the 'account.application.deauthorized' event type" do
     before do
-      expect(account_application_deauthorized).to receive(:[]).with(:type).and_return('account.application.deauthorized')
       expect(Stripe::Event).to receive(:retrieve).with('evt_account_application_deauthorized').and_raise(Stripe::AuthenticationError)
-      expect(Stripe::Event).to receive(:construct_from).with(id: 'evt_account_application_deauthorized', type: 'account.application.deauthorized').and_return(account_application_deauthorized)
     end
 
-    context "with a subscriber" do
+    context "with a subscriber params with symbolized keys" do
       it "calls the subscriber with the retrieved event" do
         StripeEvent.subscribe('account.application.deauthorized', subscriber)
 
         StripeEvent.instrument(id: 'evt_account_application_deauthorized', type: 'account.application.deauthorized')
 
-        expect(events).to eq [account_application_deauthorized]
+        expect(events.first.type).to    eq 'account.application.deauthorized'
+        expect(events.first[:type]).to  eq 'account.application.deauthorized'
+      end
+    end
+
+    # The Stripe api expects params to be passed into their StripeObject's
+    # with symbolized keys, but the params that we pass through from a
+    # accont.application.deauthorized webhook are a HashWithIndifferentAccess
+    # (keys stored as strings always.
+    context "with a subscriber params with indifferent access (stringified keys)" do
+      it "calls the subscriber with the retrieved event" do
+        StripeEvent.subscribe('account.application.deauthorized', subscriber)
+
+        StripeEvent.instrument({ id: 'evt_account_application_deauthorized', type: 'account.application.deauthorized' }.with_indifferent_access)
+
+        expect(events.first.type).to    eq 'account.application.deauthorized'
+        expect(events.first[:type]).to  eq 'account.application.deauthorized'
       end
     end
   end
