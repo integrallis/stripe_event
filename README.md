@@ -148,6 +148,15 @@ describe "Billing Events" do
 end
 ```
 
+### Ignoring Test Webhooks
+
+If you are using stipe_event in a stripe connect application you
+will likely receive both test and live webhooks.  If you would only
+like to process live webhooks in production add the following to
+your config/production.rb
+
+    StripeEvent.ignore_test_webhooks = true
+
 ### Note: 'Test Webhooks' Button on Stripe Dashboard
 
 This button sends an example event to your webhook urls, including an `id` of `evt_00000000000000`. To confirm that Stripe sent the webhook, StripeEvent attempts to retrieve the event details from Stripe using the given `id`. In this case the event does not exist and StripeEvent responds with `401 Unauthorized`. Instead of using the 'Test Webhooks' button, trigger webhooks by using the Stripe API or Dashboard to create test payments, customers, etc.
