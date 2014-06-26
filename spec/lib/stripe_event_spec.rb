@@ -59,6 +59,10 @@ describe StripeEvent do
         StripeEvent.ignore_test_webhooks = true
       end
 
+      after do
+        StripeEvent.ignore_test_webhooks = false
+      end
+
       def run_webhook
         StripeEvent.subscribe('charge.succeeded', &subscriber)
         StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded', livemode: livemode)
