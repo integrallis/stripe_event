@@ -4,7 +4,7 @@ require "stripe_event/engine" if defined?(Rails)
 
 module StripeEvent
   class << self
-    attr_accessor :adapter, :backend, :event_retriever, :namespace
+    attr_accessor :adapter, :backend, :event_retriever, :namespace, :ignore_test_webhooks
 
     def configure(&block)
       raise ArgumentError, "must provide a block" unless block_given?
@@ -13,6 +13,7 @@ module StripeEvent
     alias :setup :configure
 
     def instrument(params)
+      return if test_webhook?(params) && ignore_test_webhooks
       begin
         event = event_retriever.call(params)
       rescue Stripe::AuthenticationError => e
@@ -26,6 +27,10 @@ module StripeEvent
       end
 
       backend.instrument namespace.call(event[:type]), event
+    end
+
+    def test_webhook?(webhook_params)
+      !webhook_params[:livemode]
     end
 
     def subscribe(name, callable = Proc.new)
@@ -65,4 +70,5 @@ module StripeEvent
   self.backend = ActiveSupport::Notifications
   self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
   self.namespace = Namespace.new("stripe_event", ".")
+  self.ignore_test_webhooks = false
 end

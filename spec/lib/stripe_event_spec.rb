@@ -53,6 +53,45 @@ describe StripeEvent do
     end
   end
 
+  describe "subscribing to all or only live events" do
+    context "when we want to subscribe to only live events" do
+      before do
+        StripeEvent.ignore_test_webhooks = true
+      end
+
+      def run_webhook
+        StripeEvent.subscribe('charge.succeeded', &subscriber)
+        StripeEvent.instrument(id: 'evt_charge_succeeded', type: 'charge.succeeded', livemode: livemode)
+      end
+
+      context "when we have a test event" do
+        let(:livemode) { false }
+
+        before do
+          run_webhook
+        end
+
+        it "does not call the subscriber when we have a test event" do
+          expect(events).to be_empty
+        end
+      end
+
+      context "when we have a live event" do
+        let(:livemode) { true }
+
+        before do
+          expect(charge_succeeded).to receive(:[]).with(:type).and_return('charge.succeeded')
+          expect(Stripe::Event).to receive(:retrieve).with('evt_charge_succeeded').and_return(charge_succeeded)
+          run_webhook
+        end
+
+        it "calls the subscriber when we have a live event" do
+          expect(events).to eq [charge_succeeded]
+        end
+      end
+    end
+  end
+
   describe "subscribing to the 'account.application.deauthorized' event type" do
     before do
       expect(Stripe::Event).to receive(:retrieve).with('evt_account_application_deauthorized').and_raise(Stripe::AuthenticationError)
