@@ -22,6 +22,18 @@ describe StripeEvent::WebhookController do
     expect(count).to eq 1
   end
 
+  it "succeeds when the event_retriever returns nil (simulating an ignored webhook event)" do
+    count = 0
+    StripeEvent.event_retriever = lambda { |params| return nil }
+    StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
+    stub_event('evt_charge_succeeded')
+
+    webhook id: 'evt_charge_succeeded'
+
+    expect(response.code).to eq '200'
+    expect(count).to eq 0
+  end
+
   it "denies access with invalid event data" do
     count = 0
     StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
