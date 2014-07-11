@@ -25,7 +25,7 @@ module StripeEvent
         raise UnauthorizedError.new(e)
       end
 
-      backend.instrument namespace.call(event[:type]), event
+      backend.instrument(namespace.call(event[:type]), event) if event
     end
 
     def subscribe(name, callable = Proc.new)

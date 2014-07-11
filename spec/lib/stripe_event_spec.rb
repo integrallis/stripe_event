@@ -26,6 +26,17 @@ describe StripeEvent do
     end
   end
 
+  describe "event_retriever rejecting events" do
+    before do
+      expect(ActiveSupport::Notifications).to receive(:instrument).never
+      StripeEvent.event_retriever = lambda { |params| nil }
+    end
+
+    it "should not retrieve anything" do
+      StripeEvent.instrument(id: 'evt_reject', type: 'charge.succeeded')
+    end
+  end
+
   describe "subscribing to a specific event type" do
     before do
       expect(charge_succeeded).to receive(:[]).with(:type).and_return('charge.succeeded')
