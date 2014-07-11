@@ -98,6 +98,23 @@ end
 StripeEvent.event_retriever = EventRetriever.new
 ```
 
+If you'd like to ignore particular webhook events (perhaps to ignore test webhooks in production, or to ignore webhooks for a non-paying customer), you can do so by returning `nil` in you custom `event_retriever`. For example:
+
+```ruby
+StripeEvent.event_retriever = lambda do |params|
+  return nil if Rails.env.production && !params[:livemode]
+  Stripe::Event.retrieve(params[:id])
+end
+```
+
+```ruby
+StripeEvent.event_retriever = lambda do |params|
+  account = Account.find_by!(stripe_user_id: params[:user_id])
+  return nil if account.delinquent?
+  Stripe::Event.retrieve(params[:id], account.api_key)
+end
+```
+
 ## Without Rails
 
 StripeEvent can be used outside of Rails applications as well. Here is a basic Sinatra implementation:
