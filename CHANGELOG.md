@@ -1,3 +1,6 @@
+### 1.3.0 (July 22, 2014)
+  * Allow for ignoring particular events. Thank you to [anark](https://github.com/anark) for suggesting the change, and [Ryan McGeary](https://github.com/rmm5t) and [Pete Keen](https://github.com/peterkeen) for working on the implementation.
+
 ### 1.2.0 (June 17, 2014)
   * Gracefully authenticate `account.application.deauthorized` events. Thank you to [Ryan McGeary](https://github.com/rmm5t) for the pull request and for taking the time to test the change in a live environment.
 
