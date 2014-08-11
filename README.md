@@ -102,7 +102,7 @@ If you'd like to ignore particular webhook events (perhaps to ignore test webhoo
 
 ```ruby
 StripeEvent.event_retriever = lambda do |params|
-  return nil if Rails.env.production && !params[:livemode]
+  return nil if Rails.env.production? && !params[:livemode]
   Stripe::Event.retrieve(params[:id])
 end
 ```
