@@ -152,6 +152,28 @@ describe StripeEvent do
     end
   end
 
+  describe ".listening?" do
+    it "returns true when there is a subscriber for a matching event type" do
+      StripeEvent.subscribe('customer.', &subscriber)
+
+      expect(StripeEvent.listening?('customer.card')).to be true
+      expect(StripeEvent.listening?('customer.')).to be true
+    end
+
+    it "returns false when there is not a subscriber for a matching event type" do
+      StripeEvent.subscribe('customer.', &subscriber)
+
+      expect(StripeEvent.listening?('account')).to be false
+    end
+
+    it "returns true when a subscriber is subscribed to all events" do
+      StripeEvent.all(&subscriber)
+
+      expect(StripeEvent.listening?('customer.')).to be true
+      expect(StripeEvent.listening?('account')).to be true
+    end
+  end
+
   describe StripeEvent::NotificationAdapter do
     let(:adapter) { StripeEvent.adapter }
 
