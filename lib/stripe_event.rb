@@ -35,6 +35,11 @@ module StripeEvent
     def all(callable = Proc.new)
       subscribe nil, callable
     end
+
+    def listening?(name)
+      namespaced_name = namespace.call(name)
+      backend.notifier.listening?(namespaced_name)
+    end
   end
 
   class Namespace < Struct.new(:value, :delimiter)
