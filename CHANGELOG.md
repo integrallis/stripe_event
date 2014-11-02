@@ -1,3 +1,6 @@
+### 1.4.0 (November 1, 2014)
+  * Add `StripeEvent.listening?` method to easily determine if an event type has any registered handlers. Thank you to [Vladimir Andrijevik](https://github.com/vandrijevik) for the [idea and implementation](https://github.com/integrallis/stripe_event/pull/42).
+
 ### 1.3.0 (July 22, 2014)
   * Allow for ignoring particular events. Thank you to [anark](https://github.com/anark) for suggesting the change, and [Ryan McGeary](https://github.com/rmm5t) and [Pete Keen](https://github.com/peterkeen) for working on the implementation.
 
