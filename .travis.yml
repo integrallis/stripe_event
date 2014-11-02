@@ -9,11 +9,13 @@ gemfile:
   - gemfiles/rails3.1.gemfile
   - gemfiles/rails3.2.gemfile
   - gemfiles/rails4.0.gemfile
+  - gemfiles/rails4.1.gemfile
 matrix:
   exclude:
     - rvm: 1.9.2
       gemfile: gemfiles/rails4.0.gemfile
-    - rvm: jruby-head
+    - rvm: 1.9.2
+      gemfile: gemfiles/rails4.1.gemfile
 notifications:
   email:
     - daniel.r.whalen+travis-ci@gmail.com
