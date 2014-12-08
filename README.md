@@ -169,6 +169,14 @@ end
 
 This button sends an example event to your webhook urls, including an `id` of `evt_00000000000000`. To confirm that Stripe sent the webhook, StripeEvent attempts to retrieve the event details from Stripe using the given `id`. In this case the event does not exist and StripeEvent responds with `401 Unauthorized`. Instead of using the 'Test Webhooks' button, trigger webhooks by using the Stripe API or Dashboard to create test payments, customers, etc.
 
+### Maintainers
+
+* [Ryan McGeary](https://github.com/rmm5t)
+* [Pete Keen](https://github.com/peterkeen)
+* [Danny Whalen](https://github.com/invisiblefunnel)
+
+Special thanks to all the [contributors](https://github.com/integrallis/stripe_event/graphs/contributors).
+
 ### License
 
 [MIT License](https://github.com/integrallis/stripe_event/blob/master/LICENSE.md). Copyright 2012-2014 Integrallis Software.
