@@ -13,6 +13,8 @@ module StripeEvent
     alias :setup :configure
 
     def instrument(params)
+      return unless listening?(parmas[:type])
+      
       begin
         event = event_retriever.call(params)
       rescue Stripe::AuthenticationError => e
