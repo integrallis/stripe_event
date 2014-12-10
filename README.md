@@ -12,7 +12,7 @@ gem 'stripe_event'
 
 ```ruby
 # config/routes.rb
-mount StripeEvent::Engine => '/my-chosen-path' # provide a custom path
+mount StripeEvent::Engine, at: '/my-chosen-path' # provide a custom path
 ```
 
 ## Usage
