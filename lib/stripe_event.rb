@@ -4,7 +4,7 @@ require "stripe_event/engine" if defined?(Rails)
 
 module StripeEvent
   class << self
-    attr_accessor :adapter, :backend, :event_retriever, :namespace
+    attr_accessor :adapter, :backend, :event_retriever, :event_namespacer, :namespace
 
     def configure(&block)
       raise ArgumentError, "must provide a block" unless block_given?
@@ -25,7 +25,7 @@ module StripeEvent
         raise UnauthorizedError.new(e)
       end
 
-      backend.instrument namespace.call(event[:type]), event if event
+      backend.instrument namespace.call(event_namespacer.call(event, params)), event if event
     end
 
     def subscribe(name, callable = Proc.new)
@@ -69,5 +69,6 @@ module StripeEvent
   self.adapter = NotificationAdapter
   self.backend = ActiveSupport::Notifications
   self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
+  self.event_namespacer = lambda { |event, params| event[:type] }
   self.namespace = Namespace.new("stripe_event", ".")
 end
