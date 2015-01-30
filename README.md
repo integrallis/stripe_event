@@ -179,4 +179,4 @@ Special thanks to all the [contributors](https://github.com/integrallis/stripe_e
 
 ### License
 
-[MIT License](https://github.com/integrallis/stripe_event/blob/master/LICENSE.md). Copyright 2012-2014 Integrallis Software.
+[MIT License](https://github.com/integrallis/stripe_event/blob/master/LICENSE.md). Copyright 2012-2015 Integrallis Software.
