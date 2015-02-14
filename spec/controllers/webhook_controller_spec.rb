@@ -34,6 +34,17 @@ describe StripeEvent::WebhookController do
     expect(count).to eq 0
   end
 
+  it "calls the event finalizer if there is one" do
+    count = 0
+    StripeEvent.event_finalizer = lambda { |event| count += 1 }
+    stub_event('evt_charge_succeeded')
+
+    webhook id: 'evt_charge_succeeded'
+
+    expect(response.code).to eq '200'
+    expect(count).to eq 1
+  end
+
   it "denies access with invalid event data" do
     count = 0
     StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
