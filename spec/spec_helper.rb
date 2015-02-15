@@ -16,6 +16,7 @@ RSpec.configure do |config|
     @event_retriever = StripeEvent.event_retriever
     @notifier = StripeEvent.backend.notifier
     StripeEvent.backend.notifier = @notifier.class.new
+    StripeEvent.event_finalizer = nil
   end
 
   config.after do
