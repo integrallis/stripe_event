@@ -1,26 +1,19 @@
 language: ruby
 
 rvm:
-  - 1.9.2
   - 1.9.3
-  - 2.0.0
   - 2.1
   - jruby-19mode
 
 gemfile:
-  - gemfiles/rails3.1.gemfile
   - gemfiles/rails3.2.gemfile
-  - gemfiles/rails4.0.gemfile
   - gemfiles/rails4.1.gemfile
+  - gemfiles/rails4.2.gemfile
 
 sudo: false
 
 matrix:
-  exclude:
-    - rvm: 1.9.2
-      gemfile: gemfiles/rails4.0.gemfile
-    - rvm: 1.9.2
-      gemfile: gemfiles/rails4.1.gemfile
+  fast_finish: true
 
 notifications:
   email:
