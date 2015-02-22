@@ -1,6 +1,6 @@
 module StripeEvent
   class WebhookController < ActionController::Base
-    before_action do
+    before_filter do
       StripeEvent.authentication_secret.nil? or \
         authenticate_or_request_with_http_basic do |username, password|
           password == StripeEvent.authentication_secret
