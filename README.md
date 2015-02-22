@@ -89,7 +89,7 @@ StripeEvent.authentication_secret = Rails.application.secrets.stripe_webhook_sec
 
 3. When you specify your webhook's URL in Stripe's settings, include the secret as a password in the URL, along with any username:
 
-    https://stripe:my-secret-key@myapplication.com/my-webhook-path
+        https://stripe:my-secret-key@myapplication.com/my-webhook-path
 
 This is only truly secure if your webhook endpoint is accessed over SSL, which Stripe strongly recommends anyway.
 
