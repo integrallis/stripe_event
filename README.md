@@ -80,12 +80,12 @@ To prevent this, StripeEvent supports using HTTP Basic authentication on your we
 
 2. Configure StripeEvent to require that secret be used as a basic authentication password, using code along the lines of these examples:
 
-```ruby
-# STRIPE_WEBHOOK_SECRET environment variable
-StripeEvent.authentication_secret = ENV['STRIPE_WEBHOOK_SECRET']
-# stripe_webhook_secret key in secrets.yml file
-StripeEvent.authentication_secret = Rails.application.secrets.stripe_webhook_secret
-```
+    ```ruby
+    # STRIPE_WEBHOOK_SECRET environment variable
+    StripeEvent.authentication_secret = ENV['STRIPE_WEBHOOK_SECRET']
+    # stripe_webhook_secret key in secrets.yml file
+    StripeEvent.authentication_secret = Rails.application.secrets.stripe_webhook_secret
+    ```
 
 3. When you specify your webhook's URL in Stripe's settings, include the secret as a password in the URL, along with any username:
 
