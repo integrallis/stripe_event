@@ -70,6 +70,29 @@ StripeEvent.subscribe 'customer.card.' do |event|
 end
 ```
 
+## Securing your webhook endpoint
+
+StripeEvent automatically fetches events from Stripe to ensure they haven't been forged. However, that doesn't prevent an attacker who knows your endpoint name and an event's ID from forcing your server to process a legitimate event twice. If that event triggers some useful action, like generating a license key or enabling a delinquent account, you could end up giving something the attacker is supposed to pay for away for free.
+
+To prevent this, StripeEvent supports using HTTP Basic authentication on your webhook endpoint. If only Stripe knows the basic authentication password, this ensures that the request really comes from Stripe. Here's what you do:
+
+1. Arrange for a secret key to be available in your application's environment variables or `secrets.yml` file. You can generate a suitable secret with the `rake secret` command. (Remember, the `secrets.yml` file shouldn't contain production secrets directly; it should use ERB to include them.)
+
+2. Configure StripeEvent to require that secret be used as a basic authentication password, using code along the lines of these examples:
+
+    ```ruby
+    # STRIPE_WEBHOOK_SECRET environment variable
+    StripeEvent.authentication_secret = ENV['STRIPE_WEBHOOK_SECRET']
+    # stripe_webhook_secret key in secrets.yml file
+    StripeEvent.authentication_secret = Rails.application.secrets.stripe_webhook_secret
+    ```
+
+3. When you specify your webhook's URL in Stripe's settings, include the secret as a password in the URL, along with any username:
+
+        https://stripe:my-secret-key@myapplication.com/my-webhook-path
+
+This is only truly secure if your webhook endpoint is accessed over SSL, which Stripe strongly recommends anyway.
+
 ## Configuration
 
 If you have built an application that has multiple Stripe accounts--say, each of your customers has their own--you may want to define your own way of retrieving events from Stripe (e.g. perhaps you want to use the [user_id parameter](https://stripe.com/docs/apps/getting-started#webhooks) from the top level to detect the customer for the event, then grab their specific API key). You can do this:
