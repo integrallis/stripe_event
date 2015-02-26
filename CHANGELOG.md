@@ -1,3 +1,7 @@
+### 1.5.0 (February 25, 2015)
+  * Added [replay attack protection](https://github.com/integrallis/stripe_event#securing-your-webhook-endpoint) on webhooks. See  `StripeEvent.authentication_secret`. Thanks @brentdax for both the initial discussion and the implementation! #53, #55
+  * Dropped official support for Rails 3.1 and Rails 4.0
+
 ### 1.4.0 (November 1, 2014)
   * Add `StripeEvent.listening?` method to easily determine if an event type has any registered handlers. Thank you to [Vladimir Andrijevik](https://github.com/vandrijevik) for the [idea and implementation](https://github.com/integrallis/stripe_event/pull/42).
 
