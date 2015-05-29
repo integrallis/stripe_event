@@ -200,6 +200,10 @@ This button sends an example event to your webhook urls, including an `id` of `e
 
 Special thanks to all the [contributors](https://github.com/integrallis/stripe_event/graphs/contributors).
 
+### Versioning
+
+Semantic Versioning 2.0 as defined at <http://semver.org>.
+
 ### License
 
 [MIT License](https://github.com/integrallis/stripe_event/blob/master/LICENSE.md). Copyright 2012-2015 Integrallis Software.
