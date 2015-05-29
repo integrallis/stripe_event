@@ -13,6 +13,9 @@ gemfile:
 sudo: false
 
 matrix:
+  exclude:
+    - rvm: 2.2
+      gemfile: gemfiles/rails3.2.gemfile
   fast_finish: true
 
 notifications:
