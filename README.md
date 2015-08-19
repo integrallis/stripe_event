@@ -17,6 +17,8 @@ mount StripeEvent::Engine, at: '/my-chosen-path' # provide a custom path
 
 ## Usage
 
+Note that `STRIPE_API_KEY` is synonymous with Stripe's own `Live Secret Key` (e.g.: sk_live_hash)
+
 ```ruby
 # config/initializers/stripe.rb
 Stripe.api_key = ENV['STRIPE_API_KEY'] # Set your api key
