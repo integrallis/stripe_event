@@ -17,11 +17,9 @@ mount StripeEvent::Engine, at: '/my-chosen-path' # provide a custom path
 
 ## Usage
 
-Note that `STRIPE_API_KEY` is synonymous with Stripe's own `Live Secret Key` (e.g.: sk_live_hash)
-
 ```ruby
 # config/initializers/stripe.rb
-Stripe.api_key = ENV['STRIPE_API_KEY'] # Set your api key
+Stripe.api_key = ENV['STRIPE_SECRET_KEY'] # e.g. sk_live_1234
 
 StripeEvent.configure do |events|
   events.subscribe 'charge.failed' do |event|
@@ -149,7 +147,7 @@ require 'json'
 require 'sinatra'
 require 'stripe_event'
 
-Stripe.api_key = ENV['STRIPE_API_KEY']
+Stripe.api_key = ENV['STRIPE_SECRET_KEY']
 
 StripeEvent.subscribe 'charge.failed' do |event|
   # Look ma, no Rails!
