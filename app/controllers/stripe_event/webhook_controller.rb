@@ -7,12 +7,20 @@ module StripeEvent
         end
       end
     end
-    
+
     def event
       StripeEvent.instrument(params)
       head :ok
-    rescue StripeEvent::UnauthorizedError
+    rescue StripeEvent::UnauthorizedError => e
+      log_error(e)
       head :unauthorized
+    end
+
+    private
+
+    def log_error(e)
+      logger.error e.message
+      e.backtrace.each { |line| logger.error "  #{line}" }
     end
   end
 end
