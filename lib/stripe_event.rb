@@ -4,7 +4,7 @@ require "stripe_event/engine" if defined?(Rails)
 
 module StripeEvent
   class << self
-    attr_accessor :adapter, :backend, :event_retriever, :namespace, :authentication_secret
+    attr_accessor :adapter, :backend, :event_retriever, :namespace, :authentication_secret, :trust_incoming_event
 
     def configure(&block)
       raise ArgumentError, "must provide a block" unless block_given?
@@ -40,6 +40,20 @@ module StripeEvent
       namespaced_name = namespace.call(name)
       backend.notifier.listening?(namespaced_name)
     end
+
+    def event_retriever
+      @event_retriever ||= build_event_retriever
+    end
+
+    private
+
+    def build_event_retriever
+      if trust_incoming_event
+        lambda { |params| Stripe::Event.construct_from(params.deep_symbolize_keys) }
+      else
+        lambda { |params| Stripe::Event.retrieve(params[:id]) }
+      end
+    end
   end
 
   class Namespace < Struct.new(:value, :delimiter)
@@ -68,6 +82,5 @@ module StripeEvent
 
   self.adapter = NotificationAdapter
   self.backend = ActiveSupport::Notifications
-  self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
   self.namespace = Namespace.new("stripe_event", ".")
 end
