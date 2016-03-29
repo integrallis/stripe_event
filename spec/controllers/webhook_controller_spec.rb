@@ -8,8 +8,10 @@ describe StripeEvent::WebhookController do
   end
 
   def webhook(params)
-    post :event, params.merge(use_route: :stripe_event)
+    post :event, params
   end
+
+  routes { StripeEvent::Engine.routes }
 
   it "succeeds with valid event data" do
     count = 0
