@@ -1,20 +1,20 @@
 language: ruby
+cache: bundler
+sudo: false
 
 rvm:
-  - 2.1
   - 2.2
-  - jruby-19mode
+  - 2.3.0
 
 gemfile:
-  - gemfiles/rails3.2.gemfile
   - gemfiles/rails4.1.gemfile
   - gemfiles/rails4.2.gemfile
 
-sudo: false
-
 matrix:
-  exclude:
-    - rvm: 2.2
+  include:
+    - rvm: 2.1
+      gemfile: gemfiles/rails3.2.gemfile
+    - rvm: jruby-19mode
       gemfile: gemfiles/rails3.2.gemfile
   fast_finish: true
 
