@@ -14,8 +14,6 @@ matrix:
   include:
     - rvm: 2.1.9
       gemfile: gemfiles/rails3.2.gemfile
-    - rvm: jruby-19mode
-      gemfile: gemfiles/rails3.2.gemfile
   fast_finish: true
 
 notifications:
