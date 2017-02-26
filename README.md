@@ -101,7 +101,7 @@ This is only truly secure if your webhook endpoint is accessed over SSL, which S
 
 ## Configuration
 
-If you have built an application that has multiple Stripe accounts--say, each of your customers has their own--you may want to define your own way of retrieving events from Stripe (e.g. perhaps you want to use the [user_id parameter](https://stripe.com/docs/apps/getting-started#webhooks) from the top level to detect the customer for the event, then grab their specific API key). You can do this:
+If you have built an application that has multiple Stripe accounts--say, each of your customers has their own--you may want to define your own way of retrieving events from Stripe (e.g. perhaps you want to use the [user_id parameter](https://stripe.com/docs/connect/authentication#webhooks) from the top level to detect the customer for the event, then grab their specific API key). You can do this:
 
 ```ruby
 StripeEvent.event_retriever = lambda do |params|
