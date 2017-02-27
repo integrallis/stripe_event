@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe StripeEvent do
+  include_context 'restore_state'
+
   let(:events) { [] }
   let(:subscriber) { ->(evt){ events << evt } }
   let(:charge_succeeded) { double('charge succeeded') }
