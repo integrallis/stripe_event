@@ -62,6 +62,7 @@ describe StripeEvent do
       it "calls the subscriber with the retrieved event" do
         StripeEvent.subscribe('account.application.deauthorized', subscriber)
 
+        # TODO: Change the hash going into this method to be an ActionController::Parameters object.
         StripeEvent.instrument(id: 'evt_account_application_deauthorized', type: 'account.application.deauthorized')
 
         expect(events.first.type).to    eq 'account.application.deauthorized'
@@ -77,6 +78,7 @@ describe StripeEvent do
       it "calls the subscriber with the retrieved event" do
         StripeEvent.subscribe('account.application.deauthorized', subscriber)
 
+        # TODO: Change the hash going into this method to be an ActionController::Parameters object.
         StripeEvent.instrument({ id: 'evt_account_application_deauthorized', type: 'account.application.deauthorized' }.with_indifferent_access)
 
         expect(events.first.type).to    eq 'account.application.deauthorized'
