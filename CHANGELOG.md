@@ -1,3 +1,15 @@
+### 1.7.0 (July 5, 2017)
+
+  * Support stripe v3 gem as a dependency (#87)
+
+### 1.6.0 (February 27, 2017)
+
+  * Support stripe v2 gem as a dependency (#82, b3cee03)
+
+### 1.5.1 (September 20, 2016)
+
+  * Better Rails 5 support. Prefer `before_action` over `before_filter`. (#69, Thanks @mcolyer)
+
 ### 1.5.0 (February 25, 2015)
   * Added [replay attack protection](https://github.com/integrallis/stripe_event#securing-your-webhook-endpoint) on webhooks. See  `StripeEvent.authentication_secret`. Thanks @brentdax for both the initial discussion and the implementation! #53, #55
   * Dropped official support for Rails 3.1 and Rails 4.0
