@@ -101,11 +101,11 @@ This is only truly secure if your webhook endpoint is accessed over SSL, which S
 
 ## Configuration
 
-If you have built an application that has multiple Stripe accounts--say, each of your customers has their own--you may want to define your own way of retrieving events from Stripe (e.g. perhaps you want to use the [user_id parameter](https://stripe.com/docs/connect/authentication#webhooks) from the top level to detect the customer for the event, then grab their specific API key). You can do this:
+If you have built an application that has multiple Stripe accounts--say, each of your customers has their own--you may want to define your own way of retrieving events from Stripe (e.g. perhaps you want to use the [account parameter](https://stripe.com/docs/connect/webhooks) from the top level to detect the customer for the event, then grab their specific API key). You can do this:
 
 ```ruby
 StripeEvent.event_retriever = lambda do |params|
-  api_key = Account.find_by!(stripe_user_id: params[:user_id]).api_key
+  api_key = Account.find_by!(stripe_user_id: params[:account]).api_key
   Stripe::Event.retrieve(params[:id], api_key)
 end
 ```
@@ -113,7 +113,7 @@ end
 ```ruby
 class EventRetriever
   def call(params)
-    api_key = retrieve_api_key(params[:user_id])
+    api_key = retrieve_api_key(params[:account])
     Stripe::Event.retrieve(params[:id], api_key)
   end
 
@@ -126,6 +126,8 @@ end
 
 StripeEvent.event_retriever = EventRetriever.new
 ```
+
+*Note: Older versions of Stripe used `user_id` to reference the Connect account.*
 
 If you'd like to ignore particular webhook events (perhaps to ignore test webhooks in production, or to ignore webhooks for a non-paying customer), you can do so by returning `nil` in you custom `event_retriever`. For example:
 
