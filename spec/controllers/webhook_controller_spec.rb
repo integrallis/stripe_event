@@ -84,4 +84,38 @@ describe StripeEvent::WebhookController do
       expect(response.code).to eq '200'
     end
   end
+
+  context "with a signing secret" do
+    def webhook_with_signature(signature, params)
+      request.env['HTTP_STRIPE_SIGNATURE'] = signature
+      webhook params
+    end
+
+    let(:secret) { 'secret' }
+    let(:signature) { 'signature' }
+    let(:payload) { 'id=evt_charge_succeeded' }
+
+    before(:each) { StripeEvent.signing_secret = secret }
+    after(:each) { StripeEvent.signing_secret = nil }
+
+    it "rejects invalid signatures" do
+      ex = Stripe::SignatureVerificationError.new("Invalid signature", signature)
+
+      expect(Stripe::Webhook::Signature).to receive(:verify_header).with(payload, signature, secret).and_raise(ex)
+
+      webhook_with_signature signature, id: 'evt_charge_succeeded'
+
+      expect(response.code).to eq '400'
+    end
+
+    it "accepts valid signatures" do
+      expect(Stripe::Webhook::Signature).to receive(:verify_header).with(payload, signature, secret).and_return(true)
+
+      stub_event 'evt_charge_succeeded'
+
+      webhook_with_signature signature, id: 'evt_charge_succeeded'
+
+      expect(response.code).to eq '200'
+    end
+  end
 end
