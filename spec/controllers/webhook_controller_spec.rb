@@ -91,29 +91,29 @@ describe StripeEvent::WebhookController do
       webhook params
     end
 
+    def generate_signature(payload)
+      signature = Stripe::Webhook::Signature.send(:compute_signature, "#{timestamp}.#{payload}", secret)
+
+      "t=#{timestamp},v1=#{signature}"
+    end
+
     let(:secret) { 'secret' }
     let(:signature) { 'signature' }
-    let(:payload) { 'id=evt_charge_succeeded' }
+    let(:timestamp) { Time.now.to_i }
 
     before(:each) { StripeEvent.signing_secret = secret }
     after(:each) { StripeEvent.signing_secret = nil }
 
     it "rejects invalid signatures" do
-      ex = Stripe::SignatureVerificationError.new("Invalid signature", signature)
-
-      expect(Stripe::Webhook::Signature).to receive(:verify_header).with(payload, signature, secret).and_raise(ex)
-
-      webhook_with_signature signature, id: 'evt_charge_succeeded'
+      webhook_with_signature generate_signature('invalid payload'), id: 'evt_charge_succeeded'
 
       expect(response.code).to eq '400'
     end
 
     it "accepts valid signatures" do
-      expect(Stripe::Webhook::Signature).to receive(:verify_header).with(payload, signature, secret).and_return(true)
-
       stub_event 'evt_charge_succeeded'
 
-      webhook_with_signature signature, id: 'evt_charge_succeeded'
+      webhook_with_signature generate_signature('id=evt_charge_succeeded'), id: 'evt_charge_succeeded'
 
       expect(response.code).to eq '200'
     end
