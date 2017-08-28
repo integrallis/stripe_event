@@ -24,7 +24,7 @@ module StripeEvent
     def request_authentication
       if StripeEvent.authentication_secret
         authenticate_or_request_with_http_basic do |username, password|
-          password == StripeEvent.authentication_secret
+          ActiveSupport::SecurityUtils.variable_size_secure_compare password, StripeEvent.authentication_secret
         end
       end
     end
