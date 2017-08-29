@@ -84,4 +84,44 @@ describe StripeEvent::WebhookController do
       expect(response.code).to eq '200'
     end
   end
+
+  context "with a signing secret" do
+    def webhook_with_signature(signature, params)
+      request.env['HTTP_STRIPE_SIGNATURE'] = signature
+      webhook params
+    end
+
+    def generate_signature(secret)
+      payload   = 'id=evt_charge_succeeded'
+      timestamp = Time.now.to_i
+      signature = Stripe::Webhook::Signature.send(:compute_signature, "#{timestamp}.#{payload}", secret)
+
+      "t=#{timestamp},v1=#{signature}"
+    end
+
+    let(:shared_secret) { 'secret' }
+
+    before(:each) { StripeEvent.signing_secret = shared_secret }
+    after(:each) { StripeEvent.signing_secret = nil }
+
+    it "rejects missing signature" do
+      webhook id: 'evt_charge_succeeded'
+
+      expect(response.code).to eq '400'
+    end
+
+    it "rejects invalid signature" do
+      webhook_with_signature "invalid signature", id: 'evt_charge_succeeded'
+
+      expect(response.code).to eq '400'
+    end
+
+    it "accepts valid signature" do
+      stub_event 'evt_charge_succeeded'
+
+      webhook_with_signature generate_signature(shared_secret), id: 'evt_charge_succeeded'
+
+      expect(response.code).to eq '200'
+    end
+  end
 end

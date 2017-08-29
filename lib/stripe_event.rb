@@ -4,7 +4,7 @@ require "stripe_event/engine" if defined?(Rails)
 
 module StripeEvent
   class << self
-    attr_accessor :adapter, :backend, :event_retriever, :namespace, :authentication_secret
+    attr_accessor :adapter, :backend, :event_retriever, :namespace, :authentication_secret, :signing_secret
 
     def configure(&block)
       raise ArgumentError, "must provide a block" unless block_given?

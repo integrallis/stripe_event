@@ -99,6 +99,16 @@ To prevent this, StripeEvent supports using HTTP Basic authentication on your we
 
 This is only truly secure if your webhook endpoint is accessed over SSL, which Stripe strongly recommends anyway.
 
+## Authenticating webhooks
+
+Stripe will cryptographically sign webhook payloads with a signature that is included in a special header sent with the request. Verifying this signature lets your application properly authenticate the request originated from Stripe. To leverage this feature, please set the `signing_secret` configuration value:
+
+```
+StripeEvent.signing_secret = Rails.application.secrets.stripe_signing_secret
+```
+
+Please refer to Stripe's documentation for more details: https://stripe.com/docs/webhooks#signatures
+
 ## Configuration
 
 If you have built an application that has multiple Stripe accounts--say, each of your customers has their own--you may want to define your own way of retrieving events from Stripe (e.g. perhaps you want to use the [account parameter](https://stripe.com/docs/connect/webhooks) from the top level to detect the customer for the event, then grab their specific API key). You can do this:
