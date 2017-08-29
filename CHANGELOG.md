@@ -1,3 +1,8 @@
+### 1.8.0 (August 29, 2017)
+
+  * Support for [Stripe's Webhook Signature Verification](https://stripe.com/docs/webhooks#signatures) (#83, #90, Thanks @mikeycgto!)
+  * Secure compare during basic authentication check (#91, Thanks @mikeycgto!)
+
 ### 1.7.0 (July 5, 2017)
 
   * Support stripe v3 gem as a dependency (#87)
