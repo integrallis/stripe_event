@@ -83,6 +83,24 @@ describe StripeEvent do
         expect(events.first[:type]).to  eq 'account.application.deauthorized'
       end
     end
+
+    # Rails 5.1 uses ActionController::Parameters which is not inherited from
+    # ActiveSupport::HashWithIndifferentAccess anymore
+    if Rails::VERSION::MAJOR > 3
+      context "with a subscriber params with indifferent access (controller params)" do
+        it "calls the subscriber with the retrieved event" do
+          StripeEvent.subscribe('account.application.deauthorized', subscriber)
+
+          StripeEvent.instrument(ActionController::Parameters.new(
+            id: 'evt_account_application_deauthorized',
+            type: 'account.application.deauthorized'
+          ))
+
+          expect(events.first.type).to    eq 'account.application.deauthorized'
+          expect(events.first[:type]).to  eq 'account.application.deauthorized'
+        end
+      end
+    end
   end
 
   describe "subscribing to a namespace of event types" do
