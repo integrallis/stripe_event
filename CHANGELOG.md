@@ -1,3 +1,7 @@
+### 1.9.0 (November 30, 2017)
+
+  * Support for Rails 5.1 (#94, Thanks @krasnoukhov and @simplepractice!
+
 ### 1.8.0 (August 29, 2017)
 
   * Support for [Stripe's Webhook Signature Verification](https://stripe.com/docs/webhooks#signatures) (#83, #90, Thanks @mikeycgto!)
