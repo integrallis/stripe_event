@@ -9,9 +9,13 @@ rvm:
 gemfile:
   - gemfiles/rails4.1.gemfile
   - gemfiles/rails4.2.gemfile
+  - gemfiles/rails5.0.gemfile
+  - gemfiles/rails5.1.gemfile
 
 matrix:
   include:
+    - rvm: 2.4.2
+      gemfile: gemfiles/rails5.1.gemfile
     - rvm: 2.1.9
       gemfile: gemfiles/rails3.2.gemfile
   fast_finish: true
