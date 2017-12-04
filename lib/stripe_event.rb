@@ -46,12 +46,12 @@ module StripeEvent
     end
 
     def authentication_secret=(value)
-      warning = "[STRIPE_EVENT] `StripeEvent.authentication_secret=` is deprecated and will be " +
-                "removed in 2.x. Use `StripeEvent.signing_secret=` instead. The value " +
-                "for your specific endpoint's signing secret (starting with `whsec_`) is in your " +
-                "API > Webhooks settings (https://dashboard.stripe.com/account/webhooks). " +
-                "More information can be found here: https://stripe.com/docs/webhooks#signatures"
-      ActiveSupport::Deprecation.warn warning, caller
+      ActiveSupport::Deprecation.warn(
+        "[STRIPE_EVENT] `StripeEvent.authentication_secret=` is deprecated and will be " +
+        "removed in 2.x. Use `StripeEvent.signing_secret=` instead. The value " +
+        "for your specific endpoint's signing secret (starting with `whsec_`) is in your " +
+        "API > Webhooks settings (https://dashboard.stripe.com/account/webhooks). " +
+        "More information can be found here: https://stripe.com/docs/webhooks#signatures")
       @authentication_secret = value
     end
   end
