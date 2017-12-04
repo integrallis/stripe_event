@@ -78,6 +78,18 @@ end
 
 ## Securing your webhook endpoint
 
+### Authenticating webhooks with signatures (recommended)
+
+Stripe will cryptographically sign webhook payloads with a signature that is included in a special header sent with the request. Verifying this signature lets your application properly authenticate the request originated from Stripe. To leverage this feature, please set the `signing_secret` configuration value:
+
+```
+StripeEvent.signing_secret = Rails.application.secrets.stripe_signing_secret
+```
+
+Please refer to Stripe's documentation for more details: https://stripe.com/docs/webhooks#signatures
+
+### Basic authentication (deprecated)
+
 StripeEvent automatically fetches events from Stripe to ensure they haven't been forged. However, that doesn't prevent an attacker who knows your endpoint name and an event's ID from forcing your server to process a legitimate event twice. If that event triggers some useful action, like generating a license key or enabling a delinquent account, you could end up giving something the attacker is supposed to pay for away for free.
 
 To prevent this, StripeEvent supports using HTTP Basic authentication on your webhook endpoint. If only Stripe knows the basic authentication password, this ensures that the request really comes from Stripe. Here's what you do:
@@ -98,16 +110,6 @@ To prevent this, StripeEvent supports using HTTP Basic authentication on your we
         https://stripe:my-secret-key@myapplication.com/my-webhook-path
 
 This is only truly secure if your webhook endpoint is accessed over SSL, which Stripe strongly recommends anyway.
-
-## Authenticating webhooks
-
-Stripe will cryptographically sign webhook payloads with a signature that is included in a special header sent with the request. Verifying this signature lets your application properly authenticate the request originated from Stripe. To leverage this feature, please set the `signing_secret` configuration value:
-
-```
-StripeEvent.signing_secret = Rails.application.secrets.stripe_signing_secret
-```
-
-Please refer to Stripe's documentation for more details: https://stripe.com/docs/webhooks#signatures
 
 ## Configuration
 
