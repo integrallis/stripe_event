@@ -4,7 +4,7 @@ require "stripe_event/engine" if defined?(Rails)
 
 module StripeEvent
   class << self
-    attr_accessor :adapter, :backend, :event_retriever, :namespace, :authentication_secret, :signing_secret
+    attr_accessor :adapter, :backend, :event_retriever, :namespace, :signing_secret
 
     def configure(&block)
       raise ArgumentError, "must provide a block" unless block_given?
@@ -43,16 +43,6 @@ module StripeEvent
     def listening?(name)
       namespaced_name = namespace.call(name)
       backend.notifier.listening?(namespaced_name)
-    end
-
-    def authentication_secret=(value)
-      ActiveSupport::Deprecation.warn(
-        "[STRIPE_EVENT] `StripeEvent.authentication_secret=` is deprecated and will be " +
-        "removed in 2.x. Use `StripeEvent.signing_secret=` instead. The value " +
-        "for your specific endpoint's signing secret (starting with `whsec_`) is in your " +
-        "API > Webhooks settings (https://dashboard.stripe.com/account/webhooks). " +
-        "More information can be found here: https://stripe.com/docs/webhooks#signatures")
-      @authentication_secret = value
     end
   end
 

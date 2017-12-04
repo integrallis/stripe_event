@@ -60,37 +60,6 @@ describe StripeEvent::WebhookController, type: :controller do
     expect { webhook id: 'evt_charge_succeeded' }.to raise_error(Stripe::StripeError, /testing/)
   end
 
-  context "with an authentication secret" do
-    def webhook_with_secret(secret, params)
-      request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.encode_credentials('user', secret)
-      webhook params
-    end
-
-    before(:each) { StripeEvent.authentication_secret = "secret" }
-    after(:each) { StripeEvent.authentication_secret = nil }
-
-    it "rejects requests with no secret" do
-      stub_event('evt_charge_succeeded')
-
-      webhook id: 'evt_charge_succeeded'
-      expect(response.code).to eq '401'
-    end
-
-    it "rejects requests with incorrect secret" do
-      stub_event('evt_charge_succeeded')
-
-      webhook_with_secret 'incorrect', id: 'evt_charge_succeeded'
-      expect(response.code).to eq '401'
-    end
-
-    it "accepts requests with correct secret" do
-      stub_event('evt_charge_succeeded')
-
-      webhook_with_secret 'secret', id: 'evt_charge_succeeded'
-      expect(response.code).to eq '200'
-    end
-  end
-
   context "with a signing secret" do
     def webhook_with_signature(signature, params)
       request.env['HTTP_STRIPE_SIGNATURE'] = signature

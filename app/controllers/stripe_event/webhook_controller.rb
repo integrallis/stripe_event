@@ -1,10 +1,8 @@
 module StripeEvent
   class WebhookController < ActionController::Base
     if respond_to?(:before_action)
-      before_action :request_authentication
       before_action :verify_signature
     else
-      before_filter :request_authentication
       before_filter :verify_signature
     end
 
@@ -21,14 +19,6 @@ module StripeEvent
     def log_error(e)
       logger.error e.message
       e.backtrace.each { |line| logger.error "  #{line}" }
-    end
-
-    def request_authentication
-      if StripeEvent.authentication_secret
-        authenticate_or_request_with_http_basic do |username, password|
-          ActiveSupport::SecurityUtils.variable_size_secure_compare password, StripeEvent.authentication_secret
-        end
-      end
     end
 
     def verify_signature
