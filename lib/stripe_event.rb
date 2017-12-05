@@ -44,6 +44,16 @@ module StripeEvent
       namespaced_name = namespace.call(name)
       backend.notifier.listening?(namespaced_name)
     end
+
+    def authentication_secret=(value)
+      ActiveSupport::Deprecation.warn(
+        "[STRIPE_EVENT] `StripeEvent.authentication_secret=` is deprecated and will be " +
+        "removed in 2.x. Use `StripeEvent.signing_secret=` instead. The value " +
+        "for your specific endpoint's signing secret (starting with `whsec_`) is in your " +
+        "API > Webhooks settings (https://dashboard.stripe.com/account/webhooks). " +
+        "More information can be found here: https://stripe.com/docs/webhooks#signatures")
+      @authentication_secret = value
+    end
   end
 
   class Namespace < Struct.new(:value, :delimiter)

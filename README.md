@@ -25,7 +25,8 @@ mount StripeEvent::Engine, at: '/my-chosen-path' # provide a custom path
 
 ```ruby
 # config/initializers/stripe.rb
-Stripe.api_key = ENV['STRIPE_SECRET_KEY'] # e.g. sk_live_1234
+Stripe.api_key             = ENV['STRIPE_SECRET_KEY']     # e.g. sk_live_...
+StripeEvent.signing_secret = ENV['STRIPE_SIGNING_SECRET'] # e.g. whsec_...
 
 StripeEvent.configure do |events|
   events.subscribe 'charge.failed' do |event|
@@ -88,7 +89,7 @@ StripeEvent.signing_secret = Rails.application.secrets.stripe_signing_secret
 
 Please refer to Stripe's documentation for more details: https://stripe.com/docs/webhooks#signatures
 
-### Basic authentication (deprecated)
+### Basic authentication (DEPRECATED)
 
 StripeEvent automatically fetches events from Stripe to ensure they haven't been forged. However, that doesn't prevent an attacker who knows your endpoint name and an event's ID from forcing your server to process a legitimate event twice. If that event triggers some useful action, like generating a license key or enabling a delinquent account, you could end up giving something the attacker is supposed to pay for away for free.
 
