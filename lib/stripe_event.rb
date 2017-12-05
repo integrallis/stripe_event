@@ -4,7 +4,7 @@ require "stripe_event/engine" if defined?(Rails)
 
 module StripeEvent
   class << self
-    attr_accessor :adapter, :backend, :event_retriever, :namespace, :signing_secret
+    attr_accessor :adapter, :backend, :namespace, :event_filter, :signing_secret
 
     def configure(&block)
       raise ArgumentError, "must provide a block" unless block_given?
@@ -12,24 +12,9 @@ module StripeEvent
     end
     alias :setup :configure
 
-    def instrument(params)
-      begin
-        event = event_retriever.call(params)
-      rescue Stripe::AuthenticationError => e
-        if params[:type] == "account.application.deauthorized"
-          if defined?(ActionController::Parameters) && params.is_a?(ActionController::Parameters)
-            params = params.permit!.to_h
-          end
-
-          event = Stripe::Event.construct_from(params.deep_symbolize_keys)
-        else
-          raise UnauthorizedError.new(e)
-        end
-      rescue Stripe::StripeError => e
-        raise UnauthorizedError.new(e)
-      end
-
-      backend.instrument namespace.call(event[:type]), event if event
+    def instrument(event)
+      event = event_filter.call(event)
+      backend.instrument namespace.call(event.type), event if event
     end
 
     def subscribe(name, callable = Proc.new)
@@ -72,6 +57,6 @@ module StripeEvent
 
   self.adapter = NotificationAdapter
   self.backend = ActiveSupport::Notifications
-  self.event_retriever = lambda { |params| Stripe::Event.retrieve(params[:id]) }
   self.namespace = Namespace.new("stripe_event", ".")
+  self.event_filter = lambda { |event| event }
 end

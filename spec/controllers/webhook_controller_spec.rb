@@ -2,101 +2,90 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe StripeEvent::WebhookController, type: :controller do
-  def stub_event(identifier, status = 200)
-    stub_request(:get, "https://api.stripe.com/v1/events/#{identifier}").
-      to_return(status: status, body: File.read("spec/support/fixtures/#{identifier}.json"))
+  let(:secret) { 'secret' }
+  let(:charge_succeeded) { stub_event('evt_charge_succeeded') }
+
+  def stub_event(identifier)
+    JSON.parse(File.read("spec/support/fixtures/#{identifier}.json"))
   end
 
-  def webhook(params)
-    data = if Rails::VERSION::MAJOR > 4
-      { params: params }
-    else
-      params
-    end
+  def generate_signature(params)
+    payload   = params.to_json
+    timestamp = Time.now.to_i
+    signature = Stripe::Webhook::Signature.send(:compute_signature, "#{timestamp}.#{payload}", secret)
 
-    post :event, data
+    "t=#{timestamp},v1=#{signature}"
+  end
+
+  def webhook(signature, params)
+    request.env['HTTP_STRIPE_SIGNATURE'] = signature
+    request.env['RAW_POST_DATA'] = params.to_json # works with Rails 3, 4, or 5
+    post :event
+  end
+
+  def webhook_with_signature(params)
+    webhook generate_signature(params), params
   end
 
   routes { StripeEvent::Engine.routes }
 
-  it "succeeds with valid event data" do
-    count = 0
-    StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
-    stub_event('evt_charge_succeeded')
+  context "without a signing secret" do
+    before(:each) { StripeEvent.signing_secret = nil }
 
-    webhook id: 'evt_charge_succeeded'
+    it "denies invalid signature" do
+      webhook "invalid signature", charge_succeeded
+      expect(response.code).to eq '400'
+    end
 
-    expect(response.code).to eq '200'
-    expect(count).to eq 1
-  end
-
-  it "succeeds when the event_retriever returns nil (simulating an ignored webhook event)" do
-    count = 0
-    StripeEvent.event_retriever = lambda { |params| return nil }
-    StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
-    stub_event('evt_charge_succeeded')
-
-    webhook id: 'evt_charge_succeeded'
-
-    expect(response.code).to eq '200'
-    expect(count).to eq 0
-  end
-
-  it "denies access with invalid event data" do
-    count = 0
-    StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
-    stub_event('evt_invalid_id', 404)
-
-    webhook id: 'evt_invalid_id'
-
-    expect(response.code).to eq '401'
-    expect(count).to eq 0
-  end
-
-  it "ensures user-generated Stripe exceptions pass through" do
-    StripeEvent.subscribe('charge.succeeded') { |evt| raise Stripe::StripeError, "testing" }
-    stub_event('evt_charge_succeeded')
-
-    expect { webhook id: 'evt_charge_succeeded' }.to raise_error(Stripe::StripeError, /testing/)
+    it "denies valid signature" do
+      webhook_with_signature charge_succeeded
+      expect(response.code).to eq '400'
+    end
   end
 
   context "with a signing secret" do
-    def webhook_with_signature(signature, params)
-      request.env['HTTP_STRIPE_SIGNATURE'] = signature
-      webhook params
-    end
+    before(:each) { StripeEvent.signing_secret = secret }
 
-    def generate_signature(secret)
-      payload   = 'id=evt_charge_succeeded'
-      timestamp = Time.now.to_i
-      signature = Stripe::Webhook::Signature.send(:compute_signature, "#{timestamp}.#{payload}", secret)
-
-      "t=#{timestamp},v1=#{signature}"
-    end
-
-    let(:shared_secret) { 'secret' }
-
-    before(:each) { StripeEvent.signing_secret = shared_secret }
-    after(:each) { StripeEvent.signing_secret = nil }
-
-    it "rejects missing signature" do
-      webhook id: 'evt_charge_succeeded'
-
+    it "denies missing signature" do
+      webhook nil, charge_succeeded
       expect(response.code).to eq '400'
     end
 
-    it "rejects invalid signature" do
-      webhook_with_signature "invalid signature", id: 'evt_charge_succeeded'
-
+    it "denies invalid signature" do
+      webhook "invalid signature", charge_succeeded
       expect(response.code).to eq '400'
     end
 
-    it "accepts valid signature" do
-      stub_event 'evt_charge_succeeded'
+    it "succeeds with valid signature" do
+      webhook_with_signature charge_succeeded
+      expect(response.code).to eq '200'
+    end
 
-      webhook_with_signature generate_signature(shared_secret), id: 'evt_charge_succeeded'
+    it "succeeds with valid event data" do
+      count = 0
+      StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
+
+      webhook_with_signature charge_succeeded
 
       expect(response.code).to eq '200'
+      expect(count).to eq 1
+    end
+
+    it "succeeds when the event_filter returns nil (simulating an ignored webhook event)" do
+      count = 0
+      StripeEvent.event_filter = lambda { |event| return nil }
+      StripeEvent.subscribe('charge.succeeded') { |evt| count += 1 }
+
+      webhook_with_signature charge_succeeded
+
+      expect(response.code).to eq '200'
+      expect(count).to eq 0
+    end
+
+    it "ensures user-generated Stripe exceptions pass through" do
+      StripeEvent.subscribe('charge.succeeded') { |evt| raise Stripe::StripeError, "testing" }
+
+      expect { webhook_with_signature(charge_succeeded) }.to raise_error(Stripe::StripeError, /testing/)
     end
   end
 end
