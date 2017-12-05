@@ -1,6 +1,17 @@
+### 1.9.1 (November 30, 2017)
+
+This release is in preparation for some backward incompatible changes due to
+arrive in v2.0.0.  It is highly recommended that everyone secure their webhook
+endpoints by using `StripeEvent.signing_secret`. See the README and [Stripe's
+documentation](https://stripe.com/docs/webhooks#signatures) for more
+information.
+
+  * Deprecate `StripeEvent.authentication_secret` (#96)
+  * Deprecate unverified use of Stripe webhook's (#96)
+
 ### 1.9.0 (November 30, 2017)
 
-  * Support for Rails 5.1 (#94, Thanks @krasnoukhov and @simplepractice!
+  * Support for Rails 5.1 (#94, Thanks @krasnoukhov and @simplepractice!)
 
 ### 1.8.0 (August 29, 2017)
 
