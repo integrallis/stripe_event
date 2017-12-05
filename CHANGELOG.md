@@ -7,7 +7,7 @@ documentation](https://stripe.com/docs/webhooks#signatures) for more
 information.
 
   * Deprecate `StripeEvent.authentication_secret` (#96)
-  * Deprecate unverified use of Stripe webhook's (#96)
+  * Deprecate unverified use of Stripe's webhooks (#96)
 
 ### 1.9.0 (November 30, 2017)
 
