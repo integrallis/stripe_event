@@ -79,15 +79,28 @@ end
 
 ## Securing your webhook endpoint
 
-### Authenticating webhooks with signatures (recommended)
+### Authenticating webhooks with signatures
 
 Stripe will cryptographically sign webhook payloads with a signature that is included in a special header sent with the request. Verifying this signature lets your application properly authenticate the request originated from Stripe. To leverage this feature, please set the `signing_secret` configuration value:
 
-```
+```ruby
 StripeEvent.signing_secret = Rails.application.secrets.stripe_signing_secret
 ```
 
 Please refer to Stripe's documentation for more details: https://stripe.com/docs/webhooks#signatures
+
+### Support for multiple signing secrets
+
+Sometimes, you'll have multiple Stripe webhook subscriptions pointing at your application each with a different signing secret. For example, you might have both a main Account webhook and a webhook for a Connect application point at the same endpoint. It's possible to configure an array of signing secrets using the `signing_secrets` configuration option. The first one that successfully matches for each incoming webhook will be used to verify your incoming events.
+
+```ruby
+StripeEvent.signing_secrets = [
+  Rails.application.secrets.stripe_account_signing_secret,
+  Rails.application.secrets.stripe_connect_signing_secret,
+]
+```
+
+(NOTE: `signing_secret=` and `signing_secrets=` are just aliases for one another)
 
 ## Configuration
 
