@@ -89,75 +89,52 @@ StripeEvent.signing_secret = Rails.application.secrets.stripe_signing_secret
 
 Please refer to Stripe's documentation for more details: https://stripe.com/docs/webhooks#signatures
 
-### Basic authentication (DEPRECATED)
-
-StripeEvent automatically fetches events from Stripe to ensure they haven't been forged. However, that doesn't prevent an attacker who knows your endpoint name and an event's ID from forcing your server to process a legitimate event twice. If that event triggers some useful action, like generating a license key or enabling a delinquent account, you could end up giving something the attacker is supposed to pay for away for free.
-
-To prevent this, StripeEvent supports using HTTP Basic authentication on your webhook endpoint. If only Stripe knows the basic authentication password, this ensures that the request really comes from Stripe. Here's what you do:
-
-1. Arrange for a secret key to be available in your application's environment variables or `secrets.yml` file. You can generate a suitable secret with the `rake secret` command. (Remember, the `secrets.yml` file shouldn't contain production secrets directly; it should use ERB to include them.)
-
-2. Configure StripeEvent to require that secret be used as a basic authentication password, using code along the lines of these examples:
-
-    ```ruby
-    # STRIPE_WEBHOOK_SECRET environment variable
-    StripeEvent.authentication_secret = ENV['STRIPE_WEBHOOK_SECRET']
-    # stripe_webhook_secret key in secrets.yml file
-    StripeEvent.authentication_secret = Rails.application.secrets.stripe_webhook_secret
-    ```
-
-3. When you specify your webhook's URL in Stripe's settings, include the secret as a password in the URL, along with any username:
-
-        https://stripe:my-secret-key@myapplication.com/my-webhook-path
-
-This is only truly secure if your webhook endpoint is accessed over SSL, which Stripe strongly recommends anyway.
-
 ## Configuration
 
 If you have built an application that has multiple Stripe accounts--say, each of your customers has their own--you may want to define your own way of retrieving events from Stripe (e.g. perhaps you want to use the [account parameter](https://stripe.com/docs/connect/webhooks) from the top level to detect the customer for the event, then grab their specific API key). You can do this:
 
 ```ruby
-StripeEvent.event_retriever = lambda do |params|
-  api_key = Account.find_by!(stripe_user_id: params[:account]).api_key
-  Stripe::Event.retrieve(params[:id], api_key)
+StripeEvent.event_filter = lambda do |event|
+  api_key = Account.find_by!(stripe_account_id: event.account).api_key
+  Stripe::Event.retrieve(event.id, api_key)
 end
 ```
 
 ```ruby
-class EventRetriever
-  def call(params)
-    api_key = retrieve_api_key(params[:account])
-    Stripe::Event.retrieve(params[:id], api_key)
+class EventFilter
+  def call(event)
+    event.api_key = lookup_api_key(event.account)
+    event
   end
 
-  def retrieve_api_key(stripe_user_id)
-    Account.find_by!(stripe_user_id: stripe_user_id).api_key
+  def lookup_api_key(account_id)
+    Account.find_by!(stripe_account_id: account_id).api_key
   rescue ActiveRecord::RecordNotFound
     # whoops something went wrong - error handling
   end
 end
 
-StripeEvent.event_retriever = EventRetriever.new
+StripeEvent.event_filter = EventFilter.new
 ```
 
-*Note: Older versions of Stripe used `user_id` to reference the Connect account.*
-
-If you'd like to ignore particular webhook events (perhaps to ignore test webhooks in production, or to ignore webhooks for a non-paying customer), you can do so by returning `nil` in you custom `event_retriever`. For example:
+If you'd like to ignore particular webhook events (perhaps to ignore test webhooks in production, or to ignore webhooks for a non-paying customer), you can do so by returning `nil` in your custom `event_filter`. For example:
 
 ```ruby
-StripeEvent.event_retriever = lambda do |params|
-  return nil if Rails.env.production? && !params[:livemode]
-  Stripe::Event.retrieve(params[:id])
+StripeEvent.event_filter = lambda do |event|
+  return nil if Rails.env.production? && !event.livemode
+  event
 end
 ```
 
 ```ruby
-StripeEvent.event_retriever = lambda do |params|
-  account = Account.find_by!(stripe_user_id: params[:user_id])
+StripeEvent.event_filter = lambda do |event|
+  account = Account.find_by!(stripe_account_id: event.account)
   return nil if account.delinquent?
-  Stripe::Event.retrieve(params[:id], account.api_key)
+  event
 end
 ```
+
+*Note: Older versions of Stripe used `event.user_id` to reference the Connect Account ID.*
 
 ## Without Rails
 
@@ -183,35 +160,30 @@ end
 
 ## Testing
 
-Handling webhooks is a critical piece of modern billing systems. Verifying the behavior of StripeEvent subscribers can be done fairly easily by stubbing out the HTTP request used to authenticate the webhook request. Tools like [Webmock](https://github.com/bblimke/webmock) and [VCR](https://github.com/vcr/vcr) work well. [RequestBin](http://requestb.in/) is great for collecting the payloads. For exploratory phases of development, [UltraHook](http://www.ultrahook.com/) and other tools can forward webhook requests directly to localhost. You can check out [test-hooks](https://github.com/invisiblefunnel/test-hooks), an example Rails application to see how to test StripeEvent subscribers with RSpec request specs and Webmock. A quick look:
+Handling webhooks is a critical piece of modern billing systems. Verifying the behavior of StripeEvent subscribers can be done fairly easily by stubbing out the HTTP signature header used to authenticate the webhook request. Tools like [Webmock](https://github.com/bblimke/webmock) and [VCR](https://github.com/vcr/vcr) work well. [RequestBin](http://requestb.in/) is great for collecting the payloads. For exploratory phases of development, [UltraHook](http://www.ultrahook.com/) and other tools can forward webhook requests directly to localhost. You can check out [test-hooks](https://github.com/invisiblefunnel/test-hooks), an example Rails application to see how to test StripeEvent subscribers with RSpec request specs and Webmock. A quick look:
 
 ```ruby
 # spec/requests/billing_events_spec.rb
 require 'spec_helper'
 
 describe "Billing Events" do
-  def stub_event(fixture_id, status = 200)
-    stub_request(:get, "https://api.stripe.com/v1/events/#{fixture_id}").
-      to_return(status: status, body: File.read("spec/support/fixtures/#{fixture_id}.json"))
+  def bypass_event_signature(payload)
+    event = Stripe::Event.construct_from(JSON.parse(payload, symbolize_names: true))
+    expect(Stripe::Webhook).to receive(:construct_event).and_return(event)
   end
 
   describe "customer.created" do
-    before do
-      stub_event 'evt_customer_created'
-    end
+    let(:payload) { File.read("spec/support/fixtures/evt_customer_created.json")
+    before(:each) { bypass_event_signature payload }
 
     it "is successful" do
-      post '/_billing_events', id: 'evt_customer_created'
+      post '/_billing_events', body: payload
       expect(response.code).to eq "200"
       # Additional expectations...
     end
   end
 end
 ```
-
-### Note: 'Test Webhooks' Button on Stripe Dashboard
-
-This button sends an example event to your webhook urls, including an `id` of `evt_00000000000000`. To confirm that Stripe sent the webhook, StripeEvent attempts to retrieve the event details from Stripe using the given `id`. In this case the event does not exist and StripeEvent responds with `401 Unauthorized`. Instead of using the 'Test Webhooks' button, trigger webhooks by using the Stripe API or Dashboard to create test payments, customers, etc.
 
 ### Maintainers
 

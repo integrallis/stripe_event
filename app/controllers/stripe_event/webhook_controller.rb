@@ -1,52 +1,24 @@
 module StripeEvent
   class WebhookController < ActionController::Base
-    if respond_to?(:before_action)
-      before_action :request_authentication
-      before_action :verify_signature
-    else
-      before_filter :request_authentication
-      before_filter :verify_signature
-    end
-
     def event
-      StripeEvent.instrument(params)
+      StripeEvent.instrument(verified_event)
       head :ok
-    rescue StripeEvent::UnauthorizedError => e
+    rescue Stripe::SignatureVerificationError => e
       log_error(e)
-      head :unauthorized
+      head :bad_request
     end
 
     private
 
+    def verified_event
+      payload   = request.body.read
+      signature = request.headers['Stripe-Signature']
+      Stripe::Webhook.construct_event(payload, signature, StripeEvent.signing_secret.to_s)
+    end
+
     def log_error(e)
       logger.error e.message
       e.backtrace.each { |line| logger.error "  #{line}" }
-    end
-
-    def request_authentication
-      if StripeEvent.authentication_secret
-        authenticate_or_request_with_http_basic do |username, password|
-          ActiveSupport::SecurityUtils.variable_size_secure_compare password, StripeEvent.authentication_secret
-        end
-      end
-    end
-
-    def verify_signature
-      if StripeEvent.signing_secret
-        payload   = request.body.read
-        signature = request.headers['Stripe-Signature']
-
-        Stripe::Webhook::Signature.verify_header payload, signature, StripeEvent.signing_secret
-      else
-        ActiveSupport::Deprecation.warn(
-        "[STRIPE_EVENT] Unverified use of stripe webhooks is deprecated and configuration of " +
-        "`StripeEvent.signing_secret=` will be required in 2.x. The value for your specific " +
-        "endpoint's signing secret (starting with `whsec_`) is in your API > Webhooks settings " +
-        "(https://dashboard.stripe.com/account/webhooks). " +
-        "More information can be found here: https://stripe.com/docs/webhooks#signatures")
-      end
-    rescue Stripe::SignatureVerificationError
-      head :bad_request
     end
   end
 end

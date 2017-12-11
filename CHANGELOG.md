@@ -1,4 +1,12 @@
-### 1.9.1 (November 30, 2017)
+### PENDING 2.0.0 (TBD)
+
+**Backwards incompatible release. [Only signed webhooks are supported](https://stripe.com/docs/webhooks#signatures).**
+
+- **Requires `StripeEvent.signing_secret` configuration** (#95, #97)
+- Removes `StripeEvent.authentication_secret` and associated basic auth support (#97)
+- Adds `StripeEvent.event_filter` (replaces use-cases for the now removed `event_retriever` config) (#97)
+
+### 1.9.1 (December 5, 2017)
 
 This release is in preparation for some backward incompatible changes due to
 arrive in v2.0.0.  It is highly recommended that everyone secure their webhook
