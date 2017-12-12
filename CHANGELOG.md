@@ -1,8 +1,9 @@
 ### PENDING 2.0.0 (TBD)
 
-**Backwards incompatible release. [Only signed webhooks are supported](https://stripe.com/docs/webhooks#signatures).**
+**Backwards incompatible release. [Signed webhooks are now required.](https://stripe.com/docs/webhooks#signatures).**
 
 - **Requires `StripeEvent.signing_secret` configuration** (#95, #97)
+- Adds support for multiple signing secrets using `StripeEvent.signing_secrets` (#98, #99)
 - Removes `StripeEvent.authentication_secret` and associated basic auth support (#97)
 - Adds `StripeEvent.event_filter` (replaces use-cases for the now removed `event_retriever` config) (#97)
 
