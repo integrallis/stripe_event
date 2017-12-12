@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe StripeEvent::WebhookController, type: :controller do
-  let(:secret1) { 'secret1`' }
+  let(:secret1) { 'secret1' }
   let(:secret2) { 'secret2' }
   let(:charge_succeeded) { stub_event('evt_charge_succeeded') }
 
