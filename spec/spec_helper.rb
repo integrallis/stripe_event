@@ -13,14 +13,14 @@ RSpec.configure do |config|
   end
 
   config.before do
-    @signing_secret = StripeEvent.signing_secret
+    @signing_secrets = StripeEvent.signing_secrets
     @event_filter = StripeEvent.event_filter
     @notifier = StripeEvent.backend.notifier
     StripeEvent.backend.notifier = @notifier.class.new
   end
 
   config.after do
-    StripeEvent.signing_secret = @signing_secret
+    StripeEvent.signing_secrets = @signing_secrets
     StripeEvent.event_filter = @event_filter
     StripeEvent.backend.notifier = @notifier
   end

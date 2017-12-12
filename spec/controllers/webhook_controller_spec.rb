@@ -2,14 +2,15 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe StripeEvent::WebhookController, type: :controller do
-  let(:secret) { 'secret' }
+  let(:secret1) { 'secret1' }
+  let(:secret2) { 'secret2' }
   let(:charge_succeeded) { stub_event('evt_charge_succeeded') }
 
   def stub_event(identifier)
     JSON.parse(File.read("spec/support/fixtures/#{identifier}.json"))
   end
 
-  def generate_signature(params)
+  def generate_signature(params, secret)
     payload   = params.to_json
     timestamp = Time.now.to_i
     signature = Stripe::Webhook::Signature.send(:compute_signature, "#{timestamp}.#{payload}", secret)
@@ -23,8 +24,8 @@ describe StripeEvent::WebhookController, type: :controller do
     post :event
   end
 
-  def webhook_with_signature(params)
-    webhook generate_signature(params), params
+  def webhook_with_signature(params, secret = secret1)
+    webhook generate_signature(params, secret), params
   end
 
   routes { StripeEvent::Engine.routes }
@@ -44,7 +45,7 @@ describe StripeEvent::WebhookController, type: :controller do
   end
 
   context "with a signing secret" do
-    before(:each) { StripeEvent.signing_secret = secret }
+    before(:each) { StripeEvent.signing_secret = secret1 }
 
     it "denies missing signature" do
       webhook nil, charge_succeeded
@@ -56,8 +57,13 @@ describe StripeEvent::WebhookController, type: :controller do
       expect(response.code).to eq '400'
     end
 
-    it "succeeds with valid signature" do
-      webhook_with_signature charge_succeeded
+    it "denies signature from wrong secret" do
+      webhook_with_signature charge_succeeded, 'bogus'
+      expect(response.code).to eq '400'
+    end
+
+    it "succeeds with valid signature from correct secret" do
+      webhook_with_signature charge_succeeded, secret1
       expect(response.code).to eq '200'
     end
 
@@ -86,6 +92,35 @@ describe StripeEvent::WebhookController, type: :controller do
       StripeEvent.subscribe('charge.succeeded') { |evt| raise Stripe::StripeError, "testing" }
 
       expect { webhook_with_signature(charge_succeeded) }.to raise_error(Stripe::StripeError, /testing/)
+    end
+  end
+
+  context "with multiple signing secrets" do
+    before(:each) { StripeEvent.signing_secrets = [secret1, secret2] }
+
+    it "denies missing signature" do
+      webhook nil, charge_succeeded
+      expect(response.code).to eq '400'
+    end
+
+    it "denies invalid signature" do
+      webhook "invalid signature", charge_succeeded
+      expect(response.code).to eq '400'
+    end
+
+    it "denies signature from wrong secret" do
+      webhook_with_signature charge_succeeded, 'bogus'
+      expect(response.code).to eq '400'
+    end
+
+    it "succeeds with valid signature from first secret" do
+      webhook_with_signature charge_succeeded, secret1
+      expect(response.code).to eq '200'
+    end
+
+    it "succeeds with valid signature from second secret" do
+      webhook_with_signature charge_succeeded, secret2
+      expect(response.code).to eq '200'
     end
   end
 end
