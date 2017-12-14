@@ -1,4 +1,4 @@
-### PENDING 2.0.0 (TBD)
+### 2.0.0 (December 14, 2017)
 
 **Backwards incompatible release. [Signed webhooks are now required.](https://stripe.com/docs/webhooks#signatures).**
 
