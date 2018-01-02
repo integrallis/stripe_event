@@ -1,6 +1,11 @@
 require "active_support/notifications"
 require "stripe"
 require "stripe_event/engine" if defined?(Rails)
+require "stripe_event/exceptions"
+require "stripe_event/namespace"
+require "stripe_event/notification_adapter"
+require "stripe_event/notification_adapter"
+require "stripe_event/version"
 
 module StripeEvent
   class << self
@@ -40,30 +45,6 @@ module StripeEvent
       self.signing_secrets && self.signing_secrets.first
     end
   end
-
-  class Namespace < Struct.new(:value, :delimiter)
-    def call(name = nil)
-      "#{value}#{delimiter}#{name}"
-    end
-
-    def to_regexp(name = nil)
-      %r{^#{Regexp.escape call(name)}}
-    end
-  end
-
-  class NotificationAdapter < Struct.new(:subscriber)
-    def self.call(callable)
-      new(callable)
-    end
-
-    def call(*args)
-      payload = args.last
-      subscriber.call(payload)
-    end
-  end
-
-  class Error < StandardError; end
-  class UnauthorizedError < Error; end
 
   self.adapter = NotificationAdapter
   self.backend = ActiveSupport::Notifications
