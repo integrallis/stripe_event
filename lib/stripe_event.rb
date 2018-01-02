@@ -1,6 +1,7 @@
 require "active_support/notifications"
 require "stripe"
 require "stripe_event/engine" if defined?(Rails)
+require "stripe_event/configuration"
 require "stripe_event/exceptions"
 require "stripe_event/namespace"
 require "stripe_event/notification_adapter"
@@ -9,12 +10,8 @@ require "stripe_event/version"
 
 module StripeEvent
   class << self
-    attr_accessor :adapter, :backend, :namespace, :event_filter
-    attr_reader :signing_secrets
-
     def configure(&block)
-      raise ArgumentError, "must provide a block" unless block_given?
-      block.arity.zero? ? instance_eval(&block) : yield(self)
+      Configuration.instance.configure(&block)
     end
     alias :setup :configure
 
@@ -36,18 +33,20 @@ module StripeEvent
       backend.notifier.listening?(namespaced_name)
     end
 
-    def signing_secret=(value)
-      @signing_secrets = Array(value)
+    def configuration
+      Configuration.instance
     end
-    alias signing_secrets= signing_secret=
 
-    def signing_secret
-      self.signing_secrets && self.signing_secrets.first
+    def method_missing(method_name, *arguments, &block)
+      if configuration.respond_to?(method_name.to_sym)
+        configuration.send(method_name.to_sym, *arguments, &block)
+      else
+        super
+      end
+    end
+
+    def respond_to?(method_name, include_private = false)
+      configuration.respond_to?(method_name.to_sym) || super
     end
   end
-
-  self.adapter = NotificationAdapter
-  self.backend = ActiveSupport::Notifications
-  self.namespace = Namespace.new("stripe_event", ".")
-  self.event_filter = lambda { |event| event }
 end

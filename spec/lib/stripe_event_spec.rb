@@ -12,7 +12,7 @@ describe StripeEvent do
     it "yields itself to the block" do
       yielded = nil
       StripeEvent.configure { |events| yielded = events }
-      expect(yielded).to eq StripeEvent
+      expect(yielded).to eq StripeEvent::Configuration.instance
     end
 
     it "requires a block argument" do
@@ -23,7 +23,7 @@ describe StripeEvent do
       it "evaluates the block in its own context" do
         ctx = nil
         StripeEvent.setup { ctx = self }
-        expect(ctx).to eq StripeEvent
+        expect(ctx).to eq StripeEvent::Configuration.instance
       end
     end
   end
