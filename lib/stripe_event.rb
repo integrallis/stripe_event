@@ -5,7 +5,6 @@ require 'stripe_event/configuration'
 require 'stripe_event/exceptions'
 require 'stripe_event/namespace'
 require 'stripe_event/notification_adapter'
-require 'stripe_event/notification_adapter'
 require 'stripe_event/version'
 
 module StripeEvent

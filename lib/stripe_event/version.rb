@@ -1,4 +1,5 @@
 module StripeEvent
+  # This module holds the StripeEvent version information.
   module Version
     module_function
 
