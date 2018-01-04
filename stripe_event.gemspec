@@ -6,7 +6,7 @@ require "stripe_event/version"
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "stripe_event"
-  s.version     = StripeEvent::VERSION
+  s.version     = StripeEvent::Version
   s.license     = "MIT"
   s.authors     = ["Danny Whalen"]
   s.email       = "daniel.r.whalen@gmail.com"

@@ -1,29 +1,31 @@
-require "active_support/notifications"
-require "stripe"
-require "stripe_event/engine" if defined?(Rails)
+require 'active_support/notifications'
+require 'stripe'
+require 'stripe_event/engine' if defined?(Rails)
+require 'stripe_event/configuration'
+require 'stripe_event/exceptions'
+require 'stripe_event/namespace'
+require 'stripe_event/notification_adapter'
+require 'stripe_event/version'
 
 module StripeEvent
   class << self
-    attr_accessor :adapter, :backend, :namespace, :event_filter
-    attr_reader :signing_secrets
-
     def configure(&block)
-      raise ArgumentError, "must provide a block" unless block_given?
-      block.arity.zero? ? instance_eval(&block) : yield(self)
+      Configuration.instance.configure(&block)
     end
-    alias :setup :configure
+    alias setup configure
 
     def instrument(event)
       event = event_filter.call(event)
-      backend.instrument namespace.call(event.type), event if event
+      return unless event
+      backend.instrument(namespace.call(event.type), event)
     end
 
     def subscribe(name, callable = Proc.new)
-      backend.subscribe namespace.to_regexp(name), adapter.call(callable)
+      backend.subscribe(namespace.to_regexp(name), adapter.call(callable))
     end
 
     def all(callable = Proc.new)
-      subscribe nil, callable
+      subscribe(nil, callable)
     end
 
     def listening?(name)
@@ -31,42 +33,22 @@ module StripeEvent
       backend.notifier.listening?(namespaced_name)
     end
 
-    def signing_secret=(value)
-      @signing_secrets = Array(value)
-    end
-    alias signing_secrets= signing_secret=
-
-    def signing_secret
-      self.signing_secrets && self.signing_secrets.first
-    end
-  end
-
-  class Namespace < Struct.new(:value, :delimiter)
-    def call(name = nil)
-      "#{value}#{delimiter}#{name}"
+    def method_missing(method_name, *arguments, &block)
+      if configuration.respond_to?(method_name.to_sym)
+        configuration.send(method_name.to_sym, *arguments, &block)
+      else
+        super
+      end
     end
 
-    def to_regexp(name = nil)
-      %r{^#{Regexp.escape call(name)}}
-    end
-  end
-
-  class NotificationAdapter < Struct.new(:subscriber)
-    def self.call(callable)
-      new(callable)
+    def respond_to_missing?(method_name, include_private = false)
+      configuration.respond_to?(method_name.to_sym) || super
     end
 
-    def call(*args)
-      payload = args.last
-      subscriber.call(payload)
+    private
+
+    def configuration
+      Configuration.instance
     end
   end
-
-  class Error < StandardError; end
-  class UnauthorizedError < Error; end
-
-  self.adapter = NotificationAdapter
-  self.backend = ActiveSupport::Notifications
-  self.namespace = Namespace.new("stripe_event", ".")
-  self.event_filter = lambda { |event| event }
 end
