@@ -3,21 +3,21 @@ cache: bundler
 sudo: false
 
 rvm:
-  - 2.2.8
-  - 2.3.5
+  - 2.3.6
+  - 2.4.3
+  - 2.5.0
 
 gemfile:
-  - gemfiles/rails4.1.gemfile
   - gemfiles/rails4.2.gemfile
-  - gemfiles/rails5.0.gemfile
   - gemfiles/rails5.1.gemfile
+  - gemfiles/rails_master.gemfile
 
 matrix:
   include:
-    - rvm: 2.1.10
+    - rvm: 2.3.6
       gemfile: gemfiles/rails3.2.gemfile
-    - rvm: 2.4.2
-      gemfile: gemfiles/rails5.1.gemfile
+  allow_failures:
+    - gemfile: gemfiles/rails_master.gemfile
   fast_finish: true
 
 notifications:
