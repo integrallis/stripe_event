@@ -81,7 +81,7 @@ end
 
 ### Authenticating webhooks with signatures
 
-Stripe will cryptographically sign webhook payloads with a signature that is included in a special header sent with the request. Verifying this signature lets your application properly authenticate the request originated from Stripe. To leverage this feature, please set the `signing_secret` configuration value:
+Stripe will cryptographically sign webhook payloads with a signature that is included in a special header sent with the request. Verifying this signature lets your application properly authenticate the request originated from Stripe. **As of [v2.0.0](https://github.com/integrallis/stripe_event/releases/tag/v2.0.0), StripeEvent now mandates that this feature be used**. Please set the `signing_secret` configuration value:
 
 ```ruby
 StripeEvent.signing_secret = Rails.application.secrets.stripe_signing_secret
