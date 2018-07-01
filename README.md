@@ -186,7 +186,7 @@ describe "Billing Events" do
   end
 
   describe "customer.created" do
-    let(:payload) { File.read("spec/support/fixtures/evt_customer_created.json")
+    let(:payload) { File.read("spec/support/fixtures/evt_customer_created.json") }
     before(:each) { bypass_event_signature payload }
 
     it "is successful" do
