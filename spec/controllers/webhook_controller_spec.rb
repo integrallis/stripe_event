@@ -21,7 +21,7 @@ describe StripeEvent::WebhookController, type: :controller do
   def webhook(signature, params)
     request.env['HTTP_STRIPE_SIGNATURE'] = signature
     request.env['RAW_POST_DATA'] = params.to_json # works with Rails 3, 4, or 5
-    post :event
+    post :event, body: params.to_json
   end
 
   def webhook_with_signature(params, secret = secret1)
