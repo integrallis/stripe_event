@@ -12,7 +12,15 @@ appraise "rails5.1" do
 end
 
 appraise "rails5.2" do
-  gem "rails", ">= 5.2.0.rc1", "< 5.3"
+  gem "rails", "~> 5.2.0"
+end
+
+appraise "stripe3" do
+  gem "stripe", "~> 3.0"
+end
+
+appraise "stripe4" do
+  gem "stripe", "~> 4.0"
 end
 
 appraise "rails_master" do

@@ -11,6 +11,8 @@ gemfile:
   - gemfiles/rails4.2.gemfile
   - gemfiles/rails5.1.gemfile
   - gemfiles/rails5.2.gemfile
+  - gemfiles/stripe3.gemfile
+  - gemfiles/stripe4.gemfile
 
 matrix:
   include:
