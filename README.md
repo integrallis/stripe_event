@@ -1,7 +1,6 @@
 # StripeEvent
 
 [![Build Status](https://secure.travis-ci.org/integrallis/stripe_event.svg)](http://travis-ci.org/integrallis/stripe_event)
-[![Dependency Status](https://gemnasium.com/integrallis/stripe_event.svg)](https://gemnasium.com/integrallis/stripe_event)
 [![Gem Version](https://badge.fury.io/rb/stripe_event.svg)](http://badge.fury.io/rb/stripe_event)
 [![Code Climate](https://codeclimate.com/github/integrallis/stripe_event.svg)](https://codeclimate.com/github/integrallis/stripe_event)
 [![Coverage Status](https://coveralls.io/repos/integrallis/stripe_event/badge.svg)](https://coveralls.io/r/integrallis/stripe_event)
