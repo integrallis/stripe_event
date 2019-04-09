@@ -172,7 +172,7 @@ end
 
 ## Testing
 
-Handling webhooks is a critical piece of modern billing systems. Verifying the behavior of StripeEvent subscribers can be done fairly easily by stubbing out the HTTP signature header used to authenticate the webhook request. Tools like [Webmock](https://github.com/bblimke/webmock) and [VCR](https://github.com/vcr/vcr) work well. [RequestBin](http://requestb.in/) is great for collecting the payloads. For exploratory phases of development, [UltraHook](http://www.ultrahook.com/) and other tools can forward webhook requests directly to localhost. You can check out [test-hooks](https://github.com/invisiblefunnel/test-hooks), an example Rails application to see how to test StripeEvent subscribers with RSpec request specs and Webmock. A quick look:
+Handling webhooks is a critical piece of modern billing systems. Verifying the behavior of StripeEvent subscribers can be done fairly easily by stubbing out the HTTP signature header used to authenticate the webhook request. Tools like [Webmock](https://github.com/bblimke/webmock) and [VCR](https://github.com/vcr/vcr) work well. [RequestBin](https://requestbin.com/) is great for collecting the payloads. For exploratory phases of development, [UltraHook](http://www.ultrahook.com/) and other tools can forward webhook requests directly to localhost. You can check out [test-hooks](https://github.com/invisiblefunnel/test-hooks), an example Rails application to see how to test StripeEvent subscribers with RSpec request specs and Webmock. A quick look:
 
 ```ruby
 # spec/requests/billing_events_spec.rb
