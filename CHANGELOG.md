@@ -1,4 +1,9 @@
-### 2.1.1 (January 31, 2017)
+### 2.2.0 (December 6, 2018)
+
+- Add support for Stripe v4.x (#119)
+- Documentation Updates and Fixes (#113 and #117)
+
+### 2.1.1 (January 31, 2018)
 
 - Adds better support for Rails 5.2 (#105, #106, #107)
 - `StripeEvent::WebhookController` now calls `skip_before_action :verify_authenticity_token` if `Rails.application.config.action_controller.default_protect_from_forgery` is set (as it is by default in Rails 5.2)
