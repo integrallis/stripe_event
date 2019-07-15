@@ -3,9 +3,9 @@ cache: bundler
 sudo: false
 
 rvm:
-  - 2.3.8
-  - 2.4.5
-  - 2.5.3
+  - 2.3
+  - 2.4
+  - 2.5
 
 gemfile:
   - gemfiles/rails4.2.gemfile
@@ -16,11 +16,13 @@ gemfile:
 
 matrix:
   include:
-    - rvm: 2.3.8
+    - rvm: 2.3
       gemfile: gemfiles/rails3.2.gemfile
-  include:
-    - rvm: 2.5.3
+    - rvm: 2.5
       gemfile: gemfiles/rails_master.gemfile
+  exclude:
+    - rvm: 2.5
+      gemfile: gemfiles/rails4.2.gemfile
   allow_failures:
     - gemfile: gemfiles/rails_master.gemfile
   fast_finish: true
