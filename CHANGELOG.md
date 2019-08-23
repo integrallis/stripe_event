@@ -1,4 +1,4 @@
-### (next release)
+### 2.3.0 (August 23, 2019)
 
 - Add support for Stripe v5.x (#119)
 - Add support for Rails v6.x to the build matrix (#119)
