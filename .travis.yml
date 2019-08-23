@@ -13,6 +13,7 @@ gemfile:
   - gemfiles/rails5.2.gemfile
   - gemfiles/stripe3.gemfile
   - gemfiles/stripe4.gemfile
+  - gemfiles/stripe5.gemfile
 
 matrix:
   include:
