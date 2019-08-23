@@ -15,12 +15,20 @@ appraise "rails5.2" do
   gem "rails", "~> 5.2.0"
 end
 
+appraise "rails6.0" do
+  gem "rails", "~> 6.0.0"
+end
+
 appraise "stripe3" do
   gem "stripe", "~> 3.0"
 end
 
 appraise "stripe4" do
   gem "stripe", "~> 4.0"
+end
+
+appraise "stripe5" do
+  gem "stripe", "~> 5.0"
 end
 
 appraise "rails_master" do
