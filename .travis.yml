@@ -6,6 +6,7 @@ rvm:
   - 2.3
   - 2.4
   - 2.5
+  - 2.6
 
 gemfile:
   - gemfiles/rails4.2.gemfile
@@ -20,9 +21,15 @@ matrix:
     - rvm: 2.3
       gemfile: gemfiles/rails3.2.gemfile
     - rvm: 2.5
+      gemfile: gemfiles/rails6.0.gemfile
+    - rvm: 2.6
+      gemfile: gemfiles/rails6.0.gemfile
+    - rvm: 2.6
       gemfile: gemfiles/rails_master.gemfile
   exclude:
     - rvm: 2.5
+      gemfile: gemfiles/rails4.2.gemfile
+    - rvm: 2.6
       gemfile: gemfiles/rails4.2.gemfile
   allow_failures:
     - gemfile: gemfiles/rails_master.gemfile
