@@ -1,3 +1,8 @@
+### (next release)
+
+- Add support for Stripe v5.x (#119)
+- Add support for Rails v6.x to the build matrix (#119)
+
 ### 2.2.0 (December 6, 2018)
 
 - Add support for Stripe v4.x (#119)
