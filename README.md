@@ -106,13 +106,6 @@ StripeEvent.signing_secrets = [
 If you have built an application that has multiple Stripe accounts--say, each of your customers has their own--you may want to define your own way of retrieving events from Stripe (e.g. perhaps you want to use the [account parameter](https://stripe.com/docs/connect/webhooks) from the top level to detect the customer for the event, then grab their specific API key). You can do this:
 
 ```ruby
-StripeEvent.event_filter = lambda do |event|
-  api_key = Account.find_by!(stripe_account_id: event.account).api_key
-  Stripe::Event.retrieve(event.id, api_key)
-end
-```
-
-```ruby
 class EventFilter
   def call(event)
     event.api_key = lookup_api_key(event.account)
