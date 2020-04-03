@@ -18,11 +18,13 @@ module StripeEvent
       backend.instrument namespace.call(event.type), event if event
     end
 
-    def subscribe(name, callable = Proc.new)
+    def subscribe(name, callable = nil, &block)
+      callable ||= block
       backend.subscribe namespace.to_regexp(name), adapter.call(callable)
     end
 
-    def all(callable = Proc.new)
+    def all(callable = nil, &block)
+      callable ||= block
       subscribe nil, callable
     end
 
