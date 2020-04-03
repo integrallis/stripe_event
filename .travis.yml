@@ -4,6 +4,7 @@ cache: bundler
 rvm:
   - 2.5
   - 2.6
+  - 2.7
 
 gemfile:
   - gemfiles/rails5.1.gemfile
@@ -21,7 +22,7 @@ matrix:
       gemfile: gemfiles/rails4.2.gemfile
     - rvm: 2.4
       gemfile: gemfiles/rails4.2.gemfile
-    - rvm: 2.6
+    - rvm: ruby
       gemfile: gemfiles/rails_master.gemfile
   allow_failures:
     - gemfile: gemfiles/rails_master.gemfile
