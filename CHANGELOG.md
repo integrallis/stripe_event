@@ -1,3 +1,8 @@
+### 2.3.1 (May 12, 2020)
+
+- Fix deprecation warning in Ruby 2.7 (#130)
+- Fixes tests for Stripe 5.19.0 (#133)
+
 ### 2.3.0 (August 23, 2019)
 
 - Add support for Stripe v5.x (#119)
