@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "appraisal"
   s.add_development_dependency "coveralls"
   s.add_development_dependency "rails", [">= 3.1"]
-  s.add_development_dependency "rake", "< 11.0"
+  s.add_development_dependency "rake"
   s.add_development_dependency "rspec-rails", "~> 3.7"
   s.add_development_dependency "webmock", "~> 1.9"
 end
