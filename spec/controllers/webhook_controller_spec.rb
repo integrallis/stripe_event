@@ -12,10 +12,19 @@ describe StripeEvent::WebhookController, type: :controller do
 
   def generate_signature(params, secret)
     payload   = params.to_json
-    timestamp = Time.now.to_i
-    signature = Stripe::Webhook::Signature.send(:compute_signature, "#{timestamp}.#{payload}", secret)
+    timestamp = Time.now
 
-    "t=#{timestamp},v1=#{signature}"
+    # compute_signature was private until version 5.19.0 when it was made
+    # public and had it's API changed to split timestamp to a separate field.
+    signer = Stripe::Webhook::Signature.method(:compute_signature)
+    signature =
+      if signer.arity == 3
+        signer.call(timestamp, payload, secret)
+      else
+        signer.call("#{timestamp.to_i}.#{payload}", secret)
+      end
+
+    "t=#{timestamp.to_i},v1=#{signature}"
   end
 
   def webhook(signature, params)
