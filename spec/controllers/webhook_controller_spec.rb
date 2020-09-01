@@ -39,6 +39,18 @@ describe StripeEvent::WebhookController, type: :controller do
 
   routes { StripeEvent::Engine.routes }
 
+  context "bypass signature verification" do
+
+    before { StripeEvent.skip_signature_verification = true }
+    after  { StripeEvent.skip_signature_verification = false }
+
+    it "succeeds" do
+      webhook "invalid signature", charge_succeeded
+      expect(response.code).to eq '200'
+    end
+
+  end
+
   context "without a signing secret" do
     before(:each) { StripeEvent.signing_secret = nil }
 

@@ -5,7 +5,8 @@ module StripeEvent
     end
 
     def event
-      StripeEvent.instrument(verified_event)
+      event = StripeEvent.skip_signature_verification ? unverified_event : verified_event
+      StripeEvent.instrument(event)
       head :ok
     rescue Stripe::SignatureVerificationError => e
       log_error(e)
@@ -13,6 +14,13 @@ module StripeEvent
     end
 
     private
+
+    def unverified_event
+      payload = request.body.read
+      data    = JSON.parse(payload, symbolize_names: true)
+
+      Stripe::Event.construct_from(data)
+    end
 
     def verified_event
       payload          = request.body.read
