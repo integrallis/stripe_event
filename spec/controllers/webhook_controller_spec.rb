@@ -41,8 +41,8 @@ describe StripeEvent::WebhookController, type: :controller do
 
   context "bypass signature verification" do
 
-    before { StripeEvent.skip_signature_verification = true }
-    after  { StripeEvent.skip_signature_verification = false }
+    before(:each) { StripeEvent.skip_signature_verification = true }
+    after(:each) { StripeEvent.skip_signature_verification = false }
 
     it "succeeds" do
       webhook "invalid signature", charge_succeeded

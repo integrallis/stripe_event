@@ -30,6 +30,8 @@ describe StripeEvent do
 
   describe "bypass signature verification" do
 
+    after(:each) { StripeEvent.skip_signature_verification = false }
+
     it "sets and gets skip_signature_verification" do
       StripeEvent.skip_signature_verification = true
       expect(StripeEvent.skip_signature_verification).to be true
