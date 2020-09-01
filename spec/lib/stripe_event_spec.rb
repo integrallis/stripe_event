@@ -28,6 +28,15 @@ describe StripeEvent do
     end
   end
 
+  describe "bypass signature verification" do
+
+    it "sets and gets skip_signature_verification" do
+      StripeEvent.skip_signature_verification = true
+      expect(StripeEvent.skip_signature_verification).to be true
+    end
+
+  end
+
   describe "subscribing to a specific event type" do
     context "with a block subscriber" do
       it "calls the subscriber with the retrieved event" do

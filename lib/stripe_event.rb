@@ -4,7 +4,7 @@ require "stripe_event/engine" if defined?(Rails)
 
 module StripeEvent
   class << self
-    attr_accessor :adapter, :backend, :namespace, :event_filter
+    attr_accessor :adapter, :backend, :namespace, :event_filter, :skip_signature_verification
     attr_reader :signing_secrets
 
     def configure(&block)
