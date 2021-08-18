@@ -182,7 +182,7 @@ describe "Billing Events" do
     before(:each) { bypass_event_signature payload }
 
     it "is successful" do
-      post '/_billing_events', body: payload
+      post '/_billing_events', params: payload, as: :json
       expect(response.code).to eq "200"
       # Additional expectations...
     end
