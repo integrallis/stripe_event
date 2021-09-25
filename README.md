@@ -169,7 +169,7 @@ Handling webhooks is a critical piece of modern billing systems. Verifying the b
 
 ```ruby
 # spec/requests/billing_events_spec.rb
-require 'spec_helper'
+require 'rails_helper'
 
 describe "Billing Events" do
   def bypass_event_signature(payload)
@@ -178,12 +178,12 @@ describe "Billing Events" do
   end
 
   describe "customer.created" do
-    let(:payload) { File.read("spec/support/fixtures/evt_customer_created.json") }
-    before(:each) { bypass_event_signature payload }
+    let(:payload) { file_fixture('evt_customer_created.json').read }
+    before(:each) { bypass_event_signature(payload) }
 
     it "is successful" do
-      post '/_billing_events', body: payload
-      expect(response.code).to eq "200"
+      post '/_billing_events', params: payload
+      expect(response).to have_http_status(:success)
       # Additional expectations...
     end
   end
