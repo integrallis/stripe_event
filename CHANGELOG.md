@@ -1,5 +1,7 @@
-### 2.3.2 (TBD)
+### 2.3.2 (February 21, 2022)
 
+- Fix signature validation error if the first signing secret is nil (#146)
+- Update README (#143)
 - Setup github actions for CI (#147)
 
 ### 2.3.1 (May 12, 2020)
