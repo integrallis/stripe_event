@@ -132,4 +132,18 @@ describe StripeEvent::WebhookController, type: :controller do
       expect(response.code).to eq '200'
     end
   end
+
+  context "with multiple signing secrets first of which is nil" do
+    before(:each) { StripeEvent.signing_secrets = [nil, secret1, secret2] }
+
+    it "succeeds with valid signature from first secret" do
+      webhook_with_signature charge_succeeded, secret1
+      expect(response.code).to eq '200'
+    end
+
+    it "succeeds with valid signature from second secret" do
+      webhook_with_signature charge_succeeded, secret2
+      expect(response.code).to eq '200'
+    end
+  end
 end

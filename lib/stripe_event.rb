@@ -34,7 +34,7 @@ module StripeEvent
     end
 
     def signing_secret=(value)
-      @signing_secrets = Array(value)
+      @signing_secrets = Array(value).compact
     end
     alias signing_secrets= signing_secret=
 
