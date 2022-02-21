@@ -1,3 +1,7 @@
+### 2.3.2 (TBD)
+
+- Setup github actions for CI (#147)
+
 ### 2.3.1 (May 12, 2020)
 
 - Fix deprecation warning in Ruby 2.7 (#130)
