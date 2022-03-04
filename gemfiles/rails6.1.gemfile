@@ -4,4 +4,10 @@ source "https://rubygems.org"
 
 gem "rails", "~> 6.1.0"
 
+if Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('3.1')
+  gem 'net-imap', require: false
+  gem 'net-pop', require: false
+  gem 'net-smtp', require: false
+end
+
 gemspec path: "../"

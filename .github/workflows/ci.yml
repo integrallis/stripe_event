@@ -5,8 +5,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        ruby: ["2.5", "2.6", "2.7"]
+        ruby: ["2.5", "2.6", "2.7", "3.0", "3.1"]
         bundler: [default]
         gemfile:
           - rails5.1
@@ -20,7 +21,18 @@ jobs:
           - { ruby: "2.3", gemfile: "rails3.2", bundler: "1" }
           - { ruby: "2.3", gemfile: "rails4.2", bundler: "1" }
           - { ruby: "2.4", gemfile: "rails4.2", bundler: "1" }
-
+        exclude:
+          - { ruby: "2.5", gemfile: "rails7.0" }
+          - { ruby: "2.6", gemfile: "rails7.0" }
+          - { ruby: "3.0", gemfile: "rails5.1" }
+          - { ruby: "3.0", gemfile: "rails5.2" }
+          - { ruby: "3.0", gemfile: "stripe3" }
+          - { ruby: "3.0", gemfile: "stripe4" }
+          - { ruby: "3.1", gemfile: "rails5.1" }
+          - { ruby: "3.1", gemfile: "rails5.2" }
+          - { ruby: "3.1", gemfile: "rails6.0" }
+          - { ruby: "3.1", gemfile: "stripe3" }
+          - { ruby: "3.1", gemfile: "stripe4" }
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
