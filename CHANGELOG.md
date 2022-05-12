@@ -1,3 +1,10 @@
+### 2.4.0 (May 12, 2022)
+
+- Add Stripe 6 support (#151)
+- Add Rails 7 support (#151)
+- Add Ruby 3.1 support (#152)
+- Improved build matrix
+
 ### 2.3.2 (February 21, 2022)
 
 - Fix signature validation error if the first signing secret is nil (#146)
