@@ -10,23 +10,29 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ["2.5", "2.6", "2.7"]
+        ruby: ["2.7", "3.0", "3.1"]
         bundler: [default]
         gemfile:
-          - rails5.1
-          - rails5.2
           - rails6.0
           - rails6.1
-          - stripe3
-          - stripe4
+          - rails7.0
           - stripe5
           - stripe6
         include:
           - { ruby: "2.3", gemfile: "rails3.2", bundler: "1" }
           - { ruby: "2.3", gemfile: "rails4.2", bundler: "1" }
           - { ruby: "2.4", gemfile: "rails4.2", bundler: "1" }
-          - { ruby: "2.7", gemfile: "rails7.0", bundler: "default" }
-          - { ruby: "3.0", gemfile: "rails7.0", bundler: "default" }
+          - { ruby: "2.5", gemfile: "rails5.1", bundler: "default" }
+          - { ruby: "2.5", gemfile: "rails5.2", bundler: "default" }
+          - { ruby: "2.6", gemfile: "rails5.2", bundler: "default" }
+          - { ruby: "2.6", gemfile: "rails6.0", bundler: "default" }
+          - { ruby: "2.6", gemfile: "rails6.1", bundler: "default" }
+          - { ruby: "2.5", gemfile: "stripe3", bundler: "default" }
+          - { ruby: "2.6", gemfile: "stripe3", bundler: "default" }
+          - { ruby: "2.7", gemfile: "stripe3", bundler: "default" }
+          - { ruby: "2.5", gemfile: "stripe4", bundler: "default" }
+          - { ruby: "2.6", gemfile: "stripe4", bundler: "default" }
+          - { ruby: "2.7", gemfile: "stripe4", bundler: "default" }
 
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
