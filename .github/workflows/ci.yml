@@ -1,5 +1,9 @@
 name: CI
-on: [push, pull_request]
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
   test:
@@ -16,10 +20,13 @@ jobs:
           - stripe3
           - stripe4
           - stripe5
+          - stripe6
         include:
           - { ruby: "2.3", gemfile: "rails3.2", bundler: "1" }
           - { ruby: "2.3", gemfile: "rails4.2", bundler: "1" }
           - { ruby: "2.4", gemfile: "rails4.2", bundler: "1" }
+          - { ruby: "2.7", gemfile: "rails7.0", bundler: "default" }
+          - { ruby: "3.0", gemfile: "rails7.0", bundler: "default" }
 
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile

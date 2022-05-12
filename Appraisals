@@ -23,6 +23,10 @@ appraise "rails6.1" do
   gem "rails", "~> 6.1.0"
 end
 
+appraise "rails7.0" do
+  gem "rails", "~> 7.0.0"
+end
+
 appraise "stripe3" do
   gem "stripe", "~> 3.0"
 end
@@ -33,6 +37,10 @@ end
 
 appraise "stripe5" do
   gem "stripe", "~> 5.0"
+end
+
+appraise "stripe6" do
+  gem "stripe", "~> 6.0"
 end
 
 appraise "rails_master" do
