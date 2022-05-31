@@ -10,3 +10,4 @@ gemfiles/*.lock
 coverage/*
 .ruby-version
 .ruby-gemset
+vendor/bundle
