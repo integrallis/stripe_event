@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.test_files  = `git ls-files -- Appraisals {spec,gemfiles}/*`.split("\n")
 
   s.add_dependency "activesupport", ">= 3.1"
-  s.add_dependency "stripe", [">= 2.8", "< 7"]
+  s.add_dependency "stripe", [">= 2.8", "< 8"]
 
   s.add_development_dependency "appraisal"
   s.add_development_dependency "coveralls"
