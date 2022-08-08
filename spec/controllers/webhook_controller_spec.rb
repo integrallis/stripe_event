@@ -146,4 +146,14 @@ describe StripeEvent::WebhookController, type: :controller do
       expect(response.code).to eq '200'
     end
   end
+
+  context "raising an error when things go bad and stripe should retry" do
+    before(:each) { StripeEvent.signing_secrets = [secret1] }
+
+    it "responds with 4xx" do
+      allow(StripeEvent).to receive(:instrument) { raise StripeEvent::ProcessError, "retry please" }
+      webhook_with_signature charge_succeeded, secret1
+      expect(response.code).to eq '422'
+    end
+  end
 end
