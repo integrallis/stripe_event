@@ -1,5 +1,9 @@
 ### [Unreleased] - TBD
 
+### 2.6.0 (Aug 8, 2022)
+
+- Introduce StripeEvent::ProcessError and possible HTTP 422 responses (#155, #132)
+
 ### 2.5.0 (Aug 5, 2022)
 
 - Add Stripe 7 support (#154)
