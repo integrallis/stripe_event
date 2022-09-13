@@ -63,8 +63,8 @@ end
 
 ```ruby
 StripeEvent.configure do |events|
-  events.all BillingEventLogger.new(Rails.logger)
-  events.subscribe 'customer.created', CustomerCreated.new
+  events.all ->(event) { BillingEventLogger.new(Rails.logger).call(event) }
+  events.subscribe 'customer.created', ->(event) { CustomerCreated.new.call(event) }
 end
 ```
 
