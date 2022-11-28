@@ -1,4 +1,5 @@
 ### [Unreleased] - TBD
+- Add Stripe 8 support (#159)
 
 ### 2.6.0 (Aug 8, 2022)
 
