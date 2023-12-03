@@ -1,5 +1,6 @@
 ### [Unreleased] - TBD
 - Add Stripe 9 support (#162)
+- Add Stripe 10 support (#163)
 
 ### 2.7.0 (Nov 27, 2022)
 
