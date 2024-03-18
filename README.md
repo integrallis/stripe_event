@@ -3,7 +3,6 @@
 [![Build Status](https://github.com/integrallis/stripe_event/workflows/CI/badge.svg)](https://github.com/integrallis/stripe_event/actions?query=workflow%3ACI)
 [![Gem Version](https://badge.fury.io/rb/stripe_event.svg)](http://badge.fury.io/rb/stripe_event)
 [![Code Climate](https://codeclimate.com/github/integrallis/stripe_event.svg)](https://codeclimate.com/github/integrallis/stripe_event)
-[![Coverage Status](https://coveralls.io/repos/integrallis/stripe_event/badge.svg)](https://coveralls.io/r/integrallis/stripe_event)
 [![Gem Downloads](https://img.shields.io/gem/dt/stripe_event.svg)](https://rubygems.org/gems/stripe_event)
 
 StripeEvent is built on the [ActiveSupport::Notifications API](http://api.rubyonrails.org/classes/ActiveSupport/Notifications.html). Incoming webhook requests are [authenticated with the webhook signature](#authenticating-webhooks-with-signatures). Define subscribers to handle specific event types. Subscribers can be a block or an object that responds to `#call`.
