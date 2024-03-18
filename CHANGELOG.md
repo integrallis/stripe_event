@@ -1,4 +1,7 @@
 ### [Unreleased] - TBD
+
+### 2.8.0 (Mar 18, 2024)
+
 - Add Stripe 9 support (#162)
 - Add Stripe 10 support (#163)
 
