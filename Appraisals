@@ -63,6 +63,10 @@ appraise "stripe10" do
   gem "stripe", "~> 10.0"
 end
 
+appraise "stripe11" do
+  gem "stripe", "~> 11.0"
+end
+
 appraise "rails_master" do
   gem "rails", github: "rails"
 end
