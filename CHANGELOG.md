@@ -1,5 +1,9 @@
 ### [Unreleased] - TBD
 
+-
+
+### 2.10.0 (Jun 28, 2024)
+
 - Add Stripe 12 support (#167)
 
 ### 2.9.0 (Apr 22, 2024)
