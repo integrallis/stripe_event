@@ -1,5 +1,9 @@
 ### [Unreleased] - TBD
 
+-
+
+### 2.11.0 (Oct 3, 2024)
+
 - Add Stripe 13 support (#169)
 - Added Ruby 3.3 and Rails 7.2 to CI matrix (#170)
 
