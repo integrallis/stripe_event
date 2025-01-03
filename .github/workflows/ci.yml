@@ -10,14 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ["3.1", "3.2", "3.3"]
+        ruby: ["3.2", "3.3", "3.4"]
         bundler: [default]
         gemfile:
-          - rails6.0
-          - rails6.1
-          - rails7.0
           - rails7.1
           - rails7.2
+          - rails8.0
           - stripe5
           - stripe6
           - stripe7
@@ -34,6 +32,9 @@ jobs:
           - { ruby: "2.6", gemfile: "rails5.2", bundler: "default" }
           - { ruby: "2.6", gemfile: "rails6.0", bundler: "default" }
           - { ruby: "2.6", gemfile: "rails6.1", bundler: "default" }
+          - { ruby: "2.7", gemfile: "rails7.0", bundler: "default" }
+          - { ruby: "3.0", gemfile: "rails7.1", bundler: "default" }
+          - { ruby: "3.1", gemfile: "rails7.2", bundler: "default" }
           - { ruby: "2.5", gemfile: "stripe3", bundler: "default" }
           - { ruby: "2.6", gemfile: "stripe3", bundler: "default" }
           - { ruby: "2.7", gemfile: "stripe3", bundler: "default" }
