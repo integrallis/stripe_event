@@ -3,6 +3,12 @@
 - Add Stripe 14 support
 - Add Stripe 15 support
 
+### 2.12.0 (Apr 21, 2025)
+
+- Enhance build matrix including ruby 3.4 and rails 8 (#171)
+- Added support for Stripe 14 and 15 (#172)
+- Fix build matrix for older rails versions (#173)
+
 ### 2.11.0 (Oct 3, 2024)
 
 - Add Stripe 13 support (#169)
