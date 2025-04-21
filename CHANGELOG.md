@@ -1,6 +1,7 @@
 ### [Unreleased] - TBD
 
--
+- Add Stripe 14 support
+- Add Stripe 15 support
 
 ### 2.11.0 (Oct 3, 2024)
 
