@@ -16,6 +16,7 @@ jobs:
           - rails7.1
           - rails7.2
           - rails8.0
+          - rails8.1
           - stripe5
           - stripe6
           - stripe7
