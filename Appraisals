@@ -39,6 +39,10 @@ appraise "rails8.0" do
   gem "rails", "~> 8.0.0"
 end
 
+appraise "rails8.1" do
+  gem "rails", "~> 8.1.0"
+end
+
 appraise "stripe3" do
   gem "stripe", "~> 3.0"
 end
@@ -89,6 +93,14 @@ end
 
 appraise "stripe15" do
   gem "stripe", "~> 15.0"
+end
+
+appraise "stripe16" do
+  gem "stripe", "~> 16.0"
+end
+
+appraise "stripe17" do
+  gem "stripe", "~> 17.0"
 end
 
 appraise "rails_master" do

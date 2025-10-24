@@ -1,6 +1,7 @@
 ### [Unreleased] - TBD
 
--
+- Add Stripe 16 and 17 support
+- Add Rails 8.1 support
 
 ### 2.12.0 (Apr 21, 2025)
 

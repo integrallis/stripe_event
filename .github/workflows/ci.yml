@@ -16,6 +16,7 @@ jobs:
           - rails7.1
           - rails7.2
           - rails8.0
+          - rails8.1
           - stripe5
           - stripe6
           - stripe7
@@ -27,6 +28,8 @@ jobs:
           - stripe13
           - stripe14
           - stripe15
+          - stripe16
+          - stripe17
         include:
           - { ruby: "2.3", gemfile: "rails3.2", bundler: "1" }
           - { ruby: "2.5", gemfile: "rails5.1", bundler: "default" }
