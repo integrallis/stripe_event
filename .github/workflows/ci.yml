@@ -28,6 +28,7 @@ jobs:
           - stripe14
           - stripe15
           - stripe16
+          - stripe17
         include:
           - { ruby: "2.3", gemfile: "rails3.2", bundler: "1" }
           - { ruby: "2.5", gemfile: "rails5.1", bundler: "default" }
