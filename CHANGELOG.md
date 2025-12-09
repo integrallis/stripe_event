@@ -1,5 +1,7 @@
 ### [Unreleased] - TBD
 
+### 2.14.0 (Dec 9, 2025)
+
 - Add Stripe 18 support
 
 ### 2.13.0 (Oct 24, 2025)
