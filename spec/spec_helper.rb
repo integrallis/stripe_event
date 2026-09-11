@@ -11,6 +11,7 @@ RSpec.configure do |config|
 
   config.before do
     @signing_secrets = StripeEvent.signing_secrets
+    @signing_sources = StripeEvent.signing_sources
     @event_filter = StripeEvent.event_filter
     @notifier = StripeEvent.backend.notifier
     StripeEvent.backend.notifier = @notifier.class.new
@@ -18,6 +19,7 @@ RSpec.configure do |config|
 
   config.after do
     StripeEvent.signing_secrets = @signing_secrets
+    StripeEvent.signing_sources = @signing_sources
     StripeEvent.event_filter = @event_filter
     StripeEvent.backend.notifier = @notifier
   end

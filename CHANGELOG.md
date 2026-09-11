@@ -1,5 +1,12 @@
 ### [Unreleased] - TBD
 
+- Support source-restricted engine mounts through the `stripe_event_source`
+  route default, allowing separate platform and Connect webhook URLs.
+
+- Support callable signing secrets, resolved once per webhook request.
+- Add named `signing_sources` and source-scoped subscriptions, retaining global
+  subscribers and supporting secret rotation within each source.
+
 ### 2.15.0 (May 20, 2026)
 
 - Add Stripe 19 support

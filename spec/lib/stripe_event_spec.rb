@@ -130,6 +130,35 @@ describe StripeEvent do
     end
   end
 
+  describe "signing secrets" do
+    it "accepts a string and removes nil entries from arrays" do
+      StripeEvent.signing_secret = 'secret1'
+      expect(StripeEvent.signing_secrets).to eq ['secret1']
+      StripeEvent.signing_secrets = [nil, 'secret1', 'secret2']
+      expect(StripeEvent.signing_secrets).to eq ['secret1', 'secret2']
+    end
+
+    it "resolves a callable returning a string or array on each read" do
+      secrets = 'secret1'
+      StripeEvent.signing_secrets = -> { secrets }
+      expect(StripeEvent.signing_secrets).to eq ['secret1']
+      secrets = ['secret2', nil, 'secret3']
+      expect(StripeEvent.signing_secrets).to eq ['secret2', 'secret3']
+    end
+
+    it "accepts a mixture of static secrets and callables" do
+      StripeEvent.signing_secrets = ['secret1', -> { ['secret2', nil] }, -> { nil }]
+      expect(StripeEvent.signing_secrets).to eq ['secret1', 'secret2']
+    end
+
+    it "resolves the singular getter only once" do
+      provider = double(:provider)
+      expect(provider).to receive(:call).once.and_return(['secret1', 'secret2'])
+      StripeEvent.signing_secret = provider
+      expect(StripeEvent.signing_secret).to eq 'secret1'
+    end
+  end
+
   describe StripeEvent::Namespace do
     let(:namespace) { StripeEvent.namespace }
 
