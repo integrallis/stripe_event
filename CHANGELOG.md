@@ -1,5 +1,7 @@
 ### [Unreleased] - TBD
 
+### 2.16.0 (Nov 11, 2026)
+
 - Add Stripe 20 support
 
 ### 2.15.0 (May 20, 2026)
