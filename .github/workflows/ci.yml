@@ -32,6 +32,7 @@ jobs:
           - stripe17
           - stripe18
           - stripe19
+          - stripe20
         include:
           - { ruby: "2.3", gemfile: "rails3.2", bundler: "1" }
           - { ruby: "2.5", gemfile: "rails5.1", bundler: "default" }
@@ -53,7 +54,7 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
       # https://github.com/marketplace/actions/checkout
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       # https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
