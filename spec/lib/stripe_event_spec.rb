@@ -130,6 +130,38 @@ describe StripeEvent do
     end
   end
 
+  describe ".signing_secrets" do
+    it "returns static secrets as-is" do
+      StripeEvent.signing_secrets = ["secret1", "secret2"]
+
+      expect(StripeEvent.signing_secrets).to eq ["secret1", "secret2"]
+    end
+
+    it "resolves callable secrets" do
+      StripeEvent.signing_secrets = [-> { "secret1" }]
+
+      expect(StripeEvent.signing_secrets).to eq ["secret1"]
+    end
+
+    it "flattens callable secrets that return arrays" do
+      StripeEvent.signing_secrets = [-> { ["secret1", "secret2"] }]
+
+      expect(StripeEvent.signing_secrets).to eq ["secret1", "secret2"]
+    end
+
+    it "handles mixed static and callable secrets" do
+      StripeEvent.signing_secrets = ["secret1", -> { "secret2" }]
+
+      expect(StripeEvent.signing_secrets).to eq ["secret1", "secret2"]
+    end
+
+    it "compacts nil values from resolved callables" do
+      StripeEvent.signing_secrets = [-> { nil }, "secret1"]
+
+      expect(StripeEvent.signing_secrets).to eq ["secret1"]
+    end
+  end
+
   describe StripeEvent::Namespace do
     let(:namespace) { StripeEvent.namespace }
 

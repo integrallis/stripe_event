@@ -99,6 +99,19 @@ StripeEvent.signing_secrets = [
 
 (NOTE: `signing_secret=` and `signing_secrets=` are just aliases for one another)
 
+### Dynamic signing secrets with callables
+
+For multi-region deployments or dynamic configuration scenarios where signing secrets may vary per request, you can use a callable (lambda/proc) that will be resolved at request time:
+
+```ruby
+StripeEvent.signing_secrets = -> {
+  [
+    Rails.application.secrets.stripe_account_signing_secret,
+    Rails.application.secrets.stripe_connect_signing_secret,
+  ]
+}
+```
+
 ## Configuration
 
 If you have built an application that has multiple Stripe accounts--say, each of your customers has their own--you may want to define your own way of retrieving events from Stripe (e.g. perhaps you want to use the [account parameter](https://stripe.com/docs/connect/webhooks) from the top level to detect the customer for the event, then grab their specific API key). You can do this:
